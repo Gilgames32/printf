@@ -1,3 +1,5 @@
+#pragma once
+
 enum paper_type {
     A0,
     A1,
