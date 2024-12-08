@@ -33,8 +33,8 @@ Bővíthetőség, kényelem.
 - térköz
 - körmaszk
 - JSON
+- CUPS protocol compatibility
 
 ### Potential stuff
 
-- CUPS protocol compatibility
 - pdfből is gyárt
