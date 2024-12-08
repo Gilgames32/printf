@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Build and run",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/printf",
