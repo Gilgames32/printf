@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "nlohmann-json",
-    "opencv"
+    "opencv",
+    "qtbase"
   ]
 }
