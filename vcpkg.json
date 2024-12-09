@@ -1,5 +1,6 @@
 {
   "dependencies": [
-    "nlohmann-json"
+    "nlohmann-json",
+    "opencv"
   ]
 }
