@@ -38,3 +38,5 @@ Bővíthetőség, kényelem.
 ### Potential stuff
 
 - pdfből is gyárt
+- középre/jobbra igazított
+- mohó ládarendezés/legkönnyebb vágás/könnyű vágás és opcionálisan a feleslegre ládarendez (call me lorax the way i protect the trees)

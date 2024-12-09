@@ -1,6 +1,9 @@
 # Build
 build/
 
+# Output
+output/
+
 # Prerequisites
 *.d
 
