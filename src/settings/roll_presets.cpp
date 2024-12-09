@@ -1,0 +1,5 @@
+/*
+name
+width
+pixel perfect?
+*/
