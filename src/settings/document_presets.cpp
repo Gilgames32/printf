@@ -1,4 +1,5 @@
 /*
+width
 gutter
 margin
 ppi

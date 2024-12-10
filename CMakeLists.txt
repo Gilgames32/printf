@@ -25,6 +25,9 @@ qt_standard_project_setup()
 # Create executable
 qt_add_executable(printf
     src/main.cpp
+    src/img/filters/filter.hpp
+    src/img/filters/size.hpp
+    src/img/filters/size.cpp
 )
 
 # link to your dependencies' targets here
