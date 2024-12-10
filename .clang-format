@@ -5,11 +5,11 @@
   AllowAllParametersOfDeclarationOnNextLine: 'false'
   AlwaysBreakTemplateDeclarations: 'No'
   BreakBeforeBraces: Attach
-  ColumnLimit: '100'
+  ColumnLimit: '128'
   ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
   IncludeBlocks: Regroup
   IndentPPDirectives: AfterHash
-  IndentWidth: '2'
+  IndentWidth: '4'
   NamespaceIndentation: All
   BreakBeforeBinaryOperators: All
   BreakBeforeTernaryOperators: 'true'
