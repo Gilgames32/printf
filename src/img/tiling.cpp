@@ -100,13 +100,24 @@ namespace tiling {
             std::pair<int, std::vector<Rect2D>> height_sorting_height
                 = tile(rects_clone, preset, false);
 
+            int optimal_tiling_height
+                = std::min(width_sorting_height.first, height_sorting_height.first);
             std::vector<Rect2D> optimal_tiling
                 = width_sorting_height.first < height_sorting_height.first
                       ? width_sorting_height.second
                       : height_sorting_height.second;
 
+            cv::Mat canvas = cv::Mat::zeros(optimal_tiling_height, preset.document_width, CV_8UC4);
             std::for_each(optimal_tiling.begin(), optimal_tiling.end(), [&](Rect2D rect) {
-                // TODO: gilg does his opencv magic...
+                auto image = rect.getImg();
+
+                if (rect.isRotated()) {
+                    cv::rotate(image, image, cv::ROTATE_90_COUNTERCLOCKWISE);
+                }
+                auto dstCoord = rect.getPrimaryCorner();
+                auto dstRect = cv::Rect(dstCoord.x, dstCoord.y, rect.width, rect.height);
+
+                image.copyTo(canvas(dstRect));
             });
         }
     }  // namespace

@@ -6,7 +6,7 @@
 namespace tiling {
     class Rect2D {
         const ImgSource& image;
-        cv::Point bottom_left_corner;
+        cv::Point primaryCorner;
         bool rotated;
 
       public:
@@ -18,6 +18,10 @@ namespace tiling {
         void rotate();
 
         bool isRotated() const { return rotated; }
+
+        cv::Mat getImg() const { return image.getImg(); }
+
+        cv::Point getPrimaryCorner() const { return primaryCorner; }
     };
 
     namespace {
