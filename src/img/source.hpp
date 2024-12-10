@@ -13,9 +13,9 @@ class ImgSource {
     size_t quantity;
     FilterStore filters;
 
-   public:
+  public:
     ImgSource(const cv::Mat& image, const size_t& amount, const FilterStore& fil)
-        : file_data(image),
-          quantity(amount),
-          filters(fil) {}
+        : file_data(image), quantity(amount), filters(fil) {}
+
+    cv::Mat getImg() const { return file_data; }
 };
