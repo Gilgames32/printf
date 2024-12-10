@@ -8,12 +8,12 @@ struct preset {
     bool fill;
 };
 
-class tiling_generator {
+class TilingGenerator {
     std::vector<cv::Mat> imgs;
     preset user_preset;
 
    public:
-    tiling_generator(const std::vector<cv::Mat>& images, const preset& input_preset) {
+    TilingGenerator(const std::vector<cv::Mat>& images, const preset& input_preset) {
         imgs = images;
         user_preset = input_preset;
     }
