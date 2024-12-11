@@ -1,90 +1,103 @@
 #include "tiling.hpp"
 
 #include <opencv2/core/core.hpp>
+#include <ranges>
 #include <utility>
 
 /**
- * @brief Based on the following paper: 10.1016/j.ipl.2015.08.008
+ * @brief Based on the following paper (D. Zhang et al.): 10.1016/j.ipl.2015.08.008
  */
 namespace tiling {
     void Rect2D::rotate() {
         size_t temp = width;
         width = height;
         height = temp;
-        rotated = true;
+        rotated = !rotated;
     }
 
     namespace {
-        void recursive_helper() {}
+        /**
+         * @brief Recursive base case for `recursive_packing` function. Let `S` denote the area we
+         * are tiling.
+         *
+         * @param rects The rectangles we are using for tiling
+         * @param remainging_width Width of S
+         * @param current_height Height of S
+         * @return true If we have no more tiles to place, or S can't fit any that we can place.
+         * @return false If we have even a single tile that can be placed and fits into S.
+         */
+        bool recursive_base_case(std::vector<Rect2D> rects, size_t remainging_width,
+                                 size_t current_height) {}
 
+        void recursive_packing(std::vector<Rect2D> rects, cv::Point current_point,
+                               size_t remainging_width, size_t current_height) {
+            if (recursive_base_case(rects, remainging_width, current_height)) return;
+
+            std::vector<Rect2D> unplaced;
+            std::ranges::copy_if(rects, std::back_inserter(unplaced),
+                                 [](Rect2D rect) { return rect.moreRemaining(); });
+
+            
+        }
+
+        /**
+         * @brief NOTE: As per D. Zhang et al., the sorting of the rectangles can have a very big
+         * effect on packing efficiency. On average, for our use case sorting by width performs
+         * best, followed by area, perimeter, and finally height.
+         *
+         * Since there are so many heuristics which this function could take into consideration, it
+         * is the duty of the caller to provide the sorting with which this function is to tile the
+         * canvas.
+         *
+         * @param rects The rectangles to tile
+         * @param preset Configurable document data
+         * @return std::pair<int, std::vector<Rect2D>> The total height of the packing, and a vector
+         * of rectangles which all have a position on the plane.
+         */
         std::pair<int, std::vector<Rect2D>> tile(std::vector<Rect2D> rects,
-                                                 const DocumentPreset& preset,
-                                                 bool widthSort = true) {
-            /**
-             * (1) Let D = 1, for each item, swap its width and height
-             * if its width is larger than its height, sort all items by
-             * non-increasing width H = 0, x = 0, y = 0.
-             */
-            bool rotation_allowed = true;  // D = 1
-            int height_of_tiling = 0;      // H = 0
+                                                 const DocumentPreset& preset) {
+            size_t height_of_tiling = 0;
+            cv::Point current_point = cv::Point(0, 0);
 
-            int x, y = 0;
+            size_t remaining_width, current_height;
 
-            std::for_each(rects.begin(), rects.end(), [&](Rect2D rect) {
-                if (rect.width > rect.height) rect.rotate();
-            });
+            for (auto&& rect : rects) {
+                if (!rect.moreRemaining()) continue;
 
-            if (widthSort) {
-                std::sort(rects.begin(), rects.end(),
-                          [&](const Rect2D& a, const Rect2D& b) { return a.width > b.width; });
-            } else {
-                std::sort(rects.begin(), rects.end(),
-                          [&](const Rect2D& a, const Rect2D& b) { return a.height > b.height; });
+                current_point.y = height_of_tiling;
+
+                rect.place(current_point);
+
+                if (rect.height <= preset.document_width) rect.rotate();
+
+                current_point.x = rect.width;
+                remaining_width = preset.document_width - rect.width;
+                current_height = rect.height;
+
+                height_of_tiling += current_height;
+
+                recursive_packing(rects, current_point, remaining_width, current_height);
+
+                current_point.x = 0;
             }
 
             /**
-             * (2) If h_{i} > W then x = w_{i} , y = H , w = W − w_{i} , h = h_{i} ,
-             * H = H + h; otherwise, x = h_{i} , y = H , w = W − h_{i} ,
-             * h = w_{i} , H = H + h.
-             */
-            int w, h;
-            std::for_each(rects.begin(), rects.end(), [&](Rect2D rect) {
-                y = height_of_tiling;
-                if (rect.height > preset.document_width) {
-                    x = rect.width;
-                    w = preset.document_width - rect.width;
-                    h = rect.height;
-                } else {
-                    x = rect.height;
-                    w = preset.document_width - rect.height;
-                    h = rect.width;
-                }
-                height_of_tiling += h;
-
-                /**
-                 * (3) RecursivePacking(x, y, w, h).
-                 */
-                recursive_helper(x, y, w, h);
-            });
-
-            /**
              * (4) If unpacked items remain, let B = B_{1} go to (2); otherwise stop.
-             * TODO: figure this out
              */
+            for (auto&& rect : rects) {
+                if (rect.moreRemaining()) {
+                    /**
+                     * TODO: Figure this out.
+                     */
+                }
+            }
 
             return std::make_pair(height_of_tiling, rects);
         }  // namespace
 
         cv::Mat generate(std::vector<const ImgSource&> images, const DocumentPreset& preset) {
             /**
-             * @brief The authors of the algorithm sort the rectangles internally by
-             * width. This is the most optimal for a lot of cases but not always. We
-             * solve the problem with both width-sorting and height-sorting, and
-             * compare the height of each, then return the smaller one.
-             */
-
-            /**
-             * Create `Rect2D`-sform images
+             * Create `Rect2D`'s from images
              */
             std::vector<Rect2D> rects = {};
             std::for_each(images.begin(), images.end(),
@@ -94,31 +107,26 @@ namespace tiling {
              * Gutter stuff here
              */
 
-            std::vector<Rect2D> rects_clone = rects;
+            /**
+             * TODO: Expand heuristics for total area and perimeter
+             * (and maybe even diagonal length).
+             */
+            std::pair<int, std::vector<Rect2D>> width_sorting = tile(rects, preset);
+            std::vector<Rect2D> optimal_tiling = width_sorting.second;
 
-            std::pair<int, std::vector<Rect2D>> width_sorting_height = tile(rects, preset);
-            std::pair<int, std::vector<Rect2D>> height_sorting_height
-                = tile(rects_clone, preset, false);
+            cv::Mat canvas = cv::Mat::zeros(width_sorting.first, preset.document_width, CV_8UC4);
 
-            int optimal_tiling_height
-                = std::min(width_sorting_height.first, height_sorting_height.first);
-            std::vector<Rect2D> optimal_tiling
-                = width_sorting_height.first < height_sorting_height.first
-                      ? width_sorting_height.second
-                      : height_sorting_height.second;
+            for (auto&& rect : optimal_tiling) {
+                cv::Mat image = rect.getImg();
 
-            cv::Mat canvas = cv::Mat::zeros(optimal_tiling_height, preset.document_width, CV_8UC4);
-            std::for_each(optimal_tiling.begin(), optimal_tiling.end(), [&](Rect2D rect) {
-                auto image = rect.getImg();
+                if (rect.isRotated()) cv::rotate(image, image, cv::ROTATE_90_COUNTERCLOCKWISE);
 
-                if (rect.isRotated()) {
-                    cv::rotate(image, image, cv::ROTATE_90_COUNTERCLOCKWISE);
-                }
-                auto dstCoord = rect.getPrimaryCorner();
-                auto dstRect = cv::Rect(dstCoord.x, dstCoord.y, rect.width, rect.height);
+                cv::Point dstCoord = rect.getPrimaryCorner();
+                cv::Rect dstRect = cv::Rect(dstCoord.x, dstCoord.y, rect.width, rect.height);
 
                 image.copyTo(canvas(dstRect));
-            });
+            }
+            return canvas;
         }
     }  // namespace
 };  // namespace tiling
