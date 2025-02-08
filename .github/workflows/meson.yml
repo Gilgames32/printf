@@ -29,9 +29,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install meson and ninja
-        run: sudo apt install -y meson ninja-build
+        run: sudo apt install -y --no-install-recommends meson ninja-build
       - name: Get dependencies
-        run: sudo apt install -y libopencv-dev qt6-base-dev nlohmann-json3-dev libcups2-dev
+        run: sudo apt install -y --no-install-recommends libopencv-dev qt6-base-dev nlohmann-json3-dev libcups2-dev
       - name: Configure Project
         run: meson setup build
         env:
