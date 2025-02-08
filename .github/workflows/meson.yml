@@ -33,9 +33,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install meson and ninja
-        run: apt install meson ninja-build
+        run: sudo apt install -y meson ninja-build
       - name: Get dependencies
-        run: apt install libopencv-dev qt6-base && meson wrap install nlohmann_json
+        run: sudo apt install -y libopencv-dev qt6-base && meson wrap install nlohmann_json
       - name: Configure Project
         run: meson setup build
         env:
