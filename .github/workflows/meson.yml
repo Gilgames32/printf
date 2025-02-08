@@ -1,0 +1,42 @@
+name: Build with Meson
+
+on:
+  push:
+    branches: [ "main", "workflow" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }} with ${{ matrix.cpp_compiler }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      
+      # Set up a matrix to run the following 3 configurations:
+      # 1. <Windows, Release, latest MSVC compiler toolchain on the default runner image, default generator>
+      # 2. <Linux, Release, latest GCC compiler toolchain on the default runner image, default generator>
+      # 3. <Linux, Release, latest Clang compiler toolchain on the default runner image, default generator>
+      #
+      # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
+      matrix:
+        os: [ubuntu-latest]
+        cpp_compiler: [g++, clang++]
+        build_type: [Release]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install meson and ninja
+        run: sudo apt install -y meson ninja-build
+      - name: Get dependencies
+        run: sudo apt install -y libopencv-dev qt6-base-dev nlohmann-json3-dev libcups2-dev
+      - name: Configure Project
+        run: meson setup build
+        env:
+          CC: ${{ matrix.cpp_compiler }}
+      - name: Build Project
+        run: ninja -C build
+        env:
+          CC: ${{ matrix.cpp_compiler }}
