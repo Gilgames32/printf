@@ -16,8 +16,7 @@ namespace tiling {
       public:
         size_t width, height;
 
-        Rect2D(const ImgSource& img)
-            : image(img), width(img.getImg().cols), height(img.getImg().rows), amount_placed(0) {}
+        Rect2D(const ImgSource& img) : image(img), width(img.getImg().cols), height(img.getImg().rows), amount_placed(0) {}
 
         void rotate();
 
@@ -34,13 +33,11 @@ namespace tiling {
     };
 
     namespace {
-        void recursive_packing(std::vector<Rect2D> rects, cv::Point current_point,
-                               size_t remainging_width, size_t current_height);
+        void recursive_packing(std::vector<Rect2D> rects, cv::Point current_point, size_t remainging_width,
+                               size_t current_height);
 
-        std::pair<int, std::vector<Rect2D>> tile(std::vector<Rect2D> rects,
-                                                 const DocumentPreset& preset);
+        std::pair<int, std::vector<Rect2D>> tile(std::vector<Rect2D> rects, const DocumentPreset& preset);
     }  // namespace
 
-    std::vector<Rect2D> generate(std::vector<const ImgSource&> images,
-                                 const DocumentPreset& preset);
+    std::vector<Rect2D> generate(std::vector<const ImgSource&> images, const DocumentPreset& preset);
 };  // namespace tiling
