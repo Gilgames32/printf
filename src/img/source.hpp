@@ -1,23 +1,23 @@
 #pragma once
 
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 #include "filters/filter_store.hpp"
 
 class ImgSource {
     /**
-     * NOTE: It may be optimal to store the file path instead
-     * of the file data.
+     * NOTE: maybe should store cv::Mat instead of img_path
      */
-    cv::Mat file_data;
+    std::string img_path;
     size_t amount;
     FilterStore filters;
 
   public:
-    ImgSource(const cv::Mat& image, const size_t& amount, const FilterStore& filters)
-        : file_data(image), amount(amount), filters(filters) {}
+    ImgSource(const std::string& image_path, const size_t& amount, const FilterStore& filters)
+        : img_path(image_path), amount(amount), filters(filters) {}
 
-    cv::Mat getImg() const { return file_data; }
+    cv::Mat getImg() const { return cv::imread(img_path, 1); }
 
     size_t getAmount() const { return amount; }
 };
