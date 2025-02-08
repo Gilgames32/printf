@@ -22,7 +22,7 @@ int main(void) {
     MaskFilter maskFilter(mask);
 
     // create image window named "My Image"
-    cv::namedWindow("My Image");
+    cv::namedWindow("My Image", cv::WINDOW_AUTOSIZE | cv::WINDOW_GUI_NORMAL);
 
     // show the image on window
     cv::imshow("My Image", maskFilter.apply(image));
