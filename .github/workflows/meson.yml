@@ -35,7 +35,7 @@ jobs:
       - name: Install meson and ninja
         run: sudo apt install -y meson ninja-build
       - name: Get dependencies
-        run: sudo apt install -y libopencv-dev qt6-base && meson wrap install nlohmann_json
+        run: sudo apt install -y libopencv-dev qt6-base-dev && meson wrap install nlohmann_json
       - name: Configure Project
         run: meson setup build
         env:
