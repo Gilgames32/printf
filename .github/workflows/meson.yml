@@ -2,7 +2,7 @@ name: Build with Meson
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "workflow" ]
   pull_request:
     branches: [ "main" ]
 
