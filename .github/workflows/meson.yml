@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }} with Meson v1.7.0
+    name: Build on ${{ matrix.os }} with ${{ matrix.cpp_compiler }}
     runs-on: ${{ matrix.os }}
     
     strategy:
