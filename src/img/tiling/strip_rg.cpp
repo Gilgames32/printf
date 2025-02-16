@@ -82,7 +82,7 @@ namespace tiling {
         cv::Mat canvas = cv::Mat::zeros(width_sorting.first, preset.document_width_px, CV_8UC4);
 
         for (auto&& rect : optimal_tiling) {
-            cv::Mat image = rect.image.getImg();
+            cv::Mat image = rect.image.get_img();
 
             if (rect.rotated) cv::rotate(image, image, cv::ROTATE_90_COUNTERCLOCKWISE);
 

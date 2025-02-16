@@ -6,16 +6,16 @@
 #include "filters/filter_store.hpp"
 
 class ImgSource {
-    /**
-     * NOTE: maybe should store cv::Mat instead of img_path
-     */
-    cv::Mat file_data;
-    FilterStore filters;
-
   public:
-    ImgSource(const cv::Mat& image, const FilterStore& fil);
+    cv::Mat data;
+    FilterStore filters;
+    size_t amount;
 
-    cv::Mat getImg() const;
+    ImgSource(const cv::Mat& image, const size_t& amount, const FilterStore& fil);
 
-    cv::Mat applyFilters() const;
+    size_t get_width() const { return data.cols; }
+
+    size_t get_height() const { return data.rows; }
+
+    cv::Mat apply_filters();
 };

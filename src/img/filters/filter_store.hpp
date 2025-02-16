@@ -11,7 +11,9 @@ class FilterStore {
   public:
     void addFilter(Filter *filter);
 
-    cv::Mat applyAll(const cv::Mat &image) const;
+    cv::Mat applyAll(const cv::Mat &image);
 
     ~FilterStore();
+
+    void clear_filters();
 };
