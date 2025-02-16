@@ -9,23 +9,24 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "img/filters/mask.hpp"
+#include "img/tiling/grid_tiling.hpp"
 
-using json = nlohmann::json;
+//using json = nlohmann::json;
 
 
 int main(void) {
-    // read an image
     cv::Mat image = cv::imread("./assets/3.png", 1);
 
-    cv::Mat mask = cv::imread("./assets/mask.png", 1);
-
-    MaskFilter maskFilter(mask);
+    GridTiling tiling = GridTiling();
+    DocumentPreset preset = {1000, 10, true, true};
+    std::vector<ImgSource> images = {ImgSource(image, FilterStore())};
+    cv::Mat result = tiling.generate(preset, images);
 
     // create image window named "My Image"
     cv::namedWindow("My Image", cv::WINDOW_AUTOSIZE | cv::WINDOW_GUI_NORMAL);
 
     // show the image on window
-    cv::imshow("My Image", maskFilter.apply(image));
+    cv::imshow("My Image", result);
 
     // aboszolút filmszínház
     cv::waitKey(0);

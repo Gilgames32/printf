@@ -1,18 +1,15 @@
 #pragma once
 
-#include <cstddef>
-
 /*
-gutter
-margin
+TODO:
 ppi
-guide
+roll witdth - margin * 2 = document width
 min max height
 */
 
 struct DocumentPreset {
-    size_t document_width;
-    size_t gutter_width;
-    size_t tile_count;
-    bool fill;
+    size_t document_width_px;
+    size_t gutter_width_px;
+    bool correct_quantity;
+    bool guide;
 };

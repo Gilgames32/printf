@@ -9,12 +9,11 @@ class ImgSource {
     /**
      * NOTE: maybe should store cv::Mat instead of img_path
      */
-    std::string img_path;
-    size_t amount;
+    cv::Mat file_data;
     FilterStore filters;
 
   public:
-    ImgSource(const cv::Mat& image, const size_t& amount, const FilterStore& fil);
+    ImgSource(const cv::Mat& image, const FilterStore& fil);
 
     cv::Mat getImg() const;
 

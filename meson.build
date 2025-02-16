@@ -19,12 +19,11 @@ srcs = files(
   'src/img/filters/size.cpp',
   'src/img/source.hpp',
   'src/img/source.cpp',
-  # 'src/img/tiling.cpp',
-  # 'src/settings/document_presets.hpp',
-  # 'src/settings/document_presets.cpp',
-  # 'src/settings/source_presets.cpp',
+  'src/img/tiling/tiling.hpp',
+  'src/img/tiling/grid_tiling.hpp',
   'src/util/convert.cpp',
   'src/main.cpp',
+  'src/settings/document_presets.hpp',
 )
 
 # Executable
