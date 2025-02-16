@@ -10,12 +10,21 @@ qt6_dep = dependency('qt6', modules: ['Core'])
 
 # Source files
 srcs = files(
-    'src/main.cpp',
-    'src/img/filters/filter.hpp',
-    'src/img/filters/size.hpp',
-    'src/img/filters/size.cpp',
-    'src/img/filters/mask.hpp',
-    'src/img/filters/mask.cpp',
+  'src/img/filters/filter.hpp',
+  'src/img/filters/filter_store.hpp',
+  'src/img/filters/filter_store.cpp',
+  'src/img/filters/mask.hpp',
+  'src/img/filters/mask.cpp',
+  'src/img/filters/size.hpp',
+  'src/img/filters/size.cpp',
+  'src/img/source.hpp',
+  'src/img/source.cpp',
+  # 'src/img/tiling.cpp',
+  # 'src/settings/document_presets.hpp',
+  # 'src/settings/document_presets.cpp',
+  # 'src/settings/source_presets.cpp',
+  'src/util/convert.cpp',
+  'src/main.cpp',
 )
 
 # Executable

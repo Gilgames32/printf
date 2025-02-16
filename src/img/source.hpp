@@ -14,10 +14,9 @@ class ImgSource {
     FilterStore filters;
 
   public:
-    ImgSource(const std::string& image_path, const size_t& amount, const FilterStore& filters)
-        : img_path(image_path), amount(amount), filters(filters) {}
+    ImgSource(const cv::Mat& image, const size_t& amount, const FilterStore& fil);
 
-    cv::Mat getImg() const { return cv::imread(img_path, 1); }
+    cv::Mat getImg() const;
 
-    size_t getAmount() const { return amount; }
+    cv::Mat applyFilters() const;
 };
