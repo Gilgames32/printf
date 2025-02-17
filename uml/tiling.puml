@@ -1,0 +1,24 @@
+@startuml tiling
+
+title Csempézés
+
+abstract Tiling {
+    cv::Mat generate(DocumentPreset preset, std::vector<ImgSource> images)
+}
+
+class GridTiling {
+    cv::Mat generate(...)
+}
+Tiling <|-- GridTiling
+
+class StripTiling {
+    cv::Mat generate(...)
+}
+Tiling <|-- StripTiling
+
+class Tile {
+    ImgSource image
+    cv::Point corner
+}
+
+@enduml

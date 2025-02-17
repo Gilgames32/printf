@@ -1,0 +1,36 @@
+@startuml img_source
+
+title Kép forrás
+
+class ImgSource {
+    cv::Mat original
+    cv::Mat cached
+    size_t amount
+    std::vector<Filter> filters
+    
+    bool rotated
+    size_t width, height
+    
+    void add_filter(Filter filter)
+    void clear_filters()
+    cv::Mat get_img()
+}
+
+abstract Filter {
+    cv::Mat apply(cv::Mat &img)
+}
+ImgSource *-- Filter
+
+
+class Mask {
+    cv::Mat mask
+    cv::Mat apply(cv::Mat &img)
+}
+Filter <|-- Mask
+
+
+
+
+
+
+@enduml
