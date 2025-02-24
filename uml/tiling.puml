@@ -16,9 +16,4 @@ class StripTiling {
 }
 Tiling <|-- StripTiling
 
-class Tile {
-    ImgSource image
-    cv::Point corner
-}
-
 @enduml

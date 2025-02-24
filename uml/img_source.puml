@@ -13,6 +13,7 @@ class ImgSource {
     
     void add_filter(Filter filter)
     void clear_filters()
+    void apply_filters()
     cv::Mat get_img()
 }
 
@@ -29,7 +30,12 @@ class Mask {
 Filter <|-- Mask
 
 
-
+class Tile {
+    ImgSource image
+    cv::Point corner
+    bool rotated
+}
+ImgSource -* Tile
 
 
 
