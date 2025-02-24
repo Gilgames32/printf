@@ -3,12 +3,7 @@
 #include "size.hpp"
 
 MaskFilter::MaskFilter(const cv::Mat &mask) : mask(mask) {}
-/**
- * @brief CRAZY HAMBURGEf!!!!
- *
- * @param image
- * @return cv::Mat
- */
+
 cv::Mat MaskFilter::apply(const cv::Mat &image) {
     auto fitMask = SizeFilter::resize(mask, image.cols, image.rows);
 

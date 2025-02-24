@@ -10,21 +10,10 @@ qt6_dep = dependency('qt6', modules: ['Core'])
 
 incdir = include_directories(
   'src', 
-  'src/img', 
-  'src/util', 
-  'src/img/filters', 
-  'src/img/tiling', 
-  'src/settings'
 )
 
 # Source files
 srcs = files(
-  'src/img/filters/filter_store.cpp',
-  'src/img/filters/mask.cpp',
-  'src/img/filters/size.cpp',
-  'src/img/source.cpp',
-  'src/util/convert.cpp',
-  'src/img/tiling/grid_tiling.cpp',
   'src/main.cpp',
 )
 
