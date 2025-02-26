@@ -3,32 +3,36 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
-#include "filter.hpp"
 #include "cached_image.hpp"
+#include "filters/filter.hpp"
 
-class ImageSource {
+class ImageSource : ICachableImage {
   private:
     cv::Mat original;
     CachedImage cached;
     size_t amount;
-    std::vector<Filter> filters;
+    std::vector<Filter*> filters;
     bool rotated;
     size_t width, height;
 
   public:
-    ImageSource(cv::Mat source);
+    ImageSource(cv::Mat source, size_t amount);
 
-    void add_filter(const Filter& filter);
+    ~ImageSource() { clear_filters(); }
+
+    void add_filter(Filter* filter);
 
     void clear_filters();
 
-    void apply_filters();
+    cv::Mat apply_filters() const;
 
-    cv::Mat get_img() const;
+    cv::Mat get_img() { return cached.get_img(); }
 
-    size_t get_width() const;
+    size_t get_width() const { return width; }
 
-    size_t get_height() const;
+    size_t get_height() const { return height; }
 
-    size_t get_amount() const;
+    size_t get_amount() const { return amount; }
+
+    cv::Mat get_cachable() const override { return apply_filters(); }
 };

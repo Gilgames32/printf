@@ -11,7 +11,7 @@ class MaskFilter : public Filter {
   public:
     MaskFilter(const cv::Mat &mask);
 
-    cv::Mat apply(const cv::Mat &image) override;
+    cv::Mat apply(const cv::Mat &image) const override;
 
     void setInvert(bool invert);
 };

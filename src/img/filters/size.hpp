@@ -14,7 +14,7 @@ class SizeFilter : public Filter {
   public:
     SizeFilter(int width, int height);
 
-    cv::Mat apply(const cv::Mat &image) override;
+    cv::Mat apply(const cv::Mat &image) const override;
 
     static cv::Mat resize(const cv::Mat &image, int width, int height, int interDown = sizeInterDown,
                           int interUp = sizeInterUp);

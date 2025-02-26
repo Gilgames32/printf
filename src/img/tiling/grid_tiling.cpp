@@ -1,5 +1,6 @@
 #include "grid_tiling.hpp"
 #include "tile.hpp"
+#include "rotate.hpp"
 #include <numeric>
 
 size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t tile_height, size_t amount) {
@@ -53,10 +54,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
 
     for (ImageSource& img : images) {
         if (rotate) {
-            cv::Mat rotated;
-            
-            // TODO: rotate filter
-            // cv::rotate(img.data, img.data, cv::ROTATE_90_CLOCKWISE);
+            img.add_filter(new RotateFilter());
         }
         // TODO
         // set the size of every image to match the first one
