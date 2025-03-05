@@ -4,7 +4,7 @@
 
 class Tile {
   private:
-    ImageSource& image;
+    ImageSource* image;
     size_t width, height;
 
   public:
@@ -13,7 +13,7 @@ class Tile {
 
     bool rotated = false;
 
-    Tile(ImageSource& img) : image(img), width(img.get_width()), height(img.get_height()) {}
+    Tile(ImageSource* img) : image(img), width(img->get_width()), height(img->get_height()) {}
 
     void rotate() {
         std::swap(width, height);
@@ -26,5 +26,5 @@ class Tile {
 
     size_t get_height() const { return height; }
 
-    cv::Mat get_image() { return image.get_img(); }
+    cv::Mat get_image() { return image->get_img(); }
 };

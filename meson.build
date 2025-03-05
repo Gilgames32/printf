@@ -15,6 +15,7 @@ incdir = include_directories(
   'src/img/filters',
   'src/img/tiling',
   'src/settings',
+  'src/util'
 )
 
 # Source files
@@ -25,6 +26,7 @@ srcs = files(
   'src/img/tiling/grid_tiling.cpp',
   'src/img/cached_image.cpp',
   'src/img/image_source.cpp',
+  'src/settings/document_preset.cpp',
   'src/main.cpp'
 )
 

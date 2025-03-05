@@ -10,22 +10,29 @@
 #include "image_source.hpp"
 #include "rotate.hpp"
 #include "size.hpp"
+#include "document_preset.hpp"
+#include "grid_tiling.hpp"
 
 int main(void) {
-    cv::Mat source = cv::imread("./assets/3.png", 1);
+    DocumentPreset preset = DocumentPreset("./presets/document/tekercs.json");
+    
+    std::cout << preset.get_document_width_px() << std::endl;
 
-    ImageSource img = ImageSource(source, 1);
 
-    img.add_filter(new RotateFilter());
+    cv::Mat source = cv::imread("./assets/3.png");
 
-    // create image window named "My Image"
+    ImageSource img = ImageSource(source, 11);
+
+    // img.add_filter(new RotateFilter());
+
+    GridTiling tiling = GridTiling();
+    cv::Mat result = tiling.generate(preset, {&img});
+
+
     cv::namedWindow("My Image", cv::WINDOW_AUTOSIZE | cv::WINDOW_GUI_NORMAL);
-
-    // show the image on window
-    cv::imshow("My Image", SizeFilter::resize(img.get_img(), 800, 600));
-
-    // aboszolút filmszínház
+    cv::imshow("My Image", SizeFilter::resize_to_width(result, 1080));
     cv::waitKey(0);
+
 
     return 0;
 }

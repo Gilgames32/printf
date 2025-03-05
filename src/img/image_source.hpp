@@ -20,6 +20,16 @@ class ImageSource : ICachableImage {
     ImageSource(cv::Mat source, size_t amount);
 
     ~ImageSource() { clear_filters(); }
+    ImageSource(const ImageSource& other)
+      : original(other.original),
+        cached(*this),
+        amount(other.amount),
+        filters(other.filters), // FIXME
+        rotated(other.rotated),
+        width(other.width),
+        height(other.height) {
+          std::cout << "Copy constructor called" << std::endl;
+        }
 
     void add_filter(Filter* filter);
 

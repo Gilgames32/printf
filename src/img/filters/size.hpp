@@ -18,4 +18,6 @@ class SizeFilter : public Filter {
 
     static cv::Mat resize(const cv::Mat &image, int width, int height, int interDown = sizeInterDown,
                           int interUp = sizeInterUp);
+
+    static cv::Mat resize_to_width(const cv::Mat &image, int width, int interDown = sizeInterDown, int interUp = sizeInterUp);
 };

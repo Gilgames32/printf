@@ -16,3 +16,7 @@ cv::Mat SizeFilter::resize(const cv::Mat &image, int width, int height, int inte
 
     return resized;
 }
+
+cv::Mat SizeFilter::resize_to_width(const cv::Mat &image, int width, int interDown, int interUp) {
+    return SizeFilter::resize(image, width, image.rows * width / image.cols, interDown, interUp);
+}
