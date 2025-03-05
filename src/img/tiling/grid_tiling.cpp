@@ -1,7 +1,10 @@
 #include "grid_tiling.hpp"
-#include "tile.hpp"
-#include "rotate.hpp"
+
 #include <numeric>
+
+#include "rotate.hpp"
+#include "size.hpp"
+#include "tile.hpp"
 
 size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t tile_height, size_t amount) {
     size_t columns = std::floor(document_width / tile_width);
@@ -10,17 +13,14 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
     return (document_width - tile_width * std::min(amount, columns)) * tile_height;
 }
 
-cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource *> images) {
-    size_t document_width = preset.get_document_width_px();  // and take the gutter into account
+cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
+    size_t document_width = preset.get_document_width_px() + 2 * preset.get_gutter_px();  // FIXME proper gutter
 
     size_t tile_width = images[0]->get_width();
     size_t tile_height = images[0]->get_height();
 
-    size_t quantity = std::accumulate(images.begin(), images.end(), 0, [](size_t sum, const ImageSource* img) {
-        return sum + img->get_amount();
-    });
-
-
+    size_t quantity = std::accumulate(images.begin(), images.end(), 0,
+                                      [](size_t sum, const ImageSource* img) { return sum + img->get_amount(); });
 
     bool rotate = false;
     // fits both ways
@@ -51,6 +51,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
         // TODO
         // set the size of every image to match the first one
         // add gutter filter with guide parameter if the image doesnt already have one
+        img->add_filter(new SizeFilter(tile_width, tile_height));
 
         for (size_t i = 0; i < img->get_amount(); i++) {
             tiles.push_back(Tile(img));
@@ -63,12 +64,6 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
 
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
-
-    
-    
-
-
-    
 
     // TODO: corrected quantity
 

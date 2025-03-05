@@ -39,9 +39,9 @@ class ImageSource : ICachableImage {
 
     cv::Mat get_img() { return cached.get_img(); }
 
-    size_t get_width() const { return width; }
+    size_t get_width() { return cached.get_width(); }
 
-    size_t get_height() const { return height; }
+    size_t get_height() { return cached.get_height(); }
 
     size_t get_amount() const { return amount; }
 

@@ -32,4 +32,6 @@ class DocumentPreset {
     size_t get_max_height_px() const;
 
     size_t get_min_height_px() const;
+
+    size_t get_gutter_px() const;
 };

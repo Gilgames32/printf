@@ -10,9 +10,16 @@ class CachedImage : ICache {
     cv::Mat cache;
     bool isDirty;
 
+    void regenerate();
+
   public:
     CachedImage(const ICachableImage& source);
+    
     cv::Mat get_img();
+
+    size_t get_width();
+
+    size_t get_height();
 
     void set_dirty() override;
 };

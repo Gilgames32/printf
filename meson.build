@@ -23,6 +23,7 @@ srcs = files(
   'src/img/filters/mask.cpp',
   'src/img/filters/rotate.cpp',
   'src/img/filters/size.cpp',
+  'src/img/filters/padding.cpp',
   'src/img/tiling/grid_tiling.cpp',
   'src/img/cached_image.cpp',
   'src/img/image_source.cpp',
