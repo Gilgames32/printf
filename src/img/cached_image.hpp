@@ -1,8 +1,8 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
-#include "interfaces/icachable.hpp"
-#include "interfaces/icache.hpp"
+#include "icachable.hpp"
+#include "icache.hpp"
 
 class CachedImage : ICache {
   private:

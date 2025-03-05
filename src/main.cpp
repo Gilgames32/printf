@@ -7,10 +7,9 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-// using json = nlohmann::json;
-
-#include "img/image_source.hpp"
-#include "img/filters/rotate.hpp"
+#include "image_source.hpp"
+#include "rotate.hpp"
+#include "size.hpp"
 
 int main(void) {
     cv::Mat source = cv::imread("./assets/3.png", 1);
@@ -23,7 +22,7 @@ int main(void) {
     cv::namedWindow("My Image", cv::WINDOW_AUTOSIZE | cv::WINDOW_GUI_NORMAL);
 
     // show the image on window
-    cv::imshow("My Image", img.get_img());
+    cv::imshow("My Image", SizeFilter::resize(img.get_img(), 800, 600));
 
     // aboszolút filmszínház
     cv::waitKey(0);

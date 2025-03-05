@@ -4,7 +4,8 @@
 #include <vector>
 
 #include "cached_image.hpp"
-#include "filters/filter.hpp"
+#include "icachable.hpp"
+#include "filter.hpp"
 
 class ImageSource : ICachableImage {
   private:
