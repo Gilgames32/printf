@@ -5,7 +5,7 @@ project('printf', 'cpp',
 # Dependencies
 nlohmann_json = dependency('nlohmann_json', required: true)
 opencv = dependency('opencv4', required: true)
-qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui'])
+qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui', 'Qml'])
 
 
 
@@ -15,11 +15,14 @@ qt6 = import('qt6')
 
 ui_files = files('src/ui/mainwindow.ui')
 
-moc_files = files('src/ui/mainwindow.hpp')
+moc_headers = files('src/ui/mainwindow.hpp')
+
+qresources = files('src/qml/resources.qrc')
 
 prep = qt6.preprocess(
-  moc_headers : moc_files,
-  ui_files : ui_files
+  moc_headers : moc_headers,
+  ui_files : ui_files,
+  qresources : qresources,
 )
 
 
@@ -33,6 +36,7 @@ inc = include_directories(
   'src/settings',
   'src/util',
   'src/ui',
+  'src/qml',
 )
 
 # Source files
