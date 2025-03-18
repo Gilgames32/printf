@@ -5,17 +5,34 @@ project('printf', 'cpp',
 # Dependencies
 nlohmann_json = dependency('nlohmann_json', required: true)
 opencv = dependency('opencv4', required: true)
-qt6_dep = dependency('qt6', modules: ['Core'])
+qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui'])
 
 
-incdir = include_directories(
+
+
+# Qt6 preprocessing
+qt6 = import('qt6')
+
+ui_files = files('src/ui/mainwindow.ui')
+
+moc_files = files('src/ui/mainwindow.hpp')
+
+prep = qt6.preprocess(
+  moc_headers : moc_files,
+  ui_files : ui_files
+)
+
+
+# Include directories
+inc = include_directories(
   'src',
   'src/interfaces',
   'src/img',
   'src/img/filters',
   'src/img/tiling',
   'src/settings',
-  'src/util'
+  'src/util',
+  'src/ui',
 )
 
 # Source files
@@ -28,11 +45,12 @@ srcs = files(
   'src/img/cached_image.cpp',
   'src/img/image_source.cpp',
   'src/settings/document_preset.cpp',
-  'src/main.cpp'
+  'src/ui/mainwindow.cpp',
+  'src/main.cpp',
 )
 
 # Executable
-executable('printf', srcs,
-  include_directories : incdir,
+executable('printf', [srcs, prep],
+  include_directories: inc,
   dependencies: [nlohmann_json, opencv, qt6_dep]
 )
