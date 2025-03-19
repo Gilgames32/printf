@@ -8,9 +8,47 @@ ApplicationWindow {
     height: 480
     title: "Example QML Window"
 
-    Preview {
-        id: preview
+    RowLayout {
         anchors.fill: parent
+        spacing: 10
+
+        FileList {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+        }
+
+        ListModel {
+            id: fileModel
+
+            ListElement {
+                filePath: "file1.txt"
+            }
+
+            ListElement {
+                filePath: "file2.txt"
+            }
+
+            ListElement {
+                filePath: "file3.txt"
+            }
+
+        }
+
+        Preview {
+            id: preview
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 3
+        }
+
+        Properties {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+        }
+
     }
 
 }

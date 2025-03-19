@@ -6,8 +6,6 @@ Item {
         width: 10
         height: 10
         color: "#323232"
-        border.color: "red"
-        border.width: 1
         anchors.fill: parent
     }
 
@@ -45,7 +43,9 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onWheel: (wheel) => mouseArea.wheel(wheel) // emit the signal to the main mouse area
+            onWheel: (wheel) => {
+                return mouseArea.wheel(wheel);
+            } // emit the signal to the main mouse area
         }
 
     }
