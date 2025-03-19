@@ -13,9 +13,9 @@ qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui', 'Qml'])
 # Qt6 preprocessing
 qt6 = import('qt6')
 
-ui_files = files('src/ui/mainwindow.ui')
+ui_files = files()
 
-moc_headers = files('src/ui/mainwindow.hpp')
+moc_headers = files('src/ui/dataentrymodel.h')
 
 qresources = files('src/qml/resources.qrc')
 
@@ -49,7 +49,7 @@ srcs = files(
   'src/img/cached_image.cpp',
   'src/img/image_source.cpp',
   'src/settings/document_preset.cpp',
-  'src/ui/mainwindow.cpp',
+  'src/ui/dataentrymodel.cpp',
   'src/main.cpp',
 )
 

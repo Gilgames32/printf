@@ -10,7 +10,6 @@ ApplicationWindow {
 
     RowLayout {
         anchors.fill: parent
-        spacing: 10
 
         FileList {
             Layout.fillHeight: true
