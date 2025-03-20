@@ -6,5 +6,6 @@
         <file>Properties.qml</file>
         <file>3.png</file>
         <file>File.qml</file>
+        <file>ImagePicker.qml</file>
     </qresource>
 </RCC>
