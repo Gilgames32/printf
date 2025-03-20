@@ -3,8 +3,7 @@ import QtQuick.Controls 6.8
 
 Item {
     Rectangle {
-        width: 10
-        height: 10
+        id: flickArea
         color: "#323232"
         anchors.fill: parent
     }
@@ -19,8 +18,6 @@ Item {
                 image.scale *= zoomFactor;
             else
                 image.scale /= zoomFactor;
-            flickable.contentWidth = image.width * image.scale;
-            flickable.contentHeight = image.height * image.scale;
         }
     }
 
@@ -28,8 +25,8 @@ Item {
         id: flickable
 
         anchors.fill: parent
-        contentWidth: image.width * image.scale
-        contentHeight: image.height * image.scale
+        contentWidth: Math.max(image.width * image.scale, flickArea.width)
+        contentHeight: Math.max(image.height * image.scale, flickArea.height)
         clip: true
 
         Image {
