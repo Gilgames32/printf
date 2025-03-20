@@ -50,6 +50,7 @@ srcs = files(
   'src/img/image_source.cpp',
   'src/settings/document_preset.cpp',
   'src/ui/dataentrymodel.cpp',
+  'src/ui/inputfile.cpp',
   'src/main.cpp',
 )
 

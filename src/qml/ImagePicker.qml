@@ -4,15 +4,17 @@ import QtQuick.Dialogs 6.8
 
 FileDialog {
     id: fileDialog
+    property var onAcceptDelegate: (files) => console.log("Selected files:", files);
+    property var onRejectDelegate: () => console.log("File selection canceled");
 
     title: "Select an Image"
     nameFilters: ["Image files (*.png *.jpg *.jpeg)"]
     fileMode: FileDialog.OpenFiles
 
     onAccepted: {
-        console.log("Selected file:", fileDialog.selectedFiles);
+        onAcceptDelegate(fileDialog.selectedFiles);
     }
     onRejected: {
-        console.log("File selection canceled");
+        onRejectDelegate();
     }
 }

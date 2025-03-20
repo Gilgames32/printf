@@ -21,6 +21,9 @@ Item {
 
             ImagePicker {
                 id: imagePicker
+                onAcceptDelegate: (files) => {
+                    dataEntryModel.addFiles(files);
+                }
             }
 
         }
@@ -34,6 +37,7 @@ Item {
             spacing: 10
 
             model: DataEntryModel {
+                id: dataEntryModel
             }
 
             delegate: File {

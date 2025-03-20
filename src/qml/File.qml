@@ -29,7 +29,7 @@ Rectangle {
                 spacing: 10
 
                 Rectangle {
-                    color: model.display
+                    color: "orange"
                     Layout.preferredWidth: 100
                     Layout.preferredHeight: 100
                 }
@@ -64,7 +64,7 @@ Rectangle {
                         width: parent.width
 
                         Text {
-                            text: model.display
+                            text: model.name
                             font.pixelSize: 16
                             Layout.fillWidth: true
                         }

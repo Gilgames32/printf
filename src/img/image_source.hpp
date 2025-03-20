@@ -19,7 +19,7 @@ class ImageSource : ICachableImage {
   public:
     ImageSource(cv::Mat source, size_t amount);
 
-    ~ImageSource() { clear_filters(); }
+    virtual ~ImageSource() { clear_filters(); }
     ImageSource(const ImageSource& other)
       : original(other.original),
         cached(*this),
