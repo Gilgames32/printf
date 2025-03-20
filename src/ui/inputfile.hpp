@@ -6,8 +6,8 @@
 class InputFile {
 private:
     std::string file_path;
-    cv::Mat thumbnail;
     cv::Mat image;
+    int amount;
 
 public:
     explicit InputFile(const std::string& path);
@@ -18,7 +18,9 @@ public:
 
     std::pair<int, int> get_image_size() const;
 
-    cv::Mat get_thumbnail(int width, int height) const;
-
     cv::Mat get_image() const;
+
+    int get_amount() const;
+
+    void set_amount(int amount);
 };

@@ -10,9 +10,9 @@ class DataEntryModel : public QAbstractListModel {
   public:
     enum RoleNames {
         NameRole = Qt::UserRole + 0,
-        HueRole = Qt::UserRole + 1,
-        SaturationRole = Qt::UserRole + 2,
-        BrightnessRole = Qt::UserRole + 3
+        PathRole = Qt::UserRole + 1,
+        ImageSizeRole = Qt::UserRole + 2,
+        AmountRole = Qt::UserRole + 3
     };
 
     explicit DataEntryModel(QObject *parent = 0);
@@ -30,6 +30,7 @@ class DataEntryModel : public QAbstractListModel {
   public:
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
     Q_INVOKABLE void remove(int index);
     Q_INVOKABLE void clear();

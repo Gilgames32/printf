@@ -41,6 +41,7 @@ Item {
             }
 
             delegate: File {
+                dataModel: dataEntryModel
                 width: filePanel.width
             }
 

@@ -2,9 +2,9 @@
 
 DataEntryModel::DataEntryModel(QObject *parent) : QAbstractListModel(parent) { 
     m_roleNames[NameRole] = "name";
-    m_roleNames[HueRole] = "hue";
-    m_roleNames[SaturationRole] = "saturation";
-    m_roleNames[BrightnessRole] = "brightness";
+    m_roleNames[PathRole] = "path";
+    m_roleNames[ImageSizeRole] = "imageSize";
+    m_roleNames[AmountRole] = "amount";
 
     m_data = QList<InputFile *>();
 }
@@ -32,13 +32,39 @@ QVariant DataEntryModel::data(const QModelIndex &index, int role) const {
     // property access
     switch (role) {
         case Qt::DisplayRole:
-            return QVariant::fromValue(QString::fromStdString(m_data.value(row)->get_file_name()));
         case NameRole:
             return QVariant::fromValue(QString::fromStdString(m_data.value(row)->get_file_name()));
+        case PathRole:
+            return QVariant::fromValue(QString::fromStdString(m_data.value(row)->get_file_path()));
+        case ImageSizeRole: {
+            auto [width, height] = m_data.value(row)->get_image_size();
+            return QVariant::fromValue(QSize(width, height));
+        }
+        case AmountRole:
+            return QVariant::fromValue(m_data.value(row)->get_amount());
+        default:
+            return QVariant();
+    }
+}
+
+bool DataEntryModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+    int row = index.row();
+
+    // oob check
+    if (row < 0 || row >= m_data.count()) {
+        return false;
     }
 
-    // default
-    return QVariant();
+    switch (role) {
+        case AmountRole:
+            m_data.value(row)->set_amount(value.toInt());
+            break;
+        default:
+            return false;
+    }
+
+    emit dataChanged(index, index, {role});
+    return true;
 }
 
 void DataEntryModel::remove(int index) {

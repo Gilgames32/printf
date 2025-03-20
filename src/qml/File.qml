@@ -5,6 +5,8 @@ import QtQuick.Layouts 6.8
 Rectangle {
     id: fileItem
 
+    property var dataModel: null
+
     border.color: "black"
     border.width: 1
     radius: 5
@@ -28,15 +30,21 @@ Rectangle {
                 width: parent.width
                 spacing: 10
 
-                Rectangle {
-                    color: "orange"
-                    Layout.preferredWidth: 100
+                Image {
+                    id: image
+                    source: "file://" + model.path
+                    
+                    fillMode: Image.PreserveAspectFit
+                    
+                    Layout.fillWidth: true                    
+                    Layout.preferredWidth: 1
                     Layout.preferredHeight: 100
                 }
 
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    Layout.preferredWidth: 4
                     spacing: 10
 
                     RowLayout {
@@ -44,9 +52,10 @@ Rectangle {
                         width: parent.width
 
                         Text {
-                            text: "path"
+                            text: model.path
                             font.pixelSize: 16
                             Layout.fillWidth: true
+                            clip: true
                         }
 
                         Button {
@@ -55,6 +64,9 @@ Rectangle {
                             Layout.preferredWidth: 30
                             Layout.preferredHeight: 30
                             text: "X"
+                            onClicked: {
+                                dataModel.remove(model.index)
+                            }
                         }
 
                     }
@@ -67,21 +79,30 @@ Rectangle {
                             text: model.name
                             font.pixelSize: 16
                             Layout.fillWidth: true
+                            clip: true
                         }
 
                         SpinBox {
                             id: spinbox
 
                             Layout.preferredWidth: 60
-                            value: 0
-                            from: 0
+                            value: model.amount
+                            from: 1
+                            to: 1000
                             stepSize: 1
+                            editable: true
+
+                            onValueChanged: () => {
+                                if (model.amount != spinbox.value){
+                                    model.amount = spinbox.value;
+                                }
+                            }
                         }
 
                     }
 
                     Text {
-                        text: "extra info about the file"
+                        text: model.imageSize.width + "x" + model.imageSize.height
                         font.pixelSize: 16
                     }
 
