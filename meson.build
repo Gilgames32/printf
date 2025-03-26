@@ -15,7 +15,7 @@ qt6 = import('qt6')
 
 ui_files = files()
 
-moc_headers = files('src/ui/dataentrymodel.h')
+moc_headers = files('src/ui/source_entry_view.hpp')
 
 qresources = files('src/qml/resources.qrc')
 
@@ -49,8 +49,8 @@ srcs = files(
   'src/img/cached_image.cpp',
   'src/img/image_source.cpp',
   'src/settings/document_preset.cpp',
-  'src/ui/dataentrymodel.cpp',
-  'src/ui/inputfile.cpp',
+  'src/ui/source_entry_view.cpp',
+  'src/ui/image_source_view.cpp',
   'src/main.cpp',
 )
 

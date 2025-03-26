@@ -1,10 +1,10 @@
-#include "inputfile.hpp"
+#include "image_source_view.hpp"
 #include <opencv2/opencv.hpp>
 #include <filesystem>
 #include <stdexcept>
 
 // TODO: dont hardcode the initial amount
-InputFile::InputFile(const std::string& path) : file_path(path), amount(20) {
+ImageSourceView::ImageSourceView(const std::string& path) : file_path(path), amount(20) {
     if (file_path.rfind("file://", 0) == 0) {
         file_path = file_path.substr(7);
     }
@@ -19,20 +19,20 @@ InputFile::InputFile(const std::string& path) : file_path(path), amount(20) {
     }
 }
 
-std::string InputFile::get_file_name() const {
+std::string ImageSourceView::get_file_name() const {
     return std::filesystem::path(file_path).filename().string();
 }
 
-std::string InputFile::get_file_path() const {
+std::string ImageSourceView::get_file_path() const {
     return file_path;
 }
 
-std::pair<int, int> InputFile::get_image_size() const {
+std::pair<int, int> ImageSourceView::get_image_size() const {
     return std::make_pair(image.cols, image.rows);
 }
 
-cv::Mat InputFile::get_image() const { return image; }
+cv::Mat ImageSourceView::get_image() const { return image; }
 
-int InputFile::get_amount() const { return amount; }
+int ImageSourceView::get_amount() const { return amount; }
 
-void InputFile::set_amount(int amount) { this->amount = amount; }
+void ImageSourceView::set_amount(int amount) { this->amount = amount; }

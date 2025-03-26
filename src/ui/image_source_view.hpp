@@ -3,14 +3,14 @@
 #include <string>
 #include <opencv2/opencv.hpp>
 
-class InputFile {
+class ImageSourceView {
 private:
     std::string file_path;
     cv::Mat image;
     int amount;
 
 public:
-    explicit InputFile(const std::string& path);
+    explicit ImageSourceView(const std::string& path);
 
     std::string get_file_name() const;
 

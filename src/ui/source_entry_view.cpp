@@ -1,4 +1,4 @@
-#include "dataentrymodel.h"
+#include "source_entry_view.hpp"
 
 DataEntryModel::DataEntryModel(QObject *parent) : QAbstractListModel(parent) { 
     m_roleNames[NameRole] = "name";
@@ -6,7 +6,7 @@ DataEntryModel::DataEntryModel(QObject *parent) : QAbstractListModel(parent) {
     m_roleNames[ImageSizeRole] = "imageSize";
     m_roleNames[AmountRole] = "amount";
 
-    m_data = QList<InputFile *>();
+    m_data = QList<ImageSourceView *>();
 }
 
 DataEntryModel::~DataEntryModel() {
@@ -85,7 +85,7 @@ void DataEntryModel::clear() {
 
 void DataEntryModel::addFiles(const QStringList &files) {
     for (const QString &file : files) {
-        auto *input_file = new InputFile(file.toStdString());
+        auto *input_file = new ImageSourceView(file.toStdString());
 
         beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
         m_data.append(input_file); 

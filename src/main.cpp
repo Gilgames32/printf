@@ -1,7 +1,7 @@
 #include <QtGui>
 #include <QtQml>
 
-#include "dataentrymodel.h"
+#include "source_entry_view.hpp"
 
 int main(int argc, char *argv[])
 {

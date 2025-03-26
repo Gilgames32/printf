@@ -3,7 +3,7 @@
 #include <QtCore>
 #include <QtGui>
 
-#include "inputfile.hpp"
+#include "image_source_view.hpp"
 
 class DataEntryModel : public QAbstractListModel {
     Q_OBJECT
@@ -24,7 +24,7 @@ class DataEntryModel : public QAbstractListModel {
   private:
     // TODO: shared pointer
     // so that deleting while its generating wont result in bugs
-    QList<InputFile *> m_data;
+    QList<ImageSourceView *> m_data;
     QHash<int, QByteArray> m_roleNames;
 
   public:
