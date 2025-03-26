@@ -7,10 +7,15 @@ Rectangle {
 
     property var dataModel: null
 
-    border.color: "black"
-    border.width: 1
+    color: palette.base
     radius: 5
     implicitHeight: paddingCol.implicitHeight + 20 // FIXME: hack
+
+    SystemPalette {
+        id: palette
+
+        colorGroup: SystemPalette.Active
+    }
 
     Item {
         id: container
@@ -32,11 +37,10 @@ Rectangle {
 
                 Image {
                     id: image
+
                     source: "file://" + model.path
-                    
                     fillMode: Image.PreserveAspectFit
-                    
-                    Layout.fillWidth: true                    
+                    Layout.fillWidth: true
                     Layout.preferredWidth: 1
                     Layout.preferredHeight: 100
                 }
@@ -52,6 +56,7 @@ Rectangle {
                         width: parent.width
 
                         Text {
+                            color: palette.text
                             text: model.path
                             font.pixelSize: 16
                             Layout.fillWidth: true
@@ -65,7 +70,7 @@ Rectangle {
                             Layout.preferredHeight: 30
                             text: "X"
                             onClicked: {
-                                dataModel.remove(model.index)
+                                dataModel.remove(model.index);
                             }
                         }
 
@@ -76,6 +81,7 @@ Rectangle {
                         width: parent.width
 
                         Text {
+                            color: palette.text
                             text: model.name
                             font.pixelSize: 16
                             Layout.fillWidth: true
@@ -91,17 +97,17 @@ Rectangle {
                             to: 1000
                             stepSize: 1
                             editable: true
-
                             onValueChanged: () => {
-                                if (model.amount != spinbox.value){
+                                if (model.amount != spinbox.value)
                                     model.amount = spinbox.value;
-                                }
+
                             }
                         }
 
                     }
 
                     Text {
+                        color: palette.text
                         text: model.imageSize.width + "x" + model.imageSize.height
                         font.pixelSize: 16
                     }

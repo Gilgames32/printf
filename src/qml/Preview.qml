@@ -2,9 +2,11 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 
 Item {
+    SystemPalette { id: palette; colorGroup: SystemPalette.Active }
+
     Rectangle {
         id: flickArea
-        color: "#323232"
+        color: palette.dark
         anchors.fill: parent
     }
 
