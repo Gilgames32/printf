@@ -16,6 +16,7 @@ Application *- SourceEntryView
 class ImageSourceView {
     ImageSource* get_imagesource()
     void load_from_json(json)
+    std::map<string, string> propbe_presets()
 }
 SourceEntryView *-- "*" ImageSourceView
 
@@ -41,6 +42,7 @@ FilterView <|-- SizeView
 class DocumentPresetView {
     DocumentPreset* get_preset()
     void load_from_json(json)
+    std::map<string, string> propbe_presets()
 }
 DocumentPresetView --* Application
 

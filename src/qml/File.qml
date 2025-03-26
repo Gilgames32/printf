@@ -20,6 +20,7 @@ Rectangle {
     Item {
         id: container
 
+        clip: true
         anchors.fill: parent
         anchors.margins: 10
 
@@ -47,18 +48,17 @@ Rectangle {
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: 4
-                    spacing: 10
+                    Layout.preferredWidth: 3
 
                     RowLayout {
                         spacing: 10
-                        width: parent.width
+                        Layout.fillWidth: true
 
                         Text {
                             color: palette.text
-                            text: model.path
+                            text: model.name
                             font.pixelSize: 16
+                            font.bold: true
                             Layout.fillWidth: true
                             clip: true
                         }
@@ -76,14 +76,22 @@ Rectangle {
 
                     }
 
+                    Text {
+                        Layout.fillWidth: true
+                        color: palette.text
+                        text: model.path
+                        font.pixelSize: 12
+                        clip: true
+                    }
+
                     RowLayout {
                         spacing: 10
-                        width: parent.width
+                        Layout.fillWidth: true
 
                         Text {
                             color: palette.text
-                            text: model.name
-                            font.pixelSize: 16
+                            text: model.imageSize.width + "x" + model.imageSize.height
+                            font.pixelSize: 12
                             Layout.fillWidth: true
                             clip: true
                         }
@@ -106,10 +114,53 @@ Rectangle {
 
                     }
 
-                    Text {
-                        color: palette.text
-                        text: model.imageSize.width + "x" + model.imageSize.height
-                        font.pixelSize: 16
+                }
+
+            }
+
+            ComboBox {
+                id: comboBox
+
+                width: parent.width
+                textRole: "text"
+                onCurrentIndexChanged: {
+                }
+
+                model: ListModel {
+                    ListElement {
+                        text: "none"
+                    }
+
+                    ListElement {
+                        text: "idk"
+                    }
+
+                }
+
+            }
+
+            GroupBox {
+                title: "Size"
+                width: parent.width
+
+                ColumnLayout {
+                    spacing: 10
+                    width: parent.width
+                    
+                    UnitInput {
+                        id: widthSpinbox
+
+                        label.text: "Width"
+                        unit.text: "mm"
+                        Layout.fillWidth: true
+                    }
+
+                    UnitInput {
+                        id: heightSpinbox
+
+                        label.text: "Height"
+                        unit.text: "mm"
+                        Layout.fillWidth: true
                     }
 
                 }
