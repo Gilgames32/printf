@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<DataEntryModel>("printf", 1, 0, "DataEntryModel");
+    qmlRegisterType<SourceEntryView>("printf", 1, 0, "SourceEntryView");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/Application.qml")));

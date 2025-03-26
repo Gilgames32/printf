@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: "Example QML Window"
+    title: "printf"
 
     RowLayout {
         anchors.fill: parent

@@ -1,6 +1,6 @@
 #include "source_entry_view.hpp"
 
-DataEntryModel::DataEntryModel(QObject *parent) : QAbstractListModel(parent) { 
+SourceEntryView::SourceEntryView(QObject *parent) : QAbstractListModel(parent) { 
     m_roleNames[NameRole] = "name";
     m_roleNames[PathRole] = "path";
     m_roleNames[ImageSizeRole] = "imageSize";
@@ -9,19 +9,19 @@ DataEntryModel::DataEntryModel(QObject *parent) : QAbstractListModel(parent) {
     m_data = QList<ImageSourceView *>();
 }
 
-DataEntryModel::~DataEntryModel() {
+SourceEntryView::~SourceEntryView() {
     qDeleteAll(m_data);
     m_data.clear();
 }
 
-QHash<int, QByteArray> DataEntryModel::roleNames() const { return m_roleNames; }
+QHash<int, QByteArray> SourceEntryView::roleNames() const { return m_roleNames; }
 
-int DataEntryModel::rowCount(const QModelIndex &parent) const {
+int SourceEntryView::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return m_data.count();
 }
 
-QVariant DataEntryModel::data(const QModelIndex &index, int role) const {
+QVariant SourceEntryView::data(const QModelIndex &index, int role) const {
     int row = index.row();
 
     // oob check
@@ -47,7 +47,7 @@ QVariant DataEntryModel::data(const QModelIndex &index, int role) const {
     }
 }
 
-bool DataEntryModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+bool SourceEntryView::setData(const QModelIndex &index, const QVariant &value, int role) {
     int row = index.row();
 
     // oob check
@@ -67,7 +67,7 @@ bool DataEntryModel::setData(const QModelIndex &index, const QVariant &value, in
     return true;
 }
 
-void DataEntryModel::remove(int index) {
+void SourceEntryView::remove(int index) {
     // oob check
     if (index < 0 || index >= m_data.count()) {
         return;
@@ -78,12 +78,12 @@ void DataEntryModel::remove(int index) {
     endRemoveRows();
 }
 
-void DataEntryModel::clear() {
+void SourceEntryView::clear() {
     qDeleteAll(m_data);
     m_data.clear();
 }
 
-void DataEntryModel::addFiles(const QStringList &files) {
+void SourceEntryView::addFiles(const QStringList &files) {
     for (const QString &file : files) {
         auto *input_file = new ImageSourceView(file.toStdString());
 

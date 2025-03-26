@@ -5,7 +5,7 @@
 
 #include "image_source_view.hpp"
 
-class DataEntryModel : public QAbstractListModel {
+class SourceEntryView : public QAbstractListModel {
     Q_OBJECT
   public:
     enum RoleNames {
@@ -15,8 +15,8 @@ class DataEntryModel : public QAbstractListModel {
         AmountRole = Qt::UserRole + 3
     };
 
-    explicit DataEntryModel(QObject *parent = 0);
-    ~DataEntryModel();
+    explicit SourceEntryView(QObject *parent = 0);
+    ~SourceEntryView();
 
   protected:
     virtual QHash<int, QByteArray> roleNames() const override;
