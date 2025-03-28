@@ -122,17 +122,13 @@ Rectangle {
                 id: comboBox
 
                 width: parent.width
-                textRole: "text"
+                textRole: "text" // ?
                 onCurrentIndexChanged: {
                 }
 
                 model: ListModel {
                     ListElement {
-                        text: "none"
-                    }
-
-                    ListElement {
-                        text: "idk"
+                        text: "todo"
                     }
 
                 }
@@ -140,13 +136,31 @@ Rectangle {
             }
 
             GroupBox {
-                title: "Size"
                 width: parent.width
 
-                SizeInput {
-                    id: sizeInput
-
+                Column {
                     width: parent.width
+                    spacing: 10
+
+                    SizeInput {
+                        id: sizeInput
+
+                        width: parent.width
+                    }
+
+                    CheckBox {
+                        id: guidesCheckBox
+
+                        checked: true
+                        text: "Guides"
+                    }
+
+                    MaskInput {
+                        id: maskInput
+
+                        width: parent.width
+                    }
+
                 }
 
             }
