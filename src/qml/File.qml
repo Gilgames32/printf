@@ -143,26 +143,10 @@ Rectangle {
                 title: "Size"
                 width: parent.width
 
-                ColumnLayout {
-                    spacing: 10
+                SizeInput {
+                    id: sizeInput
+
                     width: parent.width
-                    
-                    UnitInput {
-                        id: widthSpinbox
-
-                        label.text: "Width"
-                        unit.text: "mm"
-                        Layout.fillWidth: true
-                    }
-
-                    UnitInput {
-                        id: heightSpinbox
-
-                        label.text: "Height"
-                        unit.text: "mm"
-                        Layout.fillWidth: true
-                    }
-
                 }
 
             }

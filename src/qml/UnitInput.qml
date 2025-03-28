@@ -14,7 +14,6 @@ RowLayout {
 
         color: palette.text
         font.pixelSize: 12
-        Layout.fillWidth: true
         clip: true
     }
 
