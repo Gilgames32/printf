@@ -126,15 +126,13 @@ Rectangle {
                 width: parent.width
                 textRole: "name"
                 onActivated: (index) => {
-                    console.log(imagePresetModel.getPath(index));
-                    console.log(absoluteModel.index);
+                    let path = imagePresetModel.getPath(index);
+                    if (path == "")
+                        return ;
                     dataModel.setPreset(absoluteModel.index, imagePresetModel.getPath(index));
                 }
-
-                model: imagePresetModel 
+                model: imagePresetModel
             }
-
-            
 
             GroupBox {
                 width: parent.width
@@ -145,24 +143,28 @@ Rectangle {
 
                     SizeInput {
                         id: sizeInput
+
                         imageWidth: model.size.width
                         imageHeight: model.size.height
                         onWidthChangedDelegate: (value) => {
-                            if (model.size.width == value) return;
+                            if (model.size.width == value)
+                                return ;
+
                             model.size.width = value;
-                            if (sizeInput.locked) {
+                            if (sizeInput.locked)
                                 model.size.height = value / model.aspect;
-                            }
+
                         }
                         onHeightChangedDelegate: (value) => {
-                            if (model.size.height == value) return;
+                            if (model.size.height == value)
+                                return ;
+
                             model.size.height = value;
                             console.log(sizeInput.locked);
-                            if (sizeInput.locked) {
+                            if (sizeInput.locked)
                                 model.size.width = value * model.aspect;
-                            }
-                        }
 
+                        }
                         width: parent.width
                     }
 

@@ -59,6 +59,10 @@ void ImageSourceView::set_amount(int amount) { this->amount = amount; }
 void ImageSourceView::load_from_preset(const std::string& preset_path) {
     std::cout << "Loading preset from: " << preset_path << std::endl;
        
+    if (!std::filesystem::exists(preset_path)) {
+        throw std::invalid_argument("Preset file does not exist: " + preset_path);
+    }
+    
     json json_data;
     std::ifstream file(preset_path);
     json_data = json::parse(file);
