@@ -6,6 +6,10 @@ RowLayout {
     property alias unit: unit
     property alias label: label
     property alias spinbox: spinbox
+    property alias value: spinbox.value
+    
+    property var onValueChangedDelegate: (value) => console.log("Value changed to: " + value)
+    
 
     spacing: 10
 
@@ -26,6 +30,8 @@ RowLayout {
         to: 1000
         stepSize: 1
         editable: true
+
+        onValueChanged: onValueChangedDelegate(spinbox.value);
     }
 
     Text {

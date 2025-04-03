@@ -1,10 +1,12 @@
 #include "source_entry_view.hpp"
 
-SourceEntryView::SourceEntryView(QObject *parent) : QAbstractListModel(parent) { 
+SourceEntryView::SourceEntryView(QObject *parent) : QAbstractListModel(parent) {
     m_roleNames[NameRole] = "name";
     m_roleNames[PathRole] = "path";
-    m_roleNames[ImageSizeRole] = "imageSize";
+    m_roleNames[ImageResolutionRole] = "resolution";
     m_roleNames[AmountRole] = "amount";
+    m_roleNames[ImageSizeRole] = "size";
+    m_roleNames[ImageAspectRole] = "aspect";
 
     m_data = QList<ImageSourceView *>();
 }
@@ -36,10 +38,16 @@ QVariant SourceEntryView::data(const QModelIndex &index, int role) const {
             return QVariant::fromValue(QString::fromStdString(m_data.value(row)->get_file_name()));
         case PathRole:
             return QVariant::fromValue(QString::fromStdString(m_data.value(row)->get_file_path()));
+        case ImageResolutionRole: {
+            auto [width, height] = m_data.value(row)->get_image_resolution();
+            return QVariant::fromValue(QSize(width, height));
+        }
         case ImageSizeRole: {
             auto [width, height] = m_data.value(row)->get_image_size();
             return QVariant::fromValue(QSize(width, height));
         }
+        case ImageAspectRole:
+            return QVariant::fromValue(m_data.value(row)->get_image_aspect_ratio());
         case AmountRole:
             return QVariant::fromValue(m_data.value(row)->get_amount());
         default:
@@ -59,6 +67,11 @@ bool SourceEntryView::setData(const QModelIndex &index, const QVariant &value, i
         case AmountRole:
             m_data.value(row)->set_amount(value.toInt());
             break;
+        case ImageSizeRole: {
+            auto [width, height] = value.value<QSize>();
+            m_data.value(row)->set_image_size(width, height);
+            break;
+        }
         default:
             return false;
     }
@@ -88,7 +101,13 @@ void SourceEntryView::addFiles(const QStringList &files) {
         auto *input_file = new ImageSourceView(file.toStdString());
 
         beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
-        m_data.append(input_file); 
+        m_data.append(input_file);
         endInsertRows();
     }
+}
+
+void SourceEntryView::setPreset(int index, const QString &presetPath) {
+    m_data[index]->load_from_preset(presetPath.toStdString());
+    QModelIndex modelIndex = this->index(index, 0);
+    emit dataChanged(modelIndex, modelIndex, {ImageSizeRole}); // TODO: update
 }

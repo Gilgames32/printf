@@ -3,13 +3,19 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 RowLayout {
+    property var imageWidth: 1
+    property var imageHeight: 1
+    property var onWidthChangedDelegate: (value) => console.log("Width changed to: " + value)
+    property var onHeightChangedDelegate: (value) => console.log("Height changed to: " + value)
+    property alias locked: checkBox.checked
+
     CheckBox {
         
         Layout.fillHeight: true
         
         id: checkBox
 
-        checked: true
+        checked: true // TODO: on check force aspect ratio
         clip: true
 
         Rectangle {
@@ -33,6 +39,8 @@ RowLayout {
 
         UnitInput {
             id: widthSpinbox
+            value: imageWidth
+            onValueChangedDelegate: (value) => onWidthChangedDelegate(value)
 
             Layout.alignment: Qt.AlignRight
             label.text: "Width"
@@ -42,6 +50,8 @@ RowLayout {
 
         UnitInput {
             id: heightSpinbox
+            value: imageHeight
+            onValueChangedDelegate: (value) => onHeightChangedDelegate(value)
 
             Layout.alignment: Qt.AlignRight
             label.text: "Height"

@@ -11,8 +11,10 @@ class SourceEntryView : public QAbstractListModel {
     enum RoleNames {
         NameRole = Qt::UserRole + 0,
         PathRole = Qt::UserRole + 1,
-        ImageSizeRole = Qt::UserRole + 2,
-        AmountRole = Qt::UserRole + 3
+        ImageResolutionRole = Qt::UserRole + 2,
+        AmountRole = Qt::UserRole + 3,
+        ImageSizeRole = Qt::UserRole + 4,
+        ImageAspectRole = Qt::UserRole + 5,
     };
 
     explicit SourceEntryView(QObject *parent = 0);
@@ -35,4 +37,5 @@ class SourceEntryView : public QAbstractListModel {
     Q_INVOKABLE void remove(int index);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void addFiles(const QStringList &files);
+    Q_INVOKABLE void setPreset(int index, const QString &presetPath);
 };

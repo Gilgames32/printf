@@ -7,6 +7,7 @@ Rectangle {
 
     property var dataModel: null
     property var imagePresetModel: null
+    property var absoluteModel: model
 
     color: palette.base
     radius: 5
@@ -91,7 +92,7 @@ Rectangle {
 
                         Text {
                             color: palette.text
-                            text: model.imageSize.width + "x" + model.imageSize.height
+                            text: model.resolution.width + "x" + model.resolution.height
                             font.pixelSize: 12
                             Layout.fillWidth: true
                             clip: true
@@ -126,6 +127,8 @@ Rectangle {
                 textRole: "name"
                 onActivated: (index) => {
                     console.log(imagePresetModel.getPath(index));
+                    console.log(absoluteModel.index);
+                    dataModel.setPreset(absoluteModel.index, imagePresetModel.getPath(index));
                 }
 
                 model: imagePresetModel 
@@ -142,6 +145,23 @@ Rectangle {
 
                     SizeInput {
                         id: sizeInput
+                        imageWidth: model.size.width
+                        imageHeight: model.size.height
+                        onWidthChangedDelegate: (value) => {
+                            if (model.size.width == value) return;
+                            model.size.width = value;
+                            if (sizeInput.locked) {
+                                model.size.height = value / model.aspect;
+                            }
+                        }
+                        onHeightChangedDelegate: (value) => {
+                            if (model.size.height == value) return;
+                            model.size.height = value;
+                            console.log(sizeInput.locked);
+                            if (sizeInput.locked) {
+                                model.size.width = value * model.aspect;
+                            }
+                        }
 
                         width: parent.width
                     }

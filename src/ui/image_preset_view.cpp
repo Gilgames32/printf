@@ -6,7 +6,7 @@ ImagePresetView::ImagePresetView(QObject *parent) : QAbstractListModel(parent) {
     m_roleNames[PathRole] = "path";
 
     m_data = QList<std::pair<std::string, std::string>>();
-    m_data.append(std::pair<std::string, std::string>("None", "")); // TODO is this default path good?
+    m_data.append(std::make_pair("None", "")); // TODO is this default path good?
 
     auto presets = jsonprobe::probe_presets("presets/image", "name");
     for (const auto& preset : presets) {

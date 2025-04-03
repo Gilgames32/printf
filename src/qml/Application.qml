@@ -22,7 +22,7 @@ ApplicationWindow {
 
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 3
+            Layout.preferredWidth: 2
         }
 
         Properties {
