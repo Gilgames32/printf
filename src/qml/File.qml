@@ -6,6 +6,7 @@ Rectangle {
     id: fileItem
 
     property var dataModel: null
+    property var imagePresetModel: null
 
     color: palette.base
     radius: 5
@@ -122,18 +123,15 @@ Rectangle {
                 id: comboBox
 
                 width: parent.width
-                textRole: "text" // ?
-                onCurrentIndexChanged: {
+                textRole: "name"
+                onActivated: (index) => {
+                    console.log(imagePresetModel.getPath(index));
                 }
 
-                model: ListModel {
-                    ListElement {
-                        text: "todo"
-                    }
-
-                }
-
+                model: imagePresetModel 
             }
+
+            
 
             GroupBox {
                 width: parent.width

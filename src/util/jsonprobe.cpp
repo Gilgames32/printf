@@ -1,5 +1,6 @@
 #include "jsonprobe.hpp"
 #include <fstream>
+#include <iostream>
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -26,5 +27,7 @@ ProbeList jsonprobe::probe_presets(const std::string& preset_dir_path, const std
         // TODO: handle error
     }
     
+    std::cout << "Found " << presets.size() << " presets in " << preset_dir_path << std::endl;
+
     return presets;
 }

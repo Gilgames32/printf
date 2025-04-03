@@ -40,8 +40,13 @@ Item {
                 id: sourceEntryView
             }
 
+            ImagePresetView {
+                id: imagePresetView
+            }
+
             delegate: File {
                 dataModel: sourceEntryView
+                imagePresetModel: imagePresetView
                 width: filePanel.width
             }
 
