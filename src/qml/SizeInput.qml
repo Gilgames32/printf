@@ -3,8 +3,8 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 RowLayout {
-    property var imageWidth: 1
-    property var imageHeight: 1
+    property alias imageWidth: widthSpinbox.value
+    property alias imageHeight: heightSpinbox.value
     property var onWidthChangedDelegate: (value) => console.log("Width changed to: " + value)
     property var onHeightChangedDelegate: (value) => console.log("Height changed to: " + value)
     property alias locked: checkBox.checked

@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<SourceEntryView>("printf", 1, 0, "SourceEntryView");
     qmlRegisterType<ImagePresetView>("printf", 1, 0, "ImagePresetView");
+    qRegisterMetaType<ImageSourceView*>("ImageSourceView*");
 
 
     QQmlApplicationEngine engine;

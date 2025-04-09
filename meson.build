@@ -17,6 +17,7 @@ ui_files = files()
 
 moc_headers = files(
   'src/ui/source_entry_view.hpp',
+  'src/ui/image_source_view.hpp',
   'src/ui/image_preset_view.hpp',
 )
 

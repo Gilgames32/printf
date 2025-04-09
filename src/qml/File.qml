@@ -41,7 +41,7 @@ Rectangle {
                 Image {
                     id: image
 
-                    source: "file://" + model.path
+                    source: "file://" + model.entry.filePath
                     fillMode: Image.PreserveAspectFit
                     Layout.fillWidth: true
                     Layout.preferredWidth: 1
@@ -58,7 +58,7 @@ Rectangle {
 
                         Text {
                             color: palette.text
-                            text: model.name
+                            text: model.entry.name
                             font.pixelSize: 16
                             font.bold: true
                             Layout.fillWidth: true
@@ -72,7 +72,7 @@ Rectangle {
                             Layout.preferredHeight: 30
                             text: "X"
                             onClicked: {
-                                dataModel.remove(model.index);
+                                absoluteModel.remove(model.index);
                             }
                         }
 
@@ -81,7 +81,7 @@ Rectangle {
                     Text {
                         Layout.fillWidth: true
                         color: palette.text
-                        text: model.path
+                        text: model.entry.filePath
                         font.pixelSize: 12
                         clip: true
                     }
@@ -92,7 +92,7 @@ Rectangle {
 
                         Text {
                             color: palette.text
-                            text: model.resolution.width + "x" + model.resolution.height
+                            text: model.entry.resolution.width + "x" + model.entry.resolution.height
                             font.pixelSize: 12
                             Layout.fillWidth: true
                             clip: true
@@ -102,14 +102,14 @@ Rectangle {
                             id: spinbox
 
                             Layout.preferredWidth: 60
-                            value: model.amount
+                            value: model.entry.amount
                             from: 1
                             to: 1000
                             stepSize: 1
                             editable: true
                             onValueChanged: () => {
-                                if (model.amount != spinbox.value)
-                                    model.amount = spinbox.value;
+                                if (model.entry.amount != spinbox.value)
+                                    model.entry.amount = spinbox.value;
 
                             }
                         }
@@ -129,7 +129,7 @@ Rectangle {
                     let path = imagePresetModel.getPath(index);
                     if (path == "")
                         return ;
-                    dataModel.setPreset(absoluteModel.index, imagePresetModel.getPath(index));
+                    absoluteModel.entry.setPreset(imagePresetModel.getPath(index));
                 }
                 model: imagePresetModel
             }
@@ -144,25 +144,24 @@ Rectangle {
                     SizeInput {
                         id: sizeInput
 
-                        imageWidth: model.size.width
-                        imageHeight: model.size.height
+                        imageWidth: model.entry.width
+                        imageHeight: model.entry.height
                         onWidthChangedDelegate: (value) => {
-                            if (model.size.width == value)
+                            if (model.entry.width == value)
                                 return ;
 
-                            model.size.width = value;
+                            model.entry.width = value;
                             if (sizeInput.locked)
-                                model.size.height = value / model.aspect;
+                                model.entry.height = value / model.entry.aspect;
 
                         }
                         onHeightChangedDelegate: (value) => {
-                            if (model.size.height == value)
+                            if (model.entry.height == value)
                                 return ;
 
-                            model.size.height = value;
-                            console.log(sizeInput.locked);
+                            model.entry.height = value;
                             if (sizeInput.locked)
-                                model.size.width = value * model.aspect;
+                                model.entry.width = value * model.entry.aspect;
 
                         }
                         width: parent.width

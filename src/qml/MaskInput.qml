@@ -23,7 +23,7 @@ Column {
             Image {
                 id: maskImage
 
-                source: "file://" + model.path
+                source: "file://" + model.entry.filePath
                 fillMode: Image.PreserveAspectFit
                 Layout.fillWidth: true
                 Layout.preferredWidth: 1
@@ -51,7 +51,7 @@ Column {
 
                 Text {
                     color: palette.text
-                    text: model.name
+                    text: model.entry.name
                     font.pixelSize: 12
                     Layout.fillWidth: true
                     clip: true
