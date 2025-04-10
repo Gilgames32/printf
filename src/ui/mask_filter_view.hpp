@@ -10,6 +10,7 @@ class MaskFilterView : public QObject {
     Q_PROPERTY(bool enabled MEMBER m_is_enabled NOTIFY isEnabledChanged)
     Q_PROPERTY(QString name READ get_file_name NOTIFY nameChanged)
     Q_PROPERTY(QString filePath READ get_file_path NOTIFY filePathChanged)
+    Q_PROPERTY(QString absoluteFilePath READ get_absolute_file_path NOTIFY filePathChanged)
 
   private:
     bool m_is_enabled;
@@ -22,6 +23,8 @@ class MaskFilterView : public QObject {
     QString get_file_name() const;
 
     QString get_file_path() const;
+
+    QString get_absolute_file_path() const;
 
     cv::Mat get_image() const;
 

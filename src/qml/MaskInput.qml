@@ -30,7 +30,7 @@ Column {
             Image {
                 id: maskImage
 
-                source: "file://" + maskObject.filePath
+                source: "file://" + maskObject.absoluteFilePath
                 fillMode: Image.PreserveAspectFit
                 Layout.fillWidth: true
                 Layout.preferredWidth: 1

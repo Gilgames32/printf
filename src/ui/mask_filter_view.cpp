@@ -16,6 +16,14 @@ QString MaskFilterView::get_file_name() const {
 
 QString MaskFilterView::get_file_path() const { return QString::fromStdString(m_file_path); }
 
+QString MaskFilterView::get_absolute_file_path() const {
+    std::filesystem::path path(m_file_path);
+    if (std::filesystem::exists(path) && path.is_relative()) {
+        return QString::fromStdString(std::filesystem::absolute(path).string());
+    }
+    return QString::fromStdString(m_file_path);
+}
+
 float MaskFilterView::get_image_aspect_ratio() const { return float(m_image.cols) / float(m_image.rows); }
 
 cv::Mat MaskFilterView::get_image() const { return m_image; }
