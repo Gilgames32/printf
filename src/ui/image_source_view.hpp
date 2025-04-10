@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <opencv2/opencv.hpp>
 #include <QtCore>
 #include <QtGui>
+#include <opencv2/opencv.hpp>
+#include <string>
 
 class ImageSourceView : public QObject {
     Q_OBJECT
@@ -12,17 +12,16 @@ class ImageSourceView : public QObject {
     Q_PROPERTY(QSize resolution READ get_image_resolution NOTIFY resolutionChanged)
     Q_PROPERTY(float aspectRatio READ get_image_aspect_ratio NOTIFY aspectRatioChanged)
     Q_PROPERTY(int amount MEMBER m_amount NOTIFY amountChanged)
-    Q_PROPERTY(int width MEMBER m_width NOTIFY widthChanged)
-    Q_PROPERTY(int height MEMBER m_height NOTIFY heightChanged)
+    Q_PROPERTY(QSize size READ get_size WRITE set_size NOTIFY sizeChanged)
 
-private:
+  private:
     std::string m_file_path;
     cv::Mat m_image;
     int m_amount;
     int m_width = 100;
     int m_height = 100;
 
-public:
+  public:
     explicit ImageSourceView(const std::string& path);
 
     QString get_file_name() const;
@@ -33,18 +32,23 @@ public:
 
     float get_image_aspect_ratio() const;
 
+    QSize get_size() const;
+
+    void set_size(const QSize& size);
+
     cv::Mat get_image() const;
 
     void load_from_preset(const std::string& preset_path);
 
-    Q_INVOKABLE void setPreset(const QString &presetPath);
+    Q_INVOKABLE void setPreset(const QString& presetPath);
+    Q_INVOKABLE void setSizeToWidth(int width, bool keepAspectRatio = true);
+    Q_INVOKABLE void setSizeToHeight(int height, bool keepAspectRatio = true);
 
-signals:
+  signals:
     void nameChanged();
     void filePathChanged();
     void resolutionChanged();
     void aspectRatioChanged();
     void amountChanged();
-    void widthChanged();
-    void heightChanged();
+    void sizeChanged();
 };

@@ -3,18 +3,19 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 RowLayout {
-    property alias imageWidth: widthSpinbox.value
-    property alias imageHeight: heightSpinbox.value
-    property var onWidthChangedDelegate: (value) => console.log("Width changed to: " + value)
-    property var onHeightChangedDelegate: (value) => console.log("Height changed to: " + value)
+    property var imageSize: null
+    property var onWidthChangedDelegate: (value) => {
+        return console.log("Width changed to: " + value);
+    }
+    property var onHeightChangedDelegate: (value) => {
+        return console.log("Height changed to: " + value);
+    }
     property alias locked: checkBox.checked
 
     CheckBox {
-        
-        Layout.fillHeight: true
-        
         id: checkBox
 
+        Layout.fillHeight: true
         checked: true // TODO: on check force aspect ratio
         clip: true
 
@@ -22,16 +23,13 @@ RowLayout {
             color: "transparent"
             border.color: palette.midlight
             border.width: 2
-
             width: parent.width
             height: parent.height * 0.6
-            
             x: parent.width / 2
-            
             anchors.verticalCenter: parent.verticalCenter
-
             radius: 5
         }
+
     }
 
     ColumnLayout {
@@ -39,9 +37,11 @@ RowLayout {
 
         UnitInput {
             id: widthSpinbox
-            value: imageWidth
-            onValueChangedDelegate: (value) => onWidthChangedDelegate(value)
 
+            value: imageSize.width
+            onValueChangedDelegate: (value) => {
+                return onWidthChangedDelegate(value);
+            }
             Layout.alignment: Qt.AlignRight
             label.text: "Width"
             unit.text: "mm"
@@ -50,9 +50,11 @@ RowLayout {
 
         UnitInput {
             id: heightSpinbox
-            value: imageHeight
-            onValueChangedDelegate: (value) => onHeightChangedDelegate(value)
 
+            value: imageSize.height
+            onValueChangedDelegate: (value) => {
+                return onHeightChangedDelegate(value);
+            }
             Layout.alignment: Qt.AlignRight
             label.text: "Height"
             unit.text: "mm"

@@ -37,6 +37,16 @@ QSize ImageSourceView::get_image_resolution() const { return QSize(m_image.cols,
 
 float ImageSourceView::get_image_aspect_ratio() const { return float(m_image.cols) / float(m_image.rows); }
 
+QSize ImageSourceView::get_size() const { return QSize(m_width, m_height); }
+
+void ImageSourceView::set_size(const QSize& size) {
+    if (size.width() != m_width || size.height() != m_height) {
+        m_width = size.width();
+        m_height = size.height();
+        emit sizeChanged();
+    }
+}
+
 cv::Mat ImageSourceView::get_image() const { return m_image; }
 
 void ImageSourceView::load_from_preset(const std::string& preset_path) {
@@ -58,6 +68,21 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
 Q_INVOKABLE void ImageSourceView::setPreset(const QString& presetPath) {
     load_from_preset(presetPath.toStdString());
     // TODO: update signals
-    widthChanged();
-    heightChanged();
+    emit sizeChanged();
+}
+
+Q_INVOKABLE void ImageSourceView::setSizeToWidth(int width, bool keepAspectRatio) {
+    m_width = width;
+
+    if (keepAspectRatio) m_height = std::round(width / get_image_aspect_ratio());
+
+    emit sizeChanged();
+}
+
+Q_INVOKABLE void ImageSourceView::setSizeToHeight(int height, bool keepAspectRatio) {
+    m_height = height;
+
+    if (keepAspectRatio) m_width = std::round(height * get_image_aspect_ratio());
+
+    emit sizeChanged();
 }

@@ -129,6 +129,7 @@ Rectangle {
                     let path = imagePresetModel.getPath(index);
                     if (path == "")
                         return ;
+
                     absoluteModel.entry.setPreset(imagePresetModel.getPath(index));
                 }
                 model: imagePresetModel
@@ -144,24 +145,15 @@ Rectangle {
                     SizeInput {
                         id: sizeInput
 
-                        imageWidth: model.entry.width
-                        imageHeight: model.entry.height
+                        imageSize: model.entry.size
                         onWidthChangedDelegate: (value) => {
-                            if (model.entry.width == value)
-                                return ;
-
-                            model.entry.width = value;
-                            if (sizeInput.locked)
-                                model.entry.height = value / model.entry.aspect;
+                            if (model.entry.size.width != value)
+                                model.entry.setSizeToWidth(value, sizeInput.locked);
 
                         }
                         onHeightChangedDelegate: (value) => {
-                            if (model.entry.height == value)
-                                return ;
-
-                            model.entry.height = value;
-                            if (sizeInput.locked)
-                                model.entry.width = value * model.entry.aspect;
+                            if (model.entry.size.height != value)
+                                model.entry.setSizeToHeight(value, sizeInput.locked);
 
                         }
                         width: parent.width
