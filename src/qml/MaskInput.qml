@@ -3,6 +3,8 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 
 Column {
+    property var presetModel: null
+    
     CheckBox {
         id: maskCheckBox
 
@@ -36,17 +38,17 @@ Column {
 
                 ComboBox {
                     width: parent.width
-                    textRole: "text" // ?
-                    onCurrentIndexChanged: {
+                    textRole: "name"
+                    
+                    onActivated: (index) => {
+                        let path = imagePresetModel.getPath(index);
+                        if (path == "")
+                            return;
+
+                        // absoluteModel.entry.setPreset(imagePresetModel.getPath(index));
                     }
 
-                    model: ListModel {
-                        ListElement {
-                            text: "todo"
-                        }
-
-                    }
-
+                    model: presetModel
                 }
 
                 Text {

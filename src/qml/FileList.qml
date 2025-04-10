@@ -40,13 +40,14 @@ Item {
                 id: sourceEntryView
             }
 
-            ImagePresetView {
-                id: imagePresetView
-            }
-
             delegate: File {
                 dataModel: sourceEntryView
-                imagePresetModel: imagePresetView
+                imagePresetModel: PresetView {
+                    path: "presets/image"
+                }
+                maskPresetModel: PresetView {
+                    path: "presets/mask"
+                }
                 width: filePanel.width
             }
 

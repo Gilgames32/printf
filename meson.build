@@ -18,7 +18,7 @@ ui_files = files()
 moc_headers = files(
   'src/ui/source_entry_view.hpp',
   'src/ui/image_source_view.hpp',
-  'src/ui/image_preset_view.hpp',
+  'src/ui/preset_view.hpp',
 )
 
 qresources = files('src/qml/resources.qrc')
@@ -55,7 +55,7 @@ srcs = files(
   'src/settings/document_preset.cpp',
   'src/ui/source_entry_view.cpp',
   'src/ui/image_source_view.cpp',
-  'src/ui/image_preset_view.cpp',
+  'src/ui/preset_view.cpp',
   'src/util/jsonprobe.cpp',
   'src/main.cpp',
 )

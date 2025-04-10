@@ -7,6 +7,7 @@ Rectangle {
 
     property var dataModel: null
     property var imagePresetModel: null
+    property var maskPresetModel: null
     property var absoluteModel: model
 
     color: palette.base
@@ -72,7 +73,7 @@ Rectangle {
                             Layout.preferredHeight: 30
                             text: "X"
                             onClicked: {
-                                absoluteModel.remove(model.index);
+                                dataModel.remove(model.index);
                             }
                         }
 
@@ -128,7 +129,7 @@ Rectangle {
                 onActivated: (index) => {
                     let path = imagePresetModel.getPath(index);
                     if (path == "")
-                        return ;
+                        return;
 
                     absoluteModel.entry.setPreset(imagePresetModel.getPath(index));
                 }
@@ -169,6 +170,7 @@ Rectangle {
                     MaskInput {
                         id: maskInput
 
+                        presetModel: maskPresetModel
                         width: parent.width
                     }
 

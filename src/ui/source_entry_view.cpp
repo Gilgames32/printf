@@ -22,7 +22,7 @@ QVariant SourceEntryView::data(const QModelIndex &index, int role) const {
         return QVariant();
 
     if (role == Qt::UserRole)
-        return QVariant::fromValue(m_data.at(index.row())); // Return the pointer directly
+        return QVariant::fromValue(m_data.at(index.row()));
 
     return QVariant();
 }
