@@ -7,9 +7,9 @@
 
 class PresetView : public QAbstractListModel {
     Q_OBJECT
-  public:
     Q_PROPERTY(QString path READ get_path WRITE set_path NOTIFY pathChanged)
 
+  public:
     enum RoleNames {
         NameRole = Qt::UserRole + 0,
         PathRole = Qt::UserRole + 1,

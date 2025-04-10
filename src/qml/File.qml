@@ -8,7 +8,8 @@ Rectangle {
     property var dataModel: null
     property var imagePresetModel: null
     property var maskPresetModel: null
-    property var absoluteModel: model
+
+    property var entry: model.entry
 
     color: palette.base
     radius: 5
@@ -42,7 +43,7 @@ Rectangle {
                 Image {
                     id: image
 
-                    source: "file://" + model.entry.filePath
+                    source: "file://" + entry.filePath
                     fillMode: Image.PreserveAspectFit
                     Layout.fillWidth: true
                     Layout.preferredWidth: 1
@@ -59,7 +60,7 @@ Rectangle {
 
                         Text {
                             color: palette.text
-                            text: model.entry.name
+                            text: entry.name
                             font.pixelSize: 16
                             font.bold: true
                             Layout.fillWidth: true
@@ -82,7 +83,7 @@ Rectangle {
                     Text {
                         Layout.fillWidth: true
                         color: palette.text
-                        text: model.entry.filePath
+                        text: entry.filePath
                         font.pixelSize: 12
                         clip: true
                     }
@@ -93,7 +94,7 @@ Rectangle {
 
                         Text {
                             color: palette.text
-                            text: model.entry.resolution.width + "x" + model.entry.resolution.height
+                            text: entry.resolution.width + "x" + entry.resolution.height
                             font.pixelSize: 12
                             Layout.fillWidth: true
                             clip: true
@@ -103,14 +104,14 @@ Rectangle {
                             id: spinbox
 
                             Layout.preferredWidth: 60
-                            value: model.entry.amount
+                            value: entry.amount
                             from: 1
                             to: 1000
                             stepSize: 1
                             editable: true
                             onValueChanged: () => {
-                                if (model.entry.amount != spinbox.value)
-                                    model.entry.amount = spinbox.value;
+                                if (entry.amount != spinbox.value)
+                                    entry.amount = spinbox.value;
 
                             }
                         }
@@ -131,7 +132,7 @@ Rectangle {
                     if (path == "")
                         return;
 
-                    absoluteModel.entry.setPreset(imagePresetModel.getPath(index));
+                    entry.setPreset(imagePresetModel.getPath(index));
                 }
                 model: imagePresetModel
             }
@@ -146,15 +147,15 @@ Rectangle {
                     SizeInput {
                         id: sizeInput
 
-                        imageSize: model.entry.size
+                        imageSize: entry.size
                         onWidthChangedDelegate: (value) => {
-                            if (model.entry.size.width != value)
-                                model.entry.setSizeToWidth(value, sizeInput.locked);
+                            if (entry.size.width != value)
+                                entry.setSizeToWidth(value, sizeInput.locked);
 
                         }
                         onHeightChangedDelegate: (value) => {
-                            if (model.entry.size.height != value)
-                                model.entry.setSizeToHeight(value, sizeInput.locked);
+                            if (entry.size.height != value)
+                                entry.setSizeToHeight(value, sizeInput.locked);
 
                         }
                         width: parent.width

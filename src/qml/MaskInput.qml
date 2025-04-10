@@ -1,14 +1,19 @@
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
+import printf 1.0
 
 Column {
     property var presetModel: null
-    
+
+    MaskFilterView {
+        id: maskObject
+    }
+
     CheckBox {
         id: maskCheckBox
 
-        checked: false
+        checked: maskObject.enabled
         text: "Mask"
     }
 
@@ -25,7 +30,7 @@ Column {
             Image {
                 id: maskImage
 
-                source: "file://" + model.entry.filePath
+                source: "file://" + maskObject.filePath
                 fillMode: Image.PreserveAspectFit
                 Layout.fillWidth: true
                 Layout.preferredWidth: 1
@@ -39,21 +44,19 @@ Column {
                 ComboBox {
                     width: parent.width
                     textRole: "name"
-                    
                     onActivated: (index) => {
-                        let path = imagePresetModel.getPath(index);
+                        let path = presetModel.getPath(index);
                         if (path == "")
                             return;
 
-                        // absoluteModel.entry.setPreset(imagePresetModel.getPath(index));
+                        maskObject.setPreset(presetModel.getPath(index));
                     }
-
                     model: presetModel
                 }
 
                 Text {
                     color: palette.text
-                    text: model.entry.name
+                    text: maskObject.filePath
                     font.pixelSize: 12
                     Layout.fillWidth: true
                     clip: true
