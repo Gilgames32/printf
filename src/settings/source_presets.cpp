@@ -1,5 +1,0 @@
-/*
-width
-height
-mask
-*/

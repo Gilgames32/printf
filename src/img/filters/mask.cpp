@@ -4,7 +4,7 @@
 
 MaskFilter::MaskFilter(const cv::Mat &mask) : mask(mask) {}
 
-cv::Mat MaskFilter::apply(const cv::Mat &image) {
+cv::Mat MaskFilter::apply(const cv::Mat &image) const {
     auto fitMask = SizeFilter::resize(mask, image.cols, image.rows);
 
     if (invert) {

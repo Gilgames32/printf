@@ -1,8 +1,0 @@
-/*
-width
-gutter
-margin
-ppi
-guide
-min max height
-*/

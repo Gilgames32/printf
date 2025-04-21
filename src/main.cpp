@@ -1,34 +1,24 @@
-#include <cups/cups.h>
-#include <stdio.h>
+#include <QtGui>
+#include <QtQml>
 
-#include <fstream>
-#include <iostream>
-#include <nlohmann/json.hpp>
+#include "source_entry_view.hpp"
+#include "preset_view.hpp"
+#include "mask_filter_view.hpp"
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
 
-#include "img/filters/mask.hpp"
+    qmlRegisterType<SourceEntryView>("printf", 1, 0, "SourceEntryView");
+    qmlRegisterType<PresetView>("printf", 1, 0, "PresetView");
+    qmlRegisterType<MaskFilterView>("printf", 1, 0, "MaskFilterView");
 
-using json = nlohmann::json;
+    qRegisterMetaType<ImageSourceView*>("ImageSourceView*");
+    //qRegisterMetaType<MaskFilterView>("MaskFilterView");
 
 
-int main(void) {
-    // read an image
-    cv::Mat image = cv::imread("./assets/3.png", 1);
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/qml/Application.qml")));
 
-    cv::Mat mask = cv::imread("./assets/mask.png", 1);
-
-    MaskFilter maskFilter(mask);
-
-    // create image window named "My Image"
-    cv::namedWindow("My Image");
-
-    // show the image on window
-    cv::imshow("My Image", maskFilter.apply(image));
-
-    // aboszolút filmszínház
-    cv::waitKey(0);
-
-    return 0;
+    return app.exec();
 }
