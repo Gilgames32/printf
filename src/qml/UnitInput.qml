@@ -30,6 +30,7 @@ RowLayout {
         Layout.preferredWidth: 80
         
         text: getFormattedNum()
+        horizontalAlignment: Qt.AlignRight
         
         inputMethodHints: Qt.ImhPreferNumbers
         onEditingFinished: {

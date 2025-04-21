@@ -27,6 +27,8 @@ QVariant SourceEntryView::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
+int SourceEntryView::get_count() const { return m_data.count(); }
+
 void SourceEntryView::remove(int index) {
     // oob check
     if (index < 0 || index >= m_data.size()) {
@@ -36,11 +38,13 @@ void SourceEntryView::remove(int index) {
     beginRemoveRows(QModelIndex(), index, index);
     delete m_data.takeAt(index);
     endRemoveRows();
+    emit amountChanged();
 }
 
 void SourceEntryView::clear() {
     qDeleteAll(m_data);
     m_data.clear();
+    emit amountChanged();
 }
 
 void SourceEntryView::addFiles(const QStringList &files) {
@@ -51,4 +55,5 @@ void SourceEntryView::addFiles(const QStringList &files) {
         m_data.append(input_file);
         endInsertRows();
     }
+    emit amountChanged();
 }
