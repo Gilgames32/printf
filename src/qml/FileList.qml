@@ -1,9 +1,11 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
-import QtQuick.Layouts 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
+import QtQuick.Layouts 6.9
 import printf 1.0
 
 Item {
+    // TODO: drag and drop
+    // TODO: show text when no files
     ColumnLayout {
         id: filePanel
 

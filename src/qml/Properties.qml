@@ -1,6 +1,6 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
-import QtQuick.Layouts 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
+import QtQuick.Layouts 6.9
 import printf 1.0
 
 Item {
@@ -45,17 +45,15 @@ Item {
                         value: 610
                         label.text: "Paper Width"
                         unit.text: "mm"
-                        // TODO: double input
                         Layout.alignment: Qt.AlignRight
                         Layout.fillWidth: true
                         label.Layout.fillWidth: true
                     }
 
-                    UnitInput {
+                    UnitSpinBox {
                         value: 5
                         label.text: "Margin"
                         unit.text: "mm"
-                        // TODO: double input
                         Layout.alignment: Qt.AlignRight
                         Layout.fillWidth: true
                         label.Layout.fillWidth: true

@@ -1,15 +1,17 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
-import QtQuick.Layouts 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
+import QtQuick.Layouts 6.9
 
 RowLayout {
     property alias unit: unit
     property alias label: label
-    property alias spinbox: spinbox
-    property alias value: spinbox.value
-    
-    property var onValueChangedDelegate: (value) => console.log("Value changed to: " + value)
-    
+    property var value: null
+    readonly property var from: 0
+    readonly property var to: 100_000
+
+    property var onValueChangedDelegate: (value) => {
+        return console.log("Value changed to: " + value);
+    }
 
     spacing: 10
 
@@ -21,18 +23,28 @@ RowLayout {
         clip: true
     }
 
-    // TODO: double input
-    SpinBox {
-        id: spinbox
+    TextField {
+        id: textInput
 
-        Layout.preferredWidth: 60
-        value: 1
-        from: 1
-        to: 1000
-        stepSize: 1
-        editable: true
+        Layout.preferredWidth: 80
+        text: value
+        inputMethodHints: Qt.ImhPreferNumbers
+        onEditingFinished: {
+            const parsedValue = parseFloat(text.replace(',', '.'));
 
-        onValueChanged: onValueChangedDelegate(spinbox.value);
+            if (isNaN(parsedValue)) {
+                text = value;
+                return;
+            }
+
+            const clampedValue = Math.min(Math.max(parsedValue, from),to);
+            if (clampedValue != parsedValue) text = clampedValue;
+            if (value == clampedValue) return;
+
+            value = clampedValue;
+            onValueChangedDelegate(value);
+        }
+
     }
 
     Text {
