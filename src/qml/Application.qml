@@ -8,6 +8,10 @@ ApplicationWindow {
     height: 480
     title: "printf"
 
+    
+    readonly property var dmargin: 10
+    
+
     SystemPalette {
         id: palette
         colorGroup: SystemPalette.Active
@@ -31,7 +35,7 @@ ApplicationWindow {
         }
 
         Properties {
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
             Layout.preferredWidth: 1
         }
