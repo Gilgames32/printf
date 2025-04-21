@@ -8,6 +8,11 @@ ApplicationWindow {
     height: 480
     title: "printf"
 
+    SystemPalette {
+        id: palette
+        colorGroup: SystemPalette.Active
+    }
+
     RowLayout {
         anchors.fill: parent
 

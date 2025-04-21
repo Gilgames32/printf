@@ -15,12 +15,6 @@ Rectangle {
     radius: 5
     implicitHeight: paddingCol.implicitHeight + 20 // FIXME: hack
 
-    SystemPalette {
-        id: palette
-
-        colorGroup: SystemPalette.Active
-    }
-
     Item {
         id: container
 

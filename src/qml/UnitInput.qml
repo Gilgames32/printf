@@ -21,6 +21,7 @@ RowLayout {
         clip: true
     }
 
+    // TODO: double input
     SpinBox {
         id: spinbox
 
@@ -40,7 +41,7 @@ RowLayout {
         color: palette.text
         text: unit
         font.pixelSize: 12
-        //Layout.fillWidth: true
+        Layout.preferredWidth: 32
         clip: true
     }
 

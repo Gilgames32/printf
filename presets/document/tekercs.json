@@ -3,7 +3,5 @@
     "roll_width_mm": 609.6,
     "resolution_ppi": 300,
     "margin_mm": 0,
-    "gutter_mm": 0,
-    "guide": true,
     "correct_quantity": false
 }
