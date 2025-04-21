@@ -4,31 +4,6 @@ import QtQuick.Layouts 6.9
 import printf 1.0
 
 Item {
-    DropArea {
-        id: dropArea
-
-        anchors.fill: parent
-        onDropped: (drop) => {
-            if (drop.hasUrls)
-                sourceEntryView.addFiles(drop.urls);
-
-        }
-
-        Text {
-            id: noFilesText
-
-            text: "Double click to open or drag files here"
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-            anchors.margins: dmargin
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            color: palette.mid
-            visible: sourceEntryView.count == 0
-        }
-
-    }
-
     ColumnLayout {
         id: filePanel
 
@@ -70,6 +45,40 @@ Item {
                     console.log("Double clicked");
                     imagePicker.open();
                 }
+            }
+
+            DropArea {
+                id: dropArea
+
+                anchors.fill: parent
+                onDropped: (drop) => {
+                    if (drop.hasUrls)
+                        sourceEntryView.addFiles(drop.urls);
+
+                }
+
+                Text {
+                    id: noFilesText
+
+                    text: "Double click to open or drag files here"
+                    wrapMode: Text.WordWrap
+                    anchors.fill: parent
+                    anchors.margins: dmargin
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    color: palette.mid
+                    visible: sourceEntryView.count == 0
+                }
+
+            }
+
+            Rectangle {
+                color: "transparent"
+                anchors.fill: parent
+                border.color: palette.mid
+                border.width: 1
+                radius: 5
+                visible: sourceEntryView.count == 0
             }
 
             model: SourceEntryView {
