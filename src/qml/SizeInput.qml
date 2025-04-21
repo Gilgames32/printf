@@ -3,7 +3,9 @@ import QtQuick.Controls 6.9
 import QtQuick.Layouts 6.9
 
 RowLayout {
-    property var imageSize: null
+    property var sizeWidth
+    property var sizeHeight
+
     property var onWidthChangedDelegate: (value) => {
         return console.log("Width changed to: " + value);
     }
@@ -36,9 +38,9 @@ RowLayout {
         spacing: 10
 
         UnitInput {
-            id: widthSpinbox
+            id: widthInput
+            num: sizeWidth
 
-            value: imageSize.width
             onValueChangedDelegate: (value) => {
                 return onWidthChangedDelegate(value);
             }
@@ -49,9 +51,9 @@ RowLayout {
         }
 
         UnitInput {
-            id: heightSpinbox
+            id: heightInput
+            num: sizeHeight
 
-            value: imageSize.height
             onValueChangedDelegate: (value) => {
                 return onHeightChangedDelegate(value);
             }
@@ -61,6 +63,18 @@ RowLayout {
             Layout.fillWidth: true
         }
 
+    }
+
+    onSizeWidthChanged: {
+        if (widthInput.num != sizeWidth) {
+            widthInput.num = sizeWidth;
+        }
+    }
+
+    onSizeHeightChanged: {
+        if (heightInput.num != sizeHeight) {
+            heightInput.num = sizeHeight;
+        }
     }
 
 }

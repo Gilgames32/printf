@@ -5,7 +5,7 @@ import QtQuick.Layouts 6.9
 RowLayout {
     property alias unit: unit
     property alias label: label
-    property alias value: spinbox.value
+    property alias num: spinbox.value
     property var onValueChangedDelegate: (value) => {
         return console.log("Value changed to: " + value);
     }

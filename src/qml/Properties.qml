@@ -33,7 +33,7 @@ Item {
                     spacing: 10
 
                     UnitInput {
-                        value: 300
+                        num: 300
                         label.text: "Resolution"
                         unit.text: "ppi"
                         Layout.alignment: Qt.AlignRight
@@ -42,7 +42,7 @@ Item {
                     }
 
                     UnitInput {
-                        value: 610
+                        num: 610
                         label.text: "Paper Width"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight
@@ -51,7 +51,7 @@ Item {
                     }
 
                     UnitSpinBox {
-                        value: 5
+                        num: 5
                         label.text: "Margin"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight

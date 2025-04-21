@@ -5,9 +5,10 @@ import QtQuick.Layouts 6.9
 RowLayout {
     property alias unit: unit
     property alias label: label
-    property var value: null
     readonly property var from: 0
     readonly property var to: 100_000
+    property var num: from
+    property var forceBindUpdate: true
 
     property var onValueChangedDelegate: (value) => {
         return console.log("Value changed to: " + value);
@@ -27,22 +28,26 @@ RowLayout {
         id: textInput
 
         Layout.preferredWidth: 80
-        text: value
+        
+        text: getFormattedNum()
+        
         inputMethodHints: Qt.ImhPreferNumbers
         onEditingFinished: {
-            const parsedValue = parseFloat(text.replace(',', '.'));
+            const parsedNum = parseFloat(text.replace(',', '.'));
 
-            if (isNaN(parsedValue)) {
-                text = value;
+            if (isNaN(parsedNum)) {
+                num = num; // notify num
                 return;
             }
 
-            const clampedValue = Math.min(Math.max(parsedValue, from),to);
-            if (clampedValue != parsedValue) text = clampedValue;
-            if (value == clampedValue) return;
-
-            value = clampedValue;
-            onValueChangedDelegate(value);
+            const clampedNum = Math.min(Math.max(parsedNum, from), to);
+            num = clampedNum; // notify num
+            if (num != clampedNum) {
+                num = clampedNum;
+                onValueChangedDelegate(num);
+            }
+            else if (clampedNum != parsedNum) {
+            }
         }
 
     }
@@ -55,6 +60,17 @@ RowLayout {
         font.pixelSize: 12
         Layout.preferredWidth: 32
         clip: true
+    }
+
+    
+    function getFormattedNum () {
+        // TODO: :skull:
+        return textInput.focus ? num : num.toFixed(num % 1 == 0 ? 0 : (num * 10) % 1 == 0 ? 1 : 2);
+    }
+
+    onNumChanged: {
+        console.log("num changed: " + num);
+        textInput.text = getFormattedNum();
     }
 
 }

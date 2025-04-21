@@ -141,14 +141,16 @@ Rectangle {
                     SizeInput {
                         id: sizeInput
 
-                        imageSize: entry.size
+                        sizeWidth: entry.width
+                        sizeHeight: entry.height
+
                         onWidthChangedDelegate: (value) => {
-                            if (entry.size.width != value)
+                            if (entry.width != value)
                                 entry.setSizeToWidth(value, sizeInput.locked);
 
                         }
                         onHeightChangedDelegate: (value) => {
-                            if (entry.size.height != value)
+                            if (entry.height != value)
                                 entry.setSizeToHeight(value, sizeInput.locked);
 
                         }
