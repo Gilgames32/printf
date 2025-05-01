@@ -20,6 +20,7 @@ moc_headers = files(
   'src/ui/image_source_view.hpp',
   'src/ui/preset_view.hpp',
   'src/ui/mask_filter_view.hpp',
+  'src/ui/document_properties_view.hpp',
 )
 
 qresources = files('src/qml/resources.qrc')
@@ -58,6 +59,7 @@ srcs = files(
   'src/ui/image_source_view.cpp',
   'src/ui/mask_filter_view.cpp',
   'src/ui/preset_view.cpp',
+  'src/ui/document_properties_view.cpp',
   'src/util/jsonprobe.cpp',
   'src/main.cpp',
 )

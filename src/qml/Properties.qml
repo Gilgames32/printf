@@ -6,6 +6,10 @@ import printf 1.0
 Item {
     implicitHeight: paddingCol.implicitHeight + 4 * dmargin
 
+    DocumentPropertiesView {
+        id: docProperties
+    }
+
     Rectangle {
         anchors.margins: dmargin
         anchors.fill: parent
@@ -21,9 +25,19 @@ Item {
             anchors.margins: 10
 
             ComboBox {
-                textRole: "name"
-                // TODO
                 width: parent.width
+                textRole: "name"
+                onActivated: (index) => {
+                    let path = presetModel.getPath(index);
+                    if (path == "")
+                        return;
+
+                    docProperties.setPreset(presetModel.getPath(index));
+                }
+                model: PresetView {
+                    id: presetModel
+                    path: "presets/document"
+                }
             }
 
             GroupBox {
@@ -33,7 +47,7 @@ Item {
                     spacing: 10
 
                     UnitInput {
-                        num: 300
+                        num: docProperties.resolution
                         label.text: "Resolution"
                         unit.text: "ppi"
                         Layout.alignment: Qt.AlignRight
@@ -42,7 +56,7 @@ Item {
                     }
 
                     UnitInput {
-                        num: 610
+                        num: docProperties.rollWidth
                         label.text: "Paper Width"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight
@@ -51,7 +65,7 @@ Item {
                     }
 
                     UnitSpinBox {
-                        num: 5
+                        num: docProperties.margin
                         label.text: "Margin"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight

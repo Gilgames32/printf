@@ -4,6 +4,7 @@
 #include "source_entry_view.hpp"
 #include "preset_view.hpp"
 #include "mask_filter_view.hpp"
+#include "document_properties_view.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +13,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SourceEntryView>("printf", 1, 0, "SourceEntryView");
     qmlRegisterType<PresetView>("printf", 1, 0, "PresetView");
     qmlRegisterType<MaskFilterView>("printf", 1, 0, "MaskFilterView");
+    qmlRegisterType<DocumentPropertiesView>("printf", 1, 0, "DocumentPropertiesView");
 
     qRegisterMetaType<ImageSourceView*>("ImageSourceView*");
     //qRegisterMetaType<MaskFilterView>("MaskFilterView");
