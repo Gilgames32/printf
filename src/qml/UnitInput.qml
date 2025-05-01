@@ -18,6 +18,9 @@ RowLayout {
     }
 
     spacing: 10
+    onNumChanged: {
+        textInput.text = getFormattedNum();
+    }
 
     Text {
         id: label

@@ -24,8 +24,8 @@ RowLayout {
         id: spinbox
 
         Layout.preferredWidth: 80
-        value: 1
-        from: 1
+        value: 0
+        from: 0
         to: 1000
         stepSize: 1
         editable: true

@@ -8,7 +8,8 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
-DocumentPropertiesView::DocumentPropertiesView() {}
+// TODO: remove constants
+DocumentPropertiesView::DocumentPropertiesView(): m_resolution(300), m_roll_width(600), m_margin(5), m_correct_quantity(false) {}
 
 void DocumentPropertiesView::load_from_preset(const std::string& preset_path) {
     std::cout << "Loading preset from: " << preset_path << std::endl;

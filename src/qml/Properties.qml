@@ -81,7 +81,7 @@ Item {
                 id: checkBox
 
                 text: "Corrected Quantity"
-                checked: true
+                checked: correctQuantity
             }
 
             Button {
