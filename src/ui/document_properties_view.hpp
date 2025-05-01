@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <string>
+#include <document_preset.hpp>
 
 class DocumentPropertiesView : public QObject {
     Q_OBJECT
@@ -23,6 +24,8 @@ class DocumentPropertiesView : public QObject {
     void load_from_preset(const std::string& preset_path);
 
     Q_INVOKABLE void setPreset(const QString& presetPath);
+
+    Q_INVOKABLE DocumentPreset getDocumentProperties() const;
 
   signals:
     void resolutionChanged();

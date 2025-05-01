@@ -7,13 +7,21 @@
 
 using json = nlohmann::json;
 
+DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_mm, double gutter_mm, bool correct_quantity,
+                               bool guide, double min_height_mm, double max_height_mm)
+    : ppi(ppi),
+      roll_width_mm(roll_width_mm),
+      margin_mm(margin_mm),
+      gutter_mm(gutter_mm),
+      correct_quantity(correct_quantity),
+      guide(guide),
+      min_height_mm(min_height_mm),
+      max_height_mm(max_height_mm) {}
 
 DocumentPreset::DocumentPreset(std::string path) {
     std::ifstream f(path);
     json data = json::parse(f);
     f.close();
-
-    name = data["name"];
 
     ppi = data["resolution_ppi"];
     roll_width_mm = data["roll_width_mm"];

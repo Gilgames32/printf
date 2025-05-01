@@ -1,6 +1,7 @@
 import QtQuick 6.9
 import QtQuick.Controls 6.9
 import QtQuick.Layouts 6.9
+import printf 1.0
 
 ApplicationWindow {
     visible: true
@@ -17,10 +18,23 @@ ApplicationWindow {
         colorGroup: SystemPalette.Active
     }
 
+    GeneratorView {
+        id: generator
+    }
+
+    SourceEntryView {
+        id: sourceEntryView
+    }
+
+    DocumentPropertiesView {
+        id: docProperties
+    }
+
     RowLayout {
         anchors.fill: parent
 
         FileList {
+            sourceEntryView: sourceEntryView
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: 1
@@ -35,6 +49,7 @@ ApplicationWindow {
         }
 
         Properties {
+            docProperties: docProperties
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
             Layout.preferredWidth: 1

@@ -4,11 +4,8 @@ import QtQuick.Layouts 6.9
 import printf 1.0
 
 Item {
+    property var docProperties: null
     implicitHeight: paddingCol.implicitHeight + 4 * dmargin
-
-    DocumentPropertiesView {
-        id: docProperties
-    }
 
     Rectangle {
         anchors.margins: dmargin
@@ -81,11 +78,14 @@ Item {
                 id: checkBox
 
                 text: "Corrected Quantity"
-                checked: correctQuantity
+                checked: docProperties.correctQuantity
             }
 
             Button {
                 text: "Generate"
+                onClicked: {
+                    generator.generate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
+                }
             }
 
         }

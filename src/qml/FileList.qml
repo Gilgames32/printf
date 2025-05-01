@@ -4,6 +4,8 @@ import QtQuick.Layouts 6.9
 import printf 1.0
 
 Item {
+    property var sourceEntryView: null
+
     ColumnLayout {
         id: filePanel
 
@@ -82,9 +84,7 @@ Item {
                 visible: sourceEntryView.count == 0
             }
 
-            model: SourceEntryView {
-                id: sourceEntryView
-            }
+            model: sourceEntryView
 
             delegate: File {
                 dataModel: sourceEntryView

@@ -42,8 +42,10 @@ void SourceEntryView::remove(int index) {
 }
 
 void SourceEntryView::clear() {
+    beginRemoveRows(QModelIndex(), 0, m_data.count() - 1);
     qDeleteAll(m_data);
     m_data.clear();
+    endRemoveRows();
     emit amountChanged();
 }
 
@@ -56,4 +58,8 @@ void SourceEntryView::addFiles(const QStringList &files) {
         endInsertRows();
     }
     emit amountChanged();
+}
+
+QList<ImageSource *> SourceEntryView::getImageSources() const {
+    return QList<ImageSource *>();
 }

@@ -5,6 +5,7 @@
 #include "preset_view.hpp"
 #include "mask_filter_view.hpp"
 #include "document_properties_view.hpp"
+#include "generator_view.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -14,10 +15,13 @@ int main(int argc, char *argv[])
     qmlRegisterType<PresetView>("printf", 1, 0, "PresetView");
     qmlRegisterType<MaskFilterView>("printf", 1, 0, "MaskFilterView");
     qmlRegisterType<DocumentPropertiesView>("printf", 1, 0, "DocumentPropertiesView");
+    qmlRegisterType<GeneratorView>("printf", 1, 0, "GeneratorView");
 
     qRegisterMetaType<ImageSourceView*>("ImageSourceView*");
-    //qRegisterMetaType<MaskFilterView>("MaskFilterView");
-
+    
+    qRegisterMetaType<DocumentPreset>("DocumentPreset");
+    qRegisterMetaType<ImageSource*>("ImageSource*");
+    qRegisterMetaType<QList<ImageSource*>>("QList<ImageSource*>");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qml/Application.qml")));

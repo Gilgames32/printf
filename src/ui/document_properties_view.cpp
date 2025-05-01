@@ -36,3 +36,5 @@ void DocumentPropertiesView::setPreset(const QString& presetPath) {
     emit rollWidthChanged();
     emit marginChanged();
 }
+
+DocumentPreset DocumentPropertiesView::getDocumentProperties() const { return DocumentPreset(); }

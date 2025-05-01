@@ -4,6 +4,7 @@
 #include <QtGui>
 
 #include "image_source_view.hpp"
+#include <image_source.hpp>
 
 class SourceEntryView : public QAbstractListModel {
     Q_OBJECT
@@ -30,6 +31,8 @@ class SourceEntryView : public QAbstractListModel {
     Q_INVOKABLE void remove(int index);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void addFiles(const QStringList &files);
+
+    Q_INVOKABLE QList<ImageSource*> getImageSources() const;
 
   signals:
     void amountChanged();
