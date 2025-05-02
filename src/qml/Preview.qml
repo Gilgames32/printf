@@ -3,6 +3,10 @@ import QtQuick.Controls 6.9
 
 Item {
 
+    
+    property alias previewSource: image.source
+    
+
     Rectangle {
         id: flickArea
         color: palette.dark
@@ -32,8 +36,8 @@ Item {
 
         Image {
             id: image
+            cache: false
 
-            source: "3.png"
             anchors.centerIn: parent
             transformOrigin: Item.Center
             scale: 1

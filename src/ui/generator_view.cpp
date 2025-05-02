@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "grid_tiling.hpp"
+#include "preview_provider.hpp"
 
 GeneratorView::GeneratorView() {}
 
@@ -13,15 +14,16 @@ void GeneratorView::generate(const DocumentPreset& properties, QList<ImageSource
     std::vector<ImageSource*> sources_vector(sources.constBegin(), sources.constEnd());
     GridTiling tiling = GridTiling(); // TODO: other tiling methods
     cv::Mat result = tiling.generate(properties, sources_vector);
-    
-    
+
     if (result.empty()) {
         qDebug() << "Failed to generate image.";
         return;
     }
-    std::string output_path = "output.png"; // TODO: get from settings
-    cv::imwrite(output_path, result);
-    qDebug() << "Image saved to:" << QString::fromStdString(output_path);
-    qDebug() << "Generation completed.";
+
+    // Convert cv::Mat to QImage
+    QImage image(result.data, result.cols, result.rows, result.step, QImage::Format_RGB888);
+    PreviewProvider::instance()->setImage(image.rgbSwapped());
+
+    qDebug() << "Image generation completed and set to provider.";
 }
 

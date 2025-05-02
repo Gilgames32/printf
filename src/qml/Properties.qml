@@ -5,6 +5,7 @@ import printf 1.0
 
 Item {
     property var docProperties: null
+
     implicitHeight: paddingCol.implicitHeight + 4 * dmargin
 
     Rectangle {
@@ -27,14 +28,17 @@ Item {
                 onActivated: (index) => {
                     let path = presetModel.getPath(index);
                     if (path == "")
-                        return;
+                        return ;
 
                     docProperties.setPreset(presetModel.getPath(index));
                 }
+
                 model: PresetView {
                     id: presetModel
+
                     path: "presets/document"
                 }
+
             }
 
             GroupBox {
@@ -70,6 +74,26 @@ Item {
                         label.Layout.fillWidth: true
                     }
 
+                    CheckBox {
+                        // TODO: make pretty
+                        id: guidesCheckBox
+
+                        checked: true
+                        text: "Guides"
+                        font.pixelSize: 12
+                    }
+
+                    UnitSpinBox {
+                        id: gutterSpinBox
+
+                        num: docProperties.gutter
+                        label.text: "Gutter"
+                        unit.text: "mm"
+                        Layout.alignment: Qt.AlignRight
+                        Layout.fillWidth: true
+                        label.Layout.fillWidth: true
+                    }
+
                 }
 
             }
@@ -85,6 +109,10 @@ Item {
                 text: "Generate"
                 onClicked: {
                     generator.generate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
+                    // we somehow have to signal to it...
+                    var imageSource = generator.imageSource;
+                    generator.imageSource = "";
+                    generator.imageSource = imageSource;
                 }
             }
 

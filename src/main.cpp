@@ -6,6 +6,7 @@
 #include "mask_filter_view.hpp"
 #include "document_properties_view.hpp"
 #include "generator_view.hpp"
+#include "preview_provider.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +25,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<QList<ImageSource*>>("QList<ImageSource*>");
 
     QQmlApplicationEngine engine;
+    engine.addImageProvider("previewprovider", PreviewProvider::instance());
     engine.load(QUrl(QStringLiteral("qrc:/qml/Application.qml")));
 
     return app.exec();

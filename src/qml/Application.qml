@@ -20,6 +20,14 @@ ApplicationWindow {
 
     GeneratorView {
         id: generator
+
+        property var imageSource: "image://previewprovider/"
+
+        onImageSourceChanged: {
+            
+            console.log("image source changed to: " + imageSource);
+            
+        }
     }
 
     SourceEntryView {
@@ -42,6 +50,7 @@ ApplicationWindow {
 
         Preview {
             id: preview
+            previewSource: generator.imageSource
 
             Layout.fillHeight: true
             Layout.fillWidth: true

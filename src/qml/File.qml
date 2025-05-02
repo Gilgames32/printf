@@ -157,13 +157,6 @@ Rectangle {
                         width: parent.width
                     }
 
-                    CheckBox {
-                        id: guidesCheckBox
-
-                        checked: true
-                        text: "Guides"
-                    }
-
                     MaskInput {
                         id: maskInput
 
