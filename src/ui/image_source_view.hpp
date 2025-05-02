@@ -5,6 +5,8 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 
+#include "image_source.hpp"
+
 class ImageSourceView : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString name READ get_file_name NOTIFY nameChanged)
@@ -21,7 +23,7 @@ class ImageSourceView : public QObject {
     int m_amount;
     // TODO: float
     // TODO: 0 safety
-    double m_width = 100; 
+    double m_width = 100;
     double m_height = 100;
 
   public:
@@ -42,6 +44,8 @@ class ImageSourceView : public QObject {
     cv::Mat get_image() const;
 
     void load_from_preset(const std::string& preset_path);
+
+    ImageSource* get_image_source() const;
 
     Q_INVOKABLE void setPreset(const QString& presetPath);
     Q_INVOKABLE void setSizeToWidth(double width, bool keepAspectRatio = true);

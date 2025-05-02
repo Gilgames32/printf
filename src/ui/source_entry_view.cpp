@@ -1,15 +1,13 @@
 #include "source_entry_view.hpp"
 
-SourceEntryView::SourceEntryView(QObject *parent) : QAbstractListModel(parent) {
-    m_data = QList<ImageSourceView *>();
-}
+SourceEntryView::SourceEntryView(QObject *parent) : QAbstractListModel(parent) { m_data = QList<ImageSourceView *>(); }
 
 SourceEntryView::~SourceEntryView() {
     qDeleteAll(m_data);
     m_data.clear();
 }
 
-QHash<int, QByteArray> SourceEntryView::roleNames() const { return { { Qt::UserRole, "entry" } }; }
+QHash<int, QByteArray> SourceEntryView::roleNames() const { return {{Qt::UserRole, "entry"}}; }
 
 int SourceEntryView::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
@@ -18,11 +16,9 @@ int SourceEntryView::rowCount(const QModelIndex &parent) const {
 
 QVariant SourceEntryView::data(const QModelIndex &index, int role) const {
     // oob check
-    if (!index.isValid() || index.row() >= m_data.size())
-        return QVariant();
+    if (!index.isValid() || index.row() >= m_data.size()) return QVariant();
 
-    if (role == Qt::UserRole)
-        return QVariant::fromValue(m_data.at(index.row()));
+    if (role == Qt::UserRole) return QVariant::fromValue(m_data.at(index.row()));
 
     return QVariant();
 }
@@ -61,5 +57,10 @@ void SourceEntryView::addFiles(const QStringList &files) {
 }
 
 QList<ImageSource *> SourceEntryView::getImageSources() const {
-    return QList<ImageSource *>();
+    // TODO: shared pointer
+    QList<ImageSource *> sources;
+    for (const auto &source : m_data) {
+        sources.append(source->get_image_source());
+    }
+    return sources;
 }

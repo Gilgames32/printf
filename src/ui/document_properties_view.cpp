@@ -2,14 +2,15 @@
 
 #include <filesystem>
 #include <fstream>
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
 // TODO: remove constants
-DocumentPropertiesView::DocumentPropertiesView(): m_resolution(300), m_roll_width(600), m_margin(5), m_correct_quantity(false) {}
+DocumentPropertiesView::DocumentPropertiesView()
+    : m_resolution(300), m_roll_width(600), m_margin(5), m_correct_quantity(false) {}
 
 void DocumentPropertiesView::load_from_preset(const std::string& preset_path) {
     std::cout << "Loading preset from: " << preset_path << std::endl;
@@ -37,4 +38,12 @@ void DocumentPropertiesView::setPreset(const QString& presetPath) {
     emit marginChanged();
 }
 
-DocumentPreset DocumentPropertiesView::getDocumentProperties() const { return DocumentPreset(); }
+DocumentPreset DocumentPropertiesView::getDocumentProperties() const {
+    return DocumentPreset(m_resolution, m_roll_width, m_margin,
+                          5,  // TODO: remove constant
+                          m_correct_quantity,
+                          false,  // TODO: remove constant
+                          1000,   // TODO: remove constant
+                          18000   // TODO: remove constant
+    );
+}

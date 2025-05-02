@@ -59,6 +59,8 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
     m_height = json_data["height"];
 }
 
+ImageSource* ImageSourceView::get_image_source() const { return new ImageSource(m_image, m_amount); }
+
 void ImageSourceView::setPreset(const QString& presetPath) {
     load_from_preset(presetPath.toStdString());
     // TODO: update signals
@@ -70,7 +72,7 @@ void ImageSourceView::setSizeToWidth(double width, bool keepAspectRatio) {
     m_width = width;
 
     if (keepAspectRatio) m_height = width / get_image_aspect_ratio();
-    
+
     std::cout << "Setting width to: " << m_width << std::endl;
     std::cout << "Setting height to: " << m_height << std::endl;
     emit widthChanged();
