@@ -11,12 +11,16 @@ class DocumentPropertiesView : public QObject {
     Q_PROPERTY(double rollWidth MEMBER m_roll_width NOTIFY rollWidthChanged)
     Q_PROPERTY(double margin MEMBER m_margin NOTIFY marginChanged)
     Q_PROPERTY(bool correctQuantity MEMBER m_correct_quantity NOTIFY correctQuantityChanged)
+    Q_PROPERTY(double gutter MEMBER m_gutter NOTIFY gutterChanged)
+    Q_PROPERTY(bool guides MEMBER m_guides NOTIFY guidesChanged)
 
   private:
     double m_resolution;
     double m_roll_width;
     double m_margin;
     bool m_correct_quantity;
+    double m_gutter;
+    bool m_guides;
 
   public:
     explicit DocumentPropertiesView();
@@ -32,4 +36,6 @@ class DocumentPropertiesView : public QObject {
     void rollWidthChanged();
     void marginChanged();
     void correctQuantityChanged();
+    void gutterChanged();
+    void guidesChanged();
 };

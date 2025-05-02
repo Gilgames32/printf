@@ -4,17 +4,16 @@ import QtQuick.Layouts 6.9
 import printf 1.0
 
 ApplicationWindow {
+    readonly property var dmargin: 10
+
     visible: true
     width: 640
     height: 480
     title: "printf"
 
-    
-    readonly property var dmargin: 10
-    
-
     SystemPalette {
         id: palette
+
         colorGroup: SystemPalette.Active
     }
 
@@ -22,12 +21,6 @@ ApplicationWindow {
         id: generator
 
         property var imageSource: "image://previewprovider/"
-
-        onImageSourceChanged: {
-            
-            console.log("image source changed to: " + imageSource);
-            
-        }
     }
 
     SourceEntryView {
@@ -50,8 +43,8 @@ ApplicationWindow {
 
         Preview {
             id: preview
-            previewSource: generator.imageSource
 
+            previewSource: generator.imageSource
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: 2

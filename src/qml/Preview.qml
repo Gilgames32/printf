@@ -36,7 +36,6 @@ Item {
 
         Image {
             id: image
-            cache: false
 
             anchors.centerIn: parent
             transformOrigin: Item.Center

@@ -74,13 +74,15 @@ Item {
                         label.Layout.fillWidth: true
                     }
 
-                    CheckBox {
-                        // TODO: make pretty
+                    UnitCheckBox {
                         id: guidesCheckBox
 
-                        checked: true
-                        text: "Guides"
-                        font.pixelSize: 12
+                        num: docProperties.guides
+                        label.text: "Guides"
+                        
+                        Layout.alignment: Qt.AlignRight
+                        Layout.fillWidth: true
+                        label.Layout.fillWidth: true
                     }
 
                     UnitSpinBox {

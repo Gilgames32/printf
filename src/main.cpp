@@ -19,10 +19,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<GeneratorView>("printf", 1, 0, "GeneratorView");
 
     qRegisterMetaType<ImageSourceView*>("ImageSourceView*");
-    
     qRegisterMetaType<DocumentPreset>("DocumentPreset");
     qRegisterMetaType<ImageSource*>("ImageSource*");
-    qRegisterMetaType<QList<ImageSource*>>("QList<ImageSource*>");
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("previewprovider", PreviewProvider::instance());

@@ -9,6 +9,7 @@
         <file>ImagePicker.qml</file>
         <file>UnitInput.qml</file>
         <file>UnitSpinBox.qml</file>
+        <file>UnitCheckBox.qml</file>
         <file>SizeInput.qml</file>
         <file>MaskInput.qml</file>
     </qresource>

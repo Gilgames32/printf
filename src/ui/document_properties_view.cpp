@@ -28,6 +28,8 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path) {
     m_resolution = json_data["resolution_ppi"].get<double>();
     m_roll_width = json_data["roll_width_mm"].get<double>();
     m_margin = json_data["margin_mm"].get<double>();
+    m_guides = json_data["guides"].get<bool>();
+    m_gutter = json_data["gutter_mm"].get<double>();
 }
 
 void DocumentPropertiesView::setPreset(const QString& presetPath) {
@@ -36,14 +38,13 @@ void DocumentPropertiesView::setPreset(const QString& presetPath) {
     emit resolutionChanged();
     emit rollWidthChanged();
     emit marginChanged();
+    emit guidesChanged();
+    emit gutterChanged();
 }
 
 DocumentPreset DocumentPropertiesView::getDocumentProperties() const {
-    return DocumentPreset(m_resolution, m_roll_width, m_margin,
-                          5,  // TODO: remove constant
-                          m_correct_quantity,
-                          false,  // TODO: remove constant
-                          1000,   // TODO: remove constant
-                          18000   // TODO: remove constant
+    return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides,
+                          1000,  // TODO: remove constant
+                          18000  // TODO: remove constant
     );
 }
