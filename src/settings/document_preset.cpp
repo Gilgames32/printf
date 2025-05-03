@@ -7,13 +7,21 @@
 
 using json = nlohmann::json;
 
+DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_mm, double gutter_mm, bool correct_quantity,
+                               bool guide, double min_height_mm, double max_height_mm)
+    : ppi(ppi),
+      roll_width_mm(roll_width_mm),
+      margin_mm(margin_mm),
+      gutter_mm(gutter_mm),
+      correct_quantity(correct_quantity),
+      guide(guide),
+      min_height_mm(min_height_mm),
+      max_height_mm(max_height_mm) {}
 
 DocumentPreset::DocumentPreset(std::string path) {
     std::ifstream f(path);
     json data = json::parse(f);
     f.close();
-
-    name = data["name"];
 
     ppi = data["resolution_ppi"];
     roll_width_mm = data["roll_width_mm"];
@@ -28,6 +36,8 @@ DocumentPreset::DocumentPreset(std::string path) {
     min_height_mm = 1000;
 }
 
+double DocumentPreset::get_ppi() const { return ppi; }
+
 size_t DocumentPreset::get_document_width_px() const { return convert::mm_to_pixels(roll_width_mm - margin_mm * 2, ppi); }
 
 size_t DocumentPreset::get_max_height_px() const { return convert::mm_to_pixels(max_height_mm, ppi); }
@@ -35,3 +45,7 @@ size_t DocumentPreset::get_max_height_px() const { return convert::mm_to_pixels(
 size_t DocumentPreset::get_min_height_px() const { return convert::mm_to_pixels(min_height_mm, ppi); }
 
 size_t DocumentPreset::get_gutter_px() const { return convert::mm_to_pixels(gutter_mm, ppi); }
+
+bool DocumentPreset::get_guide() const { return guide; }
+
+bool DocumentPreset::get_correct_quantity() const { return correct_quantity; }

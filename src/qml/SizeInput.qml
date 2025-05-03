@@ -1,9 +1,11 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
-import QtQuick.Layouts 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
+import QtQuick.Layouts 6.9
 
 RowLayout {
-    property var imageSize: null
+    property var sizeWidth
+    property var sizeHeight
+
     property var onWidthChangedDelegate: (value) => {
         return console.log("Width changed to: " + value);
     }
@@ -36,31 +38,43 @@ RowLayout {
         spacing: 10
 
         UnitInput {
-            id: widthSpinbox
+            id: widthInput
+            num: sizeWidth
 
-            value: imageSize.width
             onValueChangedDelegate: (value) => {
                 return onWidthChangedDelegate(value);
             }
-            Layout.alignment: Qt.AlignRight
             label.text: "Width"
             unit.text: "mm"
+            Layout.alignment: Qt.AlignRight
             Layout.fillWidth: true
         }
 
         UnitInput {
-            id: heightSpinbox
+            id: heightInput
+            num: sizeHeight
 
-            value: imageSize.height
             onValueChangedDelegate: (value) => {
                 return onHeightChangedDelegate(value);
             }
-            Layout.alignment: Qt.AlignRight
             label.text: "Height"
             unit.text: "mm"
+            Layout.alignment: Qt.AlignRight
             Layout.fillWidth: true
         }
 
+    }
+
+    onSizeWidthChanged: {
+        if (widthInput.num != sizeWidth) {
+            widthInput.num = sizeWidth;
+        }
+    }
+
+    onSizeHeightChanged: {
+        if (heightInput.num != sizeHeight) {
+            heightInput.num = sizeHeight;
+        }
     }
 
 }

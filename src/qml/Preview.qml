@@ -1,8 +1,11 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
 
 Item {
-    SystemPalette { id: palette; colorGroup: SystemPalette.Active }
+
+    
+    property alias previewSource: image.source
+    
 
     Rectangle {
         id: flickArea
@@ -34,7 +37,6 @@ Item {
         Image {
             id: image
 
-            source: "3.png"
             anchors.centerIn: parent
             transformOrigin: Item.Center
             scale: 1

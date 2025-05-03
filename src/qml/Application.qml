@@ -1,17 +1,41 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
-import QtQuick.Layouts 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
+import QtQuick.Layouts 6.9
+import printf 1.0
 
 ApplicationWindow {
+    readonly property var dmargin: 10
+
     visible: true
     width: 640
     height: 480
     title: "printf"
 
+    SystemPalette {
+        id: palette
+
+        colorGroup: SystemPalette.Active
+    }
+
+    GeneratorView {
+        id: generator
+
+        property var imageSource: "image://previewprovider/"
+    }
+
+    SourceEntryView {
+        id: sourceEntryView
+    }
+
+    DocumentPropertiesView {
+        id: docProperties
+    }
+
     RowLayout {
         anchors.fill: parent
 
         FileList {
+            sourceEntryView: sourceEntryView
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: 1
@@ -20,13 +44,15 @@ ApplicationWindow {
         Preview {
             id: preview
 
+            previewSource: generator.imageSource
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: 2
         }
 
         Properties {
-            Layout.fillHeight: true
+            docProperties: docProperties
+            Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
             Layout.preferredWidth: 1
         }

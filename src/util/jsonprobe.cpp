@@ -26,7 +26,10 @@ ProbeList jsonprobe::probe_presets(const std::string& preset_dir_path, const std
     else {
         // TODO: handle error
     }
-    
+
+    // sort by name
+    std::sort(presets.begin(), presets.end());
+
     std::cout << "Found " << presets.size() << " presets in " << preset_dir_path << std::endl;
 
     return presets;

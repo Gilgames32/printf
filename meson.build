@@ -5,7 +5,7 @@ project('printf', 'cpp',
 # Dependencies
 nlohmann_json = dependency('nlohmann_json', required: true)
 opencv = dependency('opencv4', required: true)
-qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui', 'Qml'])
+qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui', 'Qml', 'Quick'])
 
 
 
@@ -20,6 +20,8 @@ moc_headers = files(
   'src/ui/image_source_view.hpp',
   'src/ui/preset_view.hpp',
   'src/ui/mask_filter_view.hpp',
+  'src/ui/document_properties_view.hpp',
+  'src/ui/generator_view.hpp',
 )
 
 qresources = files('src/qml/resources.qrc')
@@ -58,6 +60,9 @@ srcs = files(
   'src/ui/image_source_view.cpp',
   'src/ui/mask_filter_view.cpp',
   'src/ui/preset_view.cpp',
+  'src/ui/document_properties_view.cpp',
+  'src/ui/generator_view.cpp',
+  'src/ui/preview_provider.cpp',
   'src/util/jsonprobe.cpp',
   'src/main.cpp',
 )

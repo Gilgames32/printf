@@ -1,6 +1,6 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
-import QtQuick.Layouts 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
+import QtQuick.Layouts 6.9
 
 Rectangle {
     id: fileItem
@@ -14,12 +14,6 @@ Rectangle {
     color: palette.base
     radius: 5
     implicitHeight: paddingCol.implicitHeight + 20 // FIXME: hack
-
-    SystemPalette {
-        id: palette
-
-        colorGroup: SystemPalette.Active
-    }
 
     Item {
         id: container
@@ -110,8 +104,8 @@ Rectangle {
                             stepSize: 1
                             editable: true
                             onValueChanged: () => {
-                                if (entry.amount != spinbox.value)
-                                    entry.amount = spinbox.value;
+                                if (entry.amount != value)
+                                    entry.amount = value;
 
                             }
                         }
@@ -147,25 +141,20 @@ Rectangle {
                     SizeInput {
                         id: sizeInput
 
-                        imageSize: entry.size
+                        sizeWidth: entry.width
+                        sizeHeight: entry.height
+
                         onWidthChangedDelegate: (value) => {
-                            if (entry.size.width != value)
+                            if (entry.width != value)
                                 entry.setSizeToWidth(value, sizeInput.locked);
 
                         }
                         onHeightChangedDelegate: (value) => {
-                            if (entry.size.height != value)
+                            if (entry.height != value)
                                 entry.setSizeToHeight(value, sizeInput.locked);
 
                         }
                         width: parent.width
-                    }
-
-                    CheckBox {
-                        id: guidesCheckBox
-
-                        checked: true
-                        text: "Guides"
                     }
 
                     MaskInput {

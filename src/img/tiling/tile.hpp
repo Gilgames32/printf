@@ -13,7 +13,7 @@ class Tile {
 
     bool rotated = false;
 
-    Tile(ImageSource* img) : image(img), width(img->get_width()), height(img->get_height()) {}
+    Tile(ImageSource* img) : image(img), width(img->get_width_px()), height(img->get_height_px()) {}
 
     void rotate() {
         std::swap(width, height);

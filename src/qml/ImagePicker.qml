@@ -1,6 +1,6 @@
-import QtQuick 6.8
-import QtQuick.Controls 6.8
-import QtQuick.Dialogs 6.8
+import QtQuick 6.9
+import QtQuick.Controls 6.9
+import QtQuick.Dialogs 6.9
 
 FileDialog {
     id: fileDialog
