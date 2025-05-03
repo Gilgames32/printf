@@ -16,6 +16,10 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
 }
 
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
+    if (images.empty()) {
+        return cv::Mat(); // TODO
+    }
+
     auto gutter = preset.get_gutter_px();
     auto ppi = preset.get_ppi();
     auto uniform_width_px = convert::mm_to_pixels(images[0]->width_mm, ppi);
