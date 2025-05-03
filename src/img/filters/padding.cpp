@@ -4,7 +4,11 @@ PaddingFilter::PaddingFilter(size_t padding, bool guide): padding(padding), guid
 
 cv::Mat PaddingFilter::apply(const cv::Mat &image) const {
     cv::Mat padded;
-    cv::copyMakeBorder(image, padded, padding, padding, padding, padding, cv::BORDER_CONSTANT, cv::Scalar(255, 255, 255));
+    if (padding > 0) {
+        cv::copyMakeBorder(image, padded, padding, padding, padding, padding, cv::BORDER_CONSTANT, cv::Scalar(255, 255, 255));
+    } else {
+        padded = image;
+    }
 
     if (guide) {
         // TODO: make this configurable

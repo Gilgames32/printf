@@ -44,4 +44,8 @@ class DocumentPreset {
     size_t get_min_height_px() const;
 
     size_t get_gutter_px() const;
+
+    bool get_guide() const;
+
+    bool get_correct_quantity() const;
 };

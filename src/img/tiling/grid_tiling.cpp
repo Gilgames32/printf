@@ -2,10 +2,10 @@
 
 #include <numeric>
 
+#include "padding.hpp"
 #include "rotate.hpp"
 #include "size.hpp"
 #include "tile.hpp"
-#include "padding.hpp"
 
 size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t tile_height, size_t amount) {
     size_t columns = std::floor(document_width / tile_width);
@@ -18,20 +18,19 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     auto gutter = preset.get_gutter_px();
     auto uniform_width = images[0]->get_width();
     auto uniform_height = images[0]->get_height();
-    
-    for (auto img : images)
-    {
+
+    for (auto img : images) {
         img->add_filter(new SizeFilter(uniform_width, uniform_height));
-        img->add_filter(new PaddingFilter(gutter, true)); // TODO: pull from preset
+        img->add_filter(new PaddingFilter(gutter, preset.get_guide()));
         img->burn();
     }
-    
+
     auto tile_width = images[0]->get_width();
     auto tile_height = images[0]->get_height();
-    auto document_width = preset.get_document_width_px() + 2 * gutter;  // FIXME proper gutter
-    
+    auto document_width = preset.get_document_width_px() + 2 * gutter;  // FIXME proper gutter, cut and add margin idk
+
     auto quantity = std::accumulate(images.begin(), images.end(), 0,
-                                      [](size_t sum, const ImageSource* img) { return sum + img->get_amount(); });
+                                    [](size_t sum, const ImageSource* img) { return sum + img->get_amount(); });
 
     bool rotate = false;
     // fits both ways
@@ -52,8 +51,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
 
     if (rotate) {
         std::swap(tile_width, tile_height);
-        for (auto img : images)
-        {
+        for (auto img : images) {
             img->add_filter(new RotateFilter());
         }
     }
@@ -65,14 +63,16 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
         }
     }
 
-    size_t columns = std::floor(document_width / tile_width); // TODO: test cast
+    size_t columns = std::floor(document_width / tile_width);  // TODO: test cast
     size_t rows = std::ceil((double)quantity / columns);
     size_t document_height = rows * tile_height;
 
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 
-    // TODO: corrected quantity
+    if (preset.get_correct_quantity()) {
+        quantity = rows * columns;
+    }
 
     for (size_t i = 0; i < quantity; i++) {
         Tile& tile = tiles[i];

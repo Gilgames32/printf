@@ -49,6 +49,11 @@ Item {
 
                     UnitInput {
                         num: docProperties.resolution
+                        onValueChangedDelegate: (value) => {
+                            if (docProperties.resolution != value)
+                                docProperties.resolution = value;
+
+                        }
                         label.text: "Resolution"
                         unit.text: "ppi"
                         Layout.alignment: Qt.AlignRight
@@ -58,6 +63,11 @@ Item {
 
                     UnitInput {
                         num: docProperties.rollWidth
+                        onValueChangedDelegate: (value) => {
+                            if (docProperties.rollWidth != value)
+                                docProperties.rollWidth = value;
+
+                        }
                         label.text: "Paper Width"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight
@@ -67,6 +77,11 @@ Item {
 
                     UnitSpinBox {
                         num: docProperties.margin
+                        onValueChangedDelegate: (value) => {
+                            if (docProperties.margin != value)
+                                docProperties.margin = value;
+
+                        }
                         label.text: "Margin"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight
@@ -78,8 +93,12 @@ Item {
                         id: guidesCheckBox
 
                         num: docProperties.guides
+                        onValueChangedDelegate: (value) => {
+                            if (docProperties.guides != value)
+                                docProperties.guides = value;
+
+                        }
                         label.text: "Guides"
-                        
                         Layout.alignment: Qt.AlignRight
                         Layout.fillWidth: true
                         label.Layout.fillWidth: true
@@ -89,6 +108,11 @@ Item {
                         id: gutterSpinBox
 
                         num: docProperties.gutter
+                        onValueChangedDelegate: (value) => {
+                            if (docProperties.gutter != value)
+                                docProperties.gutter = value;
+
+                        }
                         label.text: "Gutter"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight
@@ -101,10 +125,15 @@ Item {
             }
 
             CheckBox {
-                id: checkBox
+                id: correctQuantityCheckBox
 
                 text: "Corrected Quantity"
                 checked: docProperties.correctQuantity
+                onCheckedChanged: () => {
+                    if (docProperties.correctQuantity != checked)
+                        docProperties.correctQuantity = checked;
+
+                }
             }
 
             Button {

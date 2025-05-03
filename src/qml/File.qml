@@ -104,8 +104,8 @@ Rectangle {
                             stepSize: 1
                             editable: true
                             onValueChanged: () => {
-                                if (entry.amount != spinbox.value)
-                                    entry.amount = spinbox.value;
+                                if (entry.amount != value)
+                                    entry.amount = value;
 
                             }
                         }
