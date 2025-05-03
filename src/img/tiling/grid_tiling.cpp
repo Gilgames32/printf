@@ -5,6 +5,7 @@
 #include "rotate.hpp"
 #include "size.hpp"
 #include "tile.hpp"
+#include "padding.hpp"
 
 size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t tile_height, size_t amount) {
     size_t columns = std::floor(document_width / tile_width);
@@ -14,20 +15,30 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
 }
 
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
-    size_t document_width = preset.get_document_width_px() + 2 * preset.get_gutter_px();  // FIXME proper gutter
-
-    size_t tile_width = images[0]->get_width();
-    size_t tile_height = images[0]->get_height();
-
-    size_t quantity = std::accumulate(images.begin(), images.end(), 0,
+    auto gutter = preset.get_gutter_px();
+    auto uniform_width = images[0]->get_width();
+    auto uniform_height = images[0]->get_height();
+    
+    for (auto img : images)
+    {
+        img->add_filter(new SizeFilter(uniform_width, uniform_height));
+        img->add_filter(new PaddingFilter(gutter, true)); // TODO: pull from preset
+        img->burn();
+    }
+    
+    auto tile_width = images[0]->get_width();
+    auto tile_height = images[0]->get_height();
+    auto document_width = preset.get_document_width_px() + 2 * gutter;  // FIXME proper gutter
+    
+    auto quantity = std::accumulate(images.begin(), images.end(), 0,
                                       [](size_t sum, const ImageSource* img) { return sum + img->get_amount(); });
 
     bool rotate = false;
     // fits both ways
     if (tile_width <= document_width && tile_height <= document_width) {
         // check which way causes less waste
-        size_t waste_portrait = calc_waste(document_width, tile_width, tile_height, quantity);
-        size_t waste_landscape = calc_waste(document_width, tile_height, tile_width, quantity);
+        auto waste_portrait = calc_waste(document_width, tile_width, tile_height, quantity);
+        auto waste_landscape = calc_waste(document_width, tile_height, tile_width, quantity);
         rotate = waste_landscape < waste_portrait;
     } else if (tile_width <= document_width) {
         rotate = false;
@@ -41,24 +52,20 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
 
     if (rotate) {
         std::swap(tile_width, tile_height);
+        for (auto img : images)
+        {
+            img->add_filter(new RotateFilter());
+        }
     }
 
     std::vector<Tile> tiles = {};
     for (ImageSource* img : images) {
-        if (rotate) {
-            img->add_filter(new RotateFilter());
-        }
-        // TODO
-        // set the size of every image to match the first one
-        // add gutter filter with guide parameter if the image doesnt already have one
-        img->add_filter(new SizeFilter(tile_width, tile_height));
-
         for (size_t i = 0; i < img->get_amount(); i++) {
             tiles.push_back(Tile(img));
         }
     }
 
-    size_t columns = std::floor(document_width / tile_width);
+    size_t columns = std::floor(document_width / tile_width); // TODO: test cast
     size_t rows = std::ceil((double)quantity / columns);
     size_t document_height = rows * tile_height;
 

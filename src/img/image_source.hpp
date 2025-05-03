@@ -46,4 +46,6 @@ class ImageSource : ICachableImage {
     size_t get_amount() const { return amount; }
 
     cv::Mat get_cachable() const override { return apply_filters(); }
+
+    cv::Mat burn();
 };
