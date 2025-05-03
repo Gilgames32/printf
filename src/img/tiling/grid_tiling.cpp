@@ -18,17 +18,17 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
     auto gutter = preset.get_gutter_px();
     auto ppi = preset.get_ppi();
-    auto uniform_width_px = convert::mm_to_pixels(images[0]->get_width(), ppi);
-    auto uniform_height_px = convert::mm_to_pixels(images[0]->get_height(), ppi);
+    auto uniform_width_px = convert::mm_to_pixels(images[0]->width_mm, ppi);
+    auto uniform_height_px = convert::mm_to_pixels(images[0]->height_mm, ppi);
 
     for (auto img : images) {
-        img->set_size(uniform_width_px, uniform_height_px);
+        img->set_size_px(uniform_width_px, uniform_height_px);
         img->add_filter(new PaddingFilter(gutter, preset.get_guide()));
         img->burn();
     }
 
-    auto tile_width = images[0]->get_width();
-    auto tile_height = images[0]->get_height();
+    auto tile_width = images[0]->get_width_px();
+    auto tile_height = images[0]->get_height_px();
     auto document_width = preset.get_document_width_px() + 2 * gutter;  // FIXME proper gutter, cut and add margin idk
 
     auto quantity = std::accumulate(images.begin(), images.end(), 0,

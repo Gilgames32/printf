@@ -9,7 +9,7 @@ class SizeFilter : public Filter {
     static const int sizeInterUp = cv::INTER_CUBIC;
 
   public:
-    int width;
+    int width; // TODO: make private
     int height;
     SizeFilter(int width, int height);
 

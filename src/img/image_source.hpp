@@ -17,7 +17,9 @@ class ImageSource : ICachableImage {
     SizeFilter size_filter;
 
   public:
-    ImageSource(cv::Mat source, size_t amount, int width = 0, int height = 0);
+    double width_mm;
+    double height_mm;
+    ImageSource(cv::Mat source, size_t amount, double width_mm = 0, double height_mm = 0);
 
     virtual ~ImageSource() { clear_filters(); }
     ImageSource(const ImageSource& other)
@@ -37,11 +39,11 @@ class ImageSource : ICachableImage {
 
     cv::Mat get_img() { return cached.get_img(); }
 
-    size_t get_width() { return cached.get_width(); }
+    size_t get_width_px() { return cached.get_width(); }
 
-    size_t get_height() { return cached.get_height(); }
+    size_t get_height_px() { return cached.get_height(); }
 
-    void set_size(int width, int height);
+    void set_size_px(int width, int height);
 
     size_t get_amount() const { return amount; }
 

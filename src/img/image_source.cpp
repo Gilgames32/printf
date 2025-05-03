@@ -1,7 +1,7 @@
 #include "image_source.hpp"
 
-ImageSource::ImageSource(cv::Mat source, size_t amount, int width, int height)
-    : original(source), amount(amount), cached(*this), filters(), size_filter(SizeFilter(width, height)) {}
+ImageSource::ImageSource(cv::Mat source, size_t amount, double width_mm, double height_mm)
+    : original(source), amount(amount), cached(*this), filters(), size_filter(SizeFilter(source.cols, source.rows)), width_mm(width_mm), height_mm(height_mm) {}
 
 void ImageSource::add_filter(Filter* filter) {
     filters.push_back(filter);
@@ -28,10 +28,11 @@ cv::Mat ImageSource::apply_filters() const {
 cv::Mat ImageSource::burn() {
     original = apply_filters();
     clear_filters();
+    size_filter.set_size(original.cols, original.rows);
     return get_img();
 }
 
-void ImageSource::set_size(int width, int height) {
+void ImageSource::set_size_px(int width, int height) {
     size_filter.set_size(width, height);
     cached.set_dirty();
 }
