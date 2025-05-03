@@ -13,5 +13,6 @@ public:
     explicit GeneratorView();
 
     Q_INVOKABLE void generate(const DocumentPreset& properties, QList<ImageSource*> sources);
+    Q_INVOKABLE void save(const QString& path);
 };
 

@@ -4,6 +4,8 @@ PreviewProvider::PreviewProvider() : QQuickImageProvider(QQuickImageProvider::Im
 
 void PreviewProvider::setImage(const QImage& image) { m_image = image; }
 
+QImage PreviewProvider::getImage() const { return m_image; }
+
 QImage PreviewProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize) {
     Q_UNUSED(id);
     Q_UNUSED(size);

@@ -34,3 +34,23 @@ void GeneratorView::generate(const DocumentPreset& properties, QList<ImageSource
 
     qDebug() << "Image generation completed and set to provider.";
 }
+
+void GeneratorView::save(const QString& path) {
+    auto out_path = path.toStdString();
+    if (out_path.rfind("file://", 0) == 0) {
+        out_path = out_path.substr(7);
+    }
+    // TODO: cleanup
+    qDebug() << "Saving to" << out_path.c_str();
+    QImage image = PreviewProvider::instance()->getImage();
+    if (image.isNull()) {
+        qDebug() << "No image to save.";
+        return;
+    }
+    if (!image.save(out_path.c_str())) {
+        // TODO: handle errors
+        qDebug() << "Failed to save image.";
+    } else {
+        qDebug() << "Image saved successfully.";
+    }
+}

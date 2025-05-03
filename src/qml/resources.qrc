@@ -6,6 +6,7 @@
         <file>Properties.qml</file>
         <file>File.qml</file>
         <file>ImagePicker.qml</file>
+        <file>SavePicker.qml</file>
         <file>UnitInput.qml</file>
         <file>UnitSpinBox.qml</file>
         <file>UnitCheckBox.qml</file>

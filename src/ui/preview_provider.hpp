@@ -14,5 +14,7 @@ class PreviewProvider : public QQuickImageProvider {
 
     void setImage(const QImage& image);
 
+    QImage getImage() const;
+
     QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize) override;
 };

@@ -136,16 +136,35 @@ Item {
                 }
             }
 
-            Button {
-                text: "Generate"
-                onClicked: {
-                    generator.generate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
-                    // we somehow have to signal to it...
-                    var imageSource = generator.imageSource;
-                    generator.imageSource = "";
-                    generator.imageSource = imageSource;
+            RowLayout {
+                Button {
+                    text: "Generate"
+                    onClicked: {
+                        generator.generate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
+                        // we somehow have to signal to it...
+                        var imageSource = generator.imageSource;
+                        generator.imageSource = "";
+                        generator.imageSource = imageSource;
+                    }
                 }
+
+                Button {
+                    text: "Save as"
+
+                    onClicked: {
+                        saveDialog.open();
+                    }
+                }
+
+                SavePicker {
+                    id: saveDialog
+                    onAcceptDelegate: (url) => {
+                        generator.save(url);
+                    }
+                }
+
             }
+
 
         }
 
