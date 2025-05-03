@@ -4,8 +4,9 @@
 #include <vector>
 
 #include "cached_image.hpp"
-#include "icachable.hpp"
 #include "filter.hpp"
+#include "icachable.hpp"
+#include "size.hpp"
 
 class ImageSource : ICachableImage {
   private:
@@ -13,23 +14,20 @@ class ImageSource : ICachableImage {
     CachedImage cached;
     size_t amount;
     std::vector<Filter*> filters;
-    bool rotated;
-    size_t width, height;
+    SizeFilter size_filter;
 
   public:
-    ImageSource(cv::Mat source, size_t amount);
+    ImageSource(cv::Mat source, size_t amount, int width = 0, int height = 0);
 
     virtual ~ImageSource() { clear_filters(); }
     ImageSource(const ImageSource& other)
-      : original(other.original),
-        cached(*this),
-        amount(other.amount),
-        filters(other.filters), // FIXME
-        rotated(other.rotated),
-        width(other.width),
-        height(other.height) {
-          std::cout << "Copy constructor called" << std::endl;
-        }
+        : original(other.original),
+          cached(*this),
+          amount(other.amount),
+          filters(other.filters),  // FIXME
+          size_filter(other.size_filter) {
+        std::cout << "Copy constructor called" << std::endl;
+    }
 
     void add_filter(Filter* filter);
 
@@ -42,6 +40,8 @@ class ImageSource : ICachableImage {
     size_t get_width() { return cached.get_width(); }
 
     size_t get_height() { return cached.get_height(); }
+
+    void set_size(int width, int height);
 
     size_t get_amount() const { return amount; }
 

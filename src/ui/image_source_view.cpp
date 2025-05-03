@@ -59,7 +59,10 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
     m_height = json_data["height"];
 }
 
-ImageSource* ImageSourceView::get_image_source() const { return new ImageSource(m_image, m_amount); }
+ImageSource* ImageSourceView::get_image_source() const { 
+    auto img = new ImageSource(m_image, m_amount, m_width, m_height); 
+    return img;
+}
 
 void ImageSourceView::setPreset(const QString& presetPath) {
     load_from_preset(presetPath.toStdString());

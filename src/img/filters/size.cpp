@@ -2,6 +2,11 @@
 
 SizeFilter::SizeFilter(int width, int height) : width(width), height(height) {}
 
+void SizeFilter::set_size(int width, int height) {
+    this->width = width;
+    this->height = height;
+}
+
 cv::Mat SizeFilter::apply(const cv::Mat &image) const { return SizeFilter::resize(image, width, height); }
 
 cv::Mat SizeFilter::resize(const cv::Mat &image, int width, int height, int interDown, int interUp) {

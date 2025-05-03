@@ -7,12 +7,13 @@ class SizeFilter : public Filter {
   private:
     static const int sizeInterDown = cv::INTER_AREA;
     static const int sizeInterUp = cv::INTER_CUBIC;
-    int width;
-    int height;
-    bool lockAspect = true;
 
   public:
+    int width;
+    int height;
     SizeFilter(int width, int height);
+
+    void set_size(int width, int height);
 
     cv::Mat apply(const cv::Mat &image) const override;
 

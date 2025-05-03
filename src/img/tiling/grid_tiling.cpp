@@ -6,6 +6,7 @@
 #include "rotate.hpp"
 #include "size.hpp"
 #include "tile.hpp"
+#include "convert.hpp"
 
 size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t tile_height, size_t amount) {
     size_t columns = std::floor(document_width / tile_width);
@@ -16,11 +17,12 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
 
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
     auto gutter = preset.get_gutter_px();
-    auto uniform_width = images[0]->get_width();
-    auto uniform_height = images[0]->get_height();
+    auto ppi = preset.get_ppi();
+    auto uniform_width_px = convert::mm_to_pixels(images[0]->get_width(), ppi);
+    auto uniform_height_px = convert::mm_to_pixels(images[0]->get_height(), ppi);
 
     for (auto img : images) {
-        img->add_filter(new SizeFilter(uniform_width, uniform_height));
+        img->set_size(uniform_width_px, uniform_height_px);
         img->add_filter(new PaddingFilter(gutter, preset.get_guide()));
         img->burn();
     }
@@ -70,12 +72,10 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 
-    if (preset.get_correct_quantity()) {
-        quantity = rows * columns;
-    }
+    auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;
 
-    for (size_t i = 0; i < quantity; i++) {
-        Tile& tile = tiles[i];
+    for (size_t i = 0; i < corrected_quantity; i++) {
+        Tile& tile = tiles[i % quantity];
         cv::Rect target_rect = cv::Rect((i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
 
         tile.get_image().copyTo(document(target_rect));

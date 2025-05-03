@@ -36,6 +36,8 @@ DocumentPreset::DocumentPreset(std::string path) {
     min_height_mm = 1000;
 }
 
+double DocumentPreset::get_ppi() const { return ppi; }
+
 size_t DocumentPreset::get_document_width_px() const { return convert::mm_to_pixels(roll_width_mm - margin_mm * 2, ppi); }
 
 size_t DocumentPreset::get_max_height_px() const { return convert::mm_to_pixels(max_height_mm, ppi); }

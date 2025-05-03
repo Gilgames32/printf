@@ -37,6 +37,8 @@ class DocumentPreset {
   
     DocumentPreset(std::string path);
 
+    double get_ppi() const;
+
     size_t get_document_width_px() const;
 
     size_t get_max_height_px() const;
