@@ -13,6 +13,9 @@ cv::Mat SizeFilter::resize(const cv::Mat &image, int width, int height, int inte
     if (width == image.cols && height == image.rows) {
         return image;
     }
+    if (width <= 0 || height <= 0) {
+        return cv::Mat();
+    }
 
     bool downScaling = width < image.cols || height < image.rows;
 
