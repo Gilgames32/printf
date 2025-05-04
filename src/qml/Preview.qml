@@ -2,13 +2,11 @@ import QtQuick 6.9
 import QtQuick.Controls 6.9
 
 Item {
-
-    
     property alias previewSource: image.source
-    
 
     Rectangle {
         id: flickArea
+
         color: palette.dark
         anchors.fill: parent
     }

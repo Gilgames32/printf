@@ -54,6 +54,7 @@ Item {
                                 docProperties.resolution = value;
 
                         }
+                        from: 1
                         label.text: "Resolution"
                         unit.text: "ppi"
                         Layout.alignment: Qt.AlignRight
@@ -68,6 +69,7 @@ Item {
                                 docProperties.rollWidth = value;
 
                         }
+                        from: 1
                         label.text: "Paper Width"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight
@@ -150,7 +152,6 @@ Item {
 
                 Button {
                     text: "Save as"
-
                     onClicked: {
                         saveDialog.open();
                     }
@@ -158,13 +159,13 @@ Item {
 
                 SavePicker {
                     id: saveDialog
+
                     onAcceptDelegate: (url) => {
                         generator.save(url);
                     }
                 }
 
             }
-
 
         }
 

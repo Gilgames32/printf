@@ -5,8 +5,8 @@ import QtQuick.Layouts 6.9
 RowLayout {
     property alias unit: unit
     property alias label: label
-    readonly property var from: 0
-    readonly property var to: 100000
+    property var from: 0
+    property var to: 100000
     property var num: from
     property var onValueChangedDelegate: (value) => {
         return console.log("Value changed to: " + value);
