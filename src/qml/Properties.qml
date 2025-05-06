@@ -144,9 +144,8 @@ Item {
                     onClicked: {
                         generator.generate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
                         // we somehow have to signal to it...
-                        var imageSource = generator.imageSource;
                         generator.imageSource = "";
-                        generator.imageSource = imageSource;
+                        generator.imageSource = generator.providedImagePath;
                     }
                 }
 

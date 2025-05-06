@@ -36,14 +36,63 @@ Item {
             id: image
 
             anchors.centerIn: parent
-            transformOrigin: Item.Center
-            scale: 1
+            fillMode: Image.PreserveAspectFit
+            smooth: false
+            mipmap: false
+            asynchronous: true
+            cache: false
+            onStatusChanged: {
+                if (status != Image.Ready)
+                    return ;
+
+                scale = 1;
+                // fit image
+                if (width > height)
+                    scale = flickArea.width / width;
+                else
+                    scale = flickArea.height / height;
+            }
+        }
+
+        
+        Rectangle {
+            
+            anchors.fill: parent
+            
+            color: "transparent"
+            border.color: "red"
+            border.width: 1
+        }
+        
+
+        Text {
+            text: "Loading preview..."
+            anchors.centerIn: parent
+            color: palette.mid
+            visible: image.status == Image.Loading
+        }
+
+        Text {
+            text: "//TODO: greeting"
+            anchors.centerIn: parent
+            color: palette.mid
+            visible: image.status == Image.Null
+        }
+
+        Text {
+            text: "Error generating image"
+            anchors.centerIn: parent
+            color: palette.mid
+            visible: image.status == Image.Error
         }
 
         MouseArea {
             anchors.fill: parent
             onWheel: (wheel) => {
                 return mouseArea.wheel(wheel);
+            } // emit the signal to the main mouse area
+            onPositionChanged: (mouse) => {
+                return mouseArea.positionChanged(mouse);
             } // emit the signal to the main mouse area
         }
 
