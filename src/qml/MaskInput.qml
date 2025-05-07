@@ -21,6 +21,9 @@ Column {
         id: maskCheckBox
 
         checked: maskObject.enabled
+        onCheckedChanged: {
+            maskObject.enabled = maskCheckBox.checked;
+        }
         text: "Mask"
     }
 

@@ -55,8 +55,6 @@ void MaskFilterView::load_from_preset(const std::string& preset_path, const std:
         m_file_path = j["path"].get<std::string>();
         emit filePathChanged();
     }
-
-    // TODO: load m_image
 }
 
 void MaskFilterView::setPreset(const QString& presetPath, const QString& subcategory) {
