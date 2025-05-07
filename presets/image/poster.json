@@ -2,5 +2,8 @@
     "name": "Nagyplakát",
     "width": 914,
     "height": 1600,
-    "suggested_resolution": 300
+    "amount": 1,
+    "document": {
+        "resolution_ppi": 300
+    }
 }

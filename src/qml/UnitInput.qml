@@ -8,18 +8,21 @@ RowLayout {
     property var from: 0
     property var to: 100000
     property var num: from
+    property var inum: num // internal number so that outisde binding is not affected
     property var onValueChangedDelegate: (value) => {
         return console.log("Value changed to: " + value);
     }
 
     function getFormattedNum() {
         // TODO: :skull:
-        return textInput.focus ? num : num.toFixed(num % 1 == 0 ? 0 : (num * 10) % 1 == 0 ? 1 : 2);
+        return textInput.focus ? inum : inum.toFixed(inum % 1 == 0 ? 0 : (inum * 10) % 1 == 0 ? 1 : 2);
     }
 
     spacing: 10
     onNumChanged: {
-        textInput.text = getFormattedNum();
+        if (inum == num)
+            return ;
+        inum = num;
     }
 
     Text {
@@ -40,19 +43,17 @@ RowLayout {
         onEditingFinished: {
             const parsedNum = parseFloat(text.replace(',', '.'));
             if (isNaN(parsedNum)) {
-                num = num; // notify num
+                inum = inum; // notify inum
                 return ;
             }
             const clampedNum = Math.min(Math.max(parsedNum, from), to);
-            if (num != clampedNum) {
-                num = clampedNum;
-                onValueChangedDelegate(num);
+            if (inum != clampedNum) {
+                inum = clampedNum;
+                onValueChangedDelegate(inum);
             } else if (clampedNum != parsedNum) {
-                num = clampedNum; // notify num
+                inum = clampedNum;
+                onValueChangedDelegate(inum);
             }
-        }
-        onFocusChanged: {
-            textInput.text = getFormattedNum();
         }
     }
 

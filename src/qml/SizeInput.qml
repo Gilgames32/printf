@@ -3,15 +3,10 @@ import QtQuick.Controls 6.9
 import QtQuick.Layouts 6.9
 
 RowLayout {
-    property var sizeWidth
-    property var sizeHeight
-
-    property var onWidthChangedDelegate: (value) => {
-        return console.log("Width changed to: " + value);
-    }
-    property var onHeightChangedDelegate: (value) => {
-        return console.log("Height changed to: " + value);
-    }
+    property alias sizeWidth: widthInput.num
+    property alias sizeHeight: heightInput.num
+    property alias onWidthChangedDelegate: widthInput.onValueChangedDelegate
+    property alias onHeightChangedDelegate: heightInput.onValueChangedDelegate
     property alias locked: checkBox.checked
 
     CheckBox {
@@ -39,11 +34,7 @@ RowLayout {
 
         UnitInput {
             id: widthInput
-            num: sizeWidth
 
-            onValueChangedDelegate: (value) => {
-                return onWidthChangedDelegate(value);
-            }
             from: 1
             label.text: "Width"
             unit.text: "mm"
@@ -53,11 +44,7 @@ RowLayout {
 
         UnitInput {
             id: heightInput
-            num: sizeHeight
 
-            onValueChangedDelegate: (value) => {
-                return onHeightChangedDelegate(value);
-            }
             from: 1
             label.text: "Height"
             unit.text: "mm"
@@ -65,18 +52,6 @@ RowLayout {
             Layout.fillWidth: true
         }
 
-    }
-
-    onSizeWidthChanged: {
-        if (widthInput.num != sizeWidth) {
-            widthInput.num = sizeWidth;
-        }
-    }
-
-    onSizeHeightChanged: {
-        if (heightInput.num != sizeHeight) {
-            heightInput.num = sizeHeight;
-        }
     }
 
 }
