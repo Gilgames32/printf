@@ -13,12 +13,12 @@ ProbeList jsonprobe::probe_presets(const std::string& preset_dir_path, const std
     if (std::filesystem::exists(preset_dir) && std::filesystem::is_directory(preset_dir)) {
         for (const auto& entry : std::filesystem::directory_iterator(preset_dir)) {
             if (entry.is_regular_file() && entry.path().extension() == ".json") {
-                json json_data;
-                std::ifstream file(entry.path());
-                json_data = json::parse(file);
-                file.close();
-                if (json_data.contains("name")) {
-                    presets.push_back({json_data["name"], entry.path().string()});
+                json j;
+                std::ifstream f(entry.path());
+                j = json::parse(f);
+                f.close();
+                if (j.contains("name")) {
+                    presets.push_back({j["name"], entry.path().string()});
                 }
             }
         }

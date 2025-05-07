@@ -34,8 +34,6 @@ class DocumentPreset {
         double min_height_mm = 101.6,
         double max_height_mm = 18000
     );
-  
-    DocumentPreset(std::string path);
 
     double get_ppi() const;
 

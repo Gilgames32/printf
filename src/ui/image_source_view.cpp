@@ -23,7 +23,7 @@ ImageSourceView::ImageSourceView(const std::string& path) : m_file_path(path), m
         throw std::runtime_error("Failed to load image: " + m_file_path);
     }
 
-    m_width = m_image.cols / 10; // TODO
+    m_width = m_image.cols / 10;  // TODO
     m_height = m_image.rows / 10;
 }
 
@@ -50,26 +50,31 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
         throw std::invalid_argument("Preset file does not exist: " + preset_path);
     }
 
-    json json_data;
-    std::ifstream file(preset_path);
-    json_data = json::parse(file);
-    file.close();
+    json j;
+    std::ifstream f(preset_path);
+    j = json::parse(f);
+    f.close();
 
-    m_width = json_data["width"];
-    m_height = json_data["height"];
+    if (j.contains("amount")) {
+        m_amount = j["amount"];
+        emit amountChanged();
+    }
+    if (j.contains("width")) {
+        m_width = j["width"];
+        emit widthChanged();
+    }
+    if (j.contains("height")) {
+        m_height = j["height"];
+        emit heightChanged();
+    }
 }
 
-ImageSource* ImageSourceView::get_image_source() const { 
-    auto img = new ImageSource(m_image, m_amount, m_width, m_height); 
+ImageSource* ImageSourceView::get_image_source() const {
+    auto img = new ImageSource(m_image, m_amount, m_width, m_height);
     return img;
 }
 
-void ImageSourceView::setPreset(const QString& presetPath) {
-    load_from_preset(presetPath.toStdString());
-    // TODO: update signals
-    emit widthChanged();
-    emit heightChanged();
-}
+void ImageSourceView::setPreset(const QString& presetPath) { load_from_preset(presetPath.toStdString()); }
 
 void ImageSourceView::setSizeToWidth(double width, bool keepAspectRatio) {
     m_width = width;

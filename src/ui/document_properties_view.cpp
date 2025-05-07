@@ -19,28 +19,41 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path) {
         throw std::invalid_argument("Preset file does not exist: " + preset_path);
     }
 
-    json json_data;
-    std::ifstream file(preset_path);
-    json_data = json::parse(file);
-    file.close();
+    json j;
+    std::ifstream f(preset_path);
+    if (!f.is_open()) {
+        throw std::runtime_error("Failed to open preset file: " + preset_path);
+    }
+    j = json::parse(f);
+    f.close();
 
-    // TODO: handle errors
-    m_resolution = json_data["resolution_ppi"].get<double>();
-    m_roll_width = json_data["roll_width_mm"].get<double>();
-    m_margin = json_data["margin_mm"].get<double>();
-    m_guides = json_data["guides"].get<bool>();
-    m_gutter = json_data["gutter_mm"].get<double>();
+    if (j.contains("resolution_ppi")) {
+        m_resolution = j["resolution_ppi"].get<double>();
+        emit resolutionChanged();
+    }
+    if (j.contains("roll_width_mm")) {
+        m_roll_width = j["roll_width_mm"].get<double>();
+        emit rollWidthChanged();
+    }
+    if (j.contains("margin_mm")) {
+        m_margin = j["margin_mm"].get<double>();
+        emit marginChanged();
+    }
+    if (j.contains("gutter_mm")) {
+        m_gutter = j["gutter_mm"].get<double>();
+        emit gutterChanged();
+    }
+    if (j.contains("correct_quantity")) {
+        m_correct_quantity = j["correct_quantity"].get<bool>();
+        emit correctQuantityChanged();
+    }
+    if (j.contains("guide")) {
+        m_guides = j["guide"].get<bool>();
+        emit guidesChanged();
+    }
 }
 
-void DocumentPropertiesView::setPreset(const QString& presetPath) {
-    load_from_preset(presetPath.toStdString());
-    // TODO: update signals
-    emit resolutionChanged();
-    emit rollWidthChanged();
-    emit marginChanged();
-    emit guidesChanged();
-    emit gutterChanged();
-}
+void DocumentPropertiesView::setPreset(const QString& presetPath) { load_from_preset(presetPath.toStdString()); }
 
 DocumentPreset DocumentPropertiesView::getDocumentProperties() const {
     return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides,

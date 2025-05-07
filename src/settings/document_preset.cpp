@@ -1,12 +1,9 @@
 #include "document_preset.hpp"
 
 #include <fstream>
-#include <nlohmann/json.hpp>
 #include <stdexcept>
 
 #include "convert.hpp"
-
-using json = nlohmann::json;
 
 DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_mm, double gutter_mm, bool correct_quantity,
                                bool guide, double min_height_mm, double max_height_mm)
@@ -24,24 +21,6 @@ DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_m
     if (gutter_mm < 0) throw std::invalid_argument("Invalid gutter");
     if (min_height_mm <= 0) throw std::invalid_argument("Invalid minimum height");
     if (max_height_mm <= 0 || min_height_mm > max_height_mm) throw std::invalid_argument("Invalid maximum height");
-}
-
-DocumentPreset::DocumentPreset(std::string path) {
-    std::ifstream f(path);
-    json data = json::parse(f);
-    f.close();
-
-    ppi = data["resolution_ppi"];
-    roll_width_mm = data["roll_width_mm"];
-    margin_mm = data["margin_mm"];
-    gutter_mm = data["gutter_mm"];
-
-    guide = data["guide"];
-    correct_quantity = data["correct_quantity"];
-
-    // FIXME
-    max_height_mm = 18000;
-    min_height_mm = 1000;
 }
 
 double DocumentPreset::get_ppi() const { return ppi; }
