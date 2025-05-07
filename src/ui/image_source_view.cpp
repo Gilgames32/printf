@@ -23,8 +23,8 @@ ImageSourceView::ImageSourceView(const std::string& path) : m_file_path(path), m
         throw std::runtime_error("Failed to load image: " + m_file_path);
     }
 
-    m_width = m_image.cols;
-    m_height = m_image.rows;
+    m_width = m_image.cols / 10; // TODO
+    m_height = m_image.rows / 10;
 }
 
 QString ImageSourceView::get_file_name() const {

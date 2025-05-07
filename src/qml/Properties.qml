@@ -156,6 +156,13 @@ Item {
                     }
                 }
 
+                Button {
+                    text: "Print"
+                    onClicked: {
+                        
+                    }
+                }
+
                 SavePicker {
                     id: saveDialog
 
