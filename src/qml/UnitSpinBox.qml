@@ -23,7 +23,7 @@ RowLayout {
     SpinBox {
         id: spinbox
 
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: dinputsize
         value: 0
         from: 0
         to: 1000

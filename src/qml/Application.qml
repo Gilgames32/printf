@@ -1,3 +1,4 @@
+import QtQuick.Controls.FluentWinUI3 6.9
 import QtQuick 6.9
 import QtQuick.Controls 6.9
 import QtQuick.Layouts 6.9
@@ -5,6 +6,8 @@ import printf 1.0
 
 ApplicationWindow {
     readonly property var dmargin: 10
+    readonly property var dspacing: 10
+    readonly property var dinputsize: 120
 
     visible: true
     width: 640

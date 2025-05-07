@@ -36,7 +36,7 @@ RowLayout {
     TextField {
         id: textInput
 
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: dinputsize
         text: getFormattedNum()
         horizontalAlignment: Qt.AlignRight
         inputMethodHints: Qt.ImhPreferNumbers

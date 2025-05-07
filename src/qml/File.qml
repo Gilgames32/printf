@@ -101,7 +101,7 @@ Rectangle {
                         SpinBox {
                             id: spinbox
 
-                            Layout.preferredWidth: 60
+                            Layout.preferredWidth: dinputsize
                             value: entry.amount
                             from: 1
                             to: 1000
