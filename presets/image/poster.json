@@ -4,6 +4,11 @@
     "height": 1600,
     "amount": 1,
     "document": {
-        "resolution_ppi": 300
+        "roll_width_mm": 914.4,
+        "resolution_ppi": 300,
+        "margin_mm": 0,
+        "gutter_mm": 0,
+        "correct_quantity": false,
+        "guide": false
     }
 }

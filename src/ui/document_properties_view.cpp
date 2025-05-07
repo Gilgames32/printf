@@ -12,7 +12,7 @@ using json = nlohmann::json;
 DocumentPropertiesView::DocumentPropertiesView()
     : m_resolution(300), m_roll_width(609.6), m_margin(5), m_correct_quantity(false), m_guides(true), m_gutter(2) {}
 
-void DocumentPropertiesView::load_from_preset(const std::string& preset_path) {
+void DocumentPropertiesView::load_from_preset(const std::string& preset_path, const std::string& subcategory) {
     std::cout << "Loading preset from: " << preset_path << std::endl;
 
     if (!std::filesystem::exists(preset_path)) {
@@ -26,6 +26,15 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path) {
     }
     j = json::parse(f);
     f.close();
+
+    if (!subcategory.empty()) {
+        if (j.contains(subcategory)){
+            j = j[subcategory];
+        }
+        else {
+            return;
+        }
+    }
 
     if (j.contains("resolution_ppi")) {
         m_resolution = j["resolution_ppi"].get<double>();
@@ -53,7 +62,7 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path) {
     }
 }
 
-void DocumentPropertiesView::setPreset(const QString& presetPath) { load_from_preset(presetPath.toStdString()); }
+void DocumentPropertiesView::setPreset(const QString& presetPath, const QString& subcategory) { load_from_preset(presetPath.toStdString(), subcategory.toStdString()); }
 
 DocumentPreset DocumentPropertiesView::getDocumentProperties() const {
     return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides,

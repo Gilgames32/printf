@@ -28,26 +28,38 @@ float MaskFilterView::get_image_aspect_ratio() const { return float(m_image.cols
 
 cv::Mat MaskFilterView::get_image() const { return m_image; }
 
-void MaskFilterView::load_from_preset(const std::string& preset_path) {
+void MaskFilterView::load_from_preset(const std::string& preset_path, const std::string& subcategory) {
     std::cout << "Loading preset from: " << preset_path << std::endl;
 
     if (!std::filesystem::exists(preset_path)) {
         throw std::invalid_argument("Preset file does not exist: " + preset_path);
     }
 
-    json json_data;
-    std::ifstream file(preset_path);
-    json_data = json::parse(file);
-    file.close();
+    json j;
+    std::ifstream f(preset_path);
+    j = json::parse(f);
+    f.close();
 
-    // TODO: handle errors
-    m_file_path = json_data["path"].get<std::string>();
+    if (!subcategory.empty()) {
+        if (j.contains(subcategory)){
+            j = j[subcategory];
+            m_is_enabled = true;
+            emit isEnabledChanged();
+        }
+        else {
+            return;
+        }
+    }
+    
+
+    if (j.contains("path")) {
+        m_file_path = j["path"].get<std::string>();
+        emit filePathChanged();
+    }
+    
     // TODO: load m_image
 }
 
-void MaskFilterView::setPreset(const QString& presetPath) {
-    load_from_preset(presetPath.toStdString());
-    // TODO: update signals
-    emit filePathChanged();
-    emit nameChanged();
+void MaskFilterView::setPreset(const QString& presetPath, const QString& subcategory) {
+    load_from_preset(presetPath.toStdString(), subcategory.toStdString());
 }

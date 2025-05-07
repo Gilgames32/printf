@@ -30,9 +30,9 @@ class MaskFilterView : public QObject {
 
     float get_image_aspect_ratio() const;
 
-    void load_from_preset(const std::string& preset_path);
+    void load_from_preset(const std::string& preset_path, const std::string& subcategory = "");
 
-    Q_INVOKABLE void setPreset(const QString& presetPath);
+    Q_INVOKABLE void setPreset(const QString& presetPath, const QString& subcategory = "");
 
   signals:
     void isEnabledChanged();

@@ -5,6 +5,8 @@ import printf 1.0
 
 Column {
     property var presetModel: null
+    property alias maskObject: maskObject
+    
 
     MaskFilterView {
         id: maskObject

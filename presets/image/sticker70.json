@@ -4,5 +4,8 @@
     "height": 72,
     "document": {
         "resolution_ppi": 600
+    },
+    "mask": {
+        "path": "assets/mask.png"
     }
 }

@@ -126,7 +126,9 @@ Rectangle {
                     if (path == "")
                         return;
 
-                    entry.setPreset(imagePresetModel.getPath(index));
+                    entry.setPreset(path);
+                    maskInput.maskObject.setPreset(path, "mask");
+                    docProperties.setPreset(path, "document");
                 }
                 model: imagePresetModel
             }
