@@ -1,9 +1,9 @@
 #pragma once
 #include <opencv2/imgproc.hpp>
 
-#include "filter.hpp"
+#include "ifilter.hpp"
 
-class MaskFilter : public Filter {
+class MaskFilter : public IFilter {
   private:
     cv::Mat mask;
     bool invert = false;

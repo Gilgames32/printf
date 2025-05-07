@@ -7,7 +7,7 @@
 
 GeneratorView::GeneratorView() {}
 
-void GeneratorView::generate(const DocumentPreset& properties, QList<ImageSource*> sources) {
+void GeneratorView::generate(const DocumentPreset& properties, const QList<ImageSource*>& sources) {
     // TODO cleanup
     qDebug() << "Generating...";
     qDebug() << "Roll Width:" << properties.get_document_width_px();

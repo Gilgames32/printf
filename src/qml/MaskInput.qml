@@ -6,8 +6,13 @@ import printf 1.0
 Column {
     property var presetModel: null
     property alias maskObject: maskObject
+    property var imageSource: null
     
-
+    
+    Component.onCompleted: () => {
+        imageSource.addFilter(maskObject);
+    }
+    
     MaskFilterView {
         id: maskObject
     }

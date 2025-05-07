@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "cached_image.hpp"
-#include "filter.hpp"
+#include "ifilter.hpp"
 #include "icachable.hpp"
 #include "size.hpp"
 
@@ -13,7 +13,7 @@ class ImageSource : ICachableImage {
     cv::Mat original;
     CachedImage cached;
     size_t amount;
-    std::vector<Filter*> filters;
+    std::vector<IFilter*> filters;
     SizeFilter size_filter;
 
   public:
@@ -31,7 +31,7 @@ class ImageSource : ICachableImage {
         std::cout << "Copy constructor called" << std::endl;
     }
 
-    void add_filter(Filter* filter);
+    void add_filter(IFilter* filter);
 
     void clear_filters();
 

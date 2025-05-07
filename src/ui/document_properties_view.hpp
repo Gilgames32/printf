@@ -23,7 +23,7 @@ class DocumentPropertiesView : public QObject {
     bool m_guides;
 
   public:
-    explicit DocumentPropertiesView();
+    DocumentPropertiesView();
 
     void load_from_preset(const std::string& preset_path, const std::string& subcategory = "");
 

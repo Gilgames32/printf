@@ -15,6 +15,10 @@ Rectangle {
     radius: 5
     implicitHeight: paddingCol.implicitHeight + 20 // FIXME: hack
 
+    Component.onCompleted: () => {
+        entry.clearFilters();
+    }
+
     Item {
         id: container
 
@@ -163,6 +167,7 @@ Rectangle {
                         id: maskInput
 
                         presetModel: maskPresetModel
+                        imageSource: entry
                         width: parent.width
                     }
 

@@ -5,20 +5,27 @@
 MaskFilter::MaskFilter(const cv::Mat &mask) : mask(mask) {}
 
 cv::Mat MaskFilter::apply(const cv::Mat &image) const {
+    // convert mask
     auto fitMask = SizeFilter::resize(mask, image.cols, image.rows);
-
     if (invert) {
         cv::bitwise_not(fitMask, fitMask);
     }
-    cv::normalize(fitMask, fitMask, 0., 1., cv::NORM_MINMAX, CV_32F);
+    fitMask.convertTo(fitMask, CV_32FC3, 1.0 / 255.0);
 
-    cv::Mat result;
-    image.convertTo(result, CV_32F);
+    // background
+    cv::Mat white(image.size(), CV_32FC3, cv::Scalar(1.0, 1.0, 1.0));
+    
+    // convert image
+    cv::Mat imagef;
+    image.convertTo(imagef, CV_32FC3, 1.0 / 255.0);
 
-    cv::multiply(result, fitMask, result);
-
-    result.convertTo(result, CV_8U);
-    return result;
+    cv::Mat blended;
+    cv::multiply(fitMask, imagef, imagef);
+    cv::multiply(cv::Scalar(1.0, 1.0, 1.0) - fitMask, white, white);
+    cv::add(imagef, white, blended);
+    blended.convertTo(blended, CV_8UC3, 255.0);
+    
+    return blended;
 }
 
 void MaskFilter::setInvert(bool invert) { this->invert = invert; }

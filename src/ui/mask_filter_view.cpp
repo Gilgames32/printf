@@ -5,10 +5,11 @@
 #include <opencv2/opencv.hpp>
 #include <stdexcept>
 
+#include "mask.hpp"
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
-MaskFilterView::MaskFilterView(): m_is_enabled(false) {}
+MaskFilterView::MaskFilterView() : m_is_enabled(false) {}
 
 QString MaskFilterView::get_file_name() const {
     return QString::fromStdString(std::filesystem::path(m_file_path).filename().string());
@@ -41,25 +42,28 @@ void MaskFilterView::load_from_preset(const std::string& preset_path, const std:
     f.close();
 
     if (!subcategory.empty()) {
-        if (j.contains(subcategory)){
+        if (j.contains(subcategory)) {
             j = j[subcategory];
             m_is_enabled = true;
             emit isEnabledChanged();
-        }
-        else {
+        } else {
             return;
         }
     }
-    
 
     if (j.contains("path")) {
         m_file_path = j["path"].get<std::string>();
         emit filePathChanged();
     }
-    
+
     // TODO: load m_image
 }
 
 void MaskFilterView::setPreset(const QString& presetPath, const QString& subcategory) {
     load_from_preset(presetPath.toStdString(), subcategory.toStdString());
+}
+
+IFilter* MaskFilterView::get_filter() const {
+    cv::Mat mask = cv::imread(m_file_path);
+    return new MaskFilter(mask);
 }

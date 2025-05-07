@@ -10,9 +10,9 @@ class GeneratorView: public QObject
 {
     Q_OBJECT
 public:
-    explicit GeneratorView();
+    GeneratorView();
 
-    Q_INVOKABLE void generate(const DocumentPreset& properties, QList<ImageSource*> sources);
+    Q_INVOKABLE void generate(const DocumentPreset& properties, const QList<ImageSource*>& sources);
     Q_INVOKABLE void save(const QString& path);
 };
 

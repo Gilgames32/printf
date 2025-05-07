@@ -45,7 +45,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
         // check which way causes less waste
         auto waste_portrait = calc_waste(document_width, tile_width, tile_height, quantity);
         auto waste_landscape = calc_waste(document_width, tile_height, tile_width, quantity);
-        rotate = waste_landscape < waste_portrait;
+        rotate = waste_portrait < waste_landscape;
     } else if (tile_width <= document_width) {
         rotate = false;
     } else if (tile_height <= document_width) {

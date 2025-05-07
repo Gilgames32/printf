@@ -22,6 +22,7 @@ moc_headers = files(
   'src/ui/mask_filter_view.hpp',
   'src/ui/document_properties_view.hpp',
   'src/ui/generator_view.hpp',
+  'src/ui/ifilter_view.hpp',
 )
 
 qresources = files('src/qml/resources.qrc')
