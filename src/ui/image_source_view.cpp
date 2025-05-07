@@ -135,7 +135,7 @@ ImageSource* ImageSourceView::get_image_source() const {
     auto img = new ImageSource(m_image, m_amount, m_width, m_height);
     for (auto filter : m_filters)
     {
-        img->add_filter(filter->get_filter());
+        if (filter->is_enabled()) img->add_filter(filter->get_filter());
     }
     
     return img;

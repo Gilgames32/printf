@@ -37,6 +37,8 @@ class MaskFilterView : public IFilterView {
 
     virtual IFilter* get_filter() const override;
 
+    virtual bool is_enabled() const override;
+
   signals:
     void isEnabledChanged();
     void nameChanged();

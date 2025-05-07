@@ -67,3 +67,5 @@ IFilter* MaskFilterView::get_filter() const {
     cv::Mat mask = cv::imread(m_file_path);
     return new MaskFilter(mask);
 }
+
+bool MaskFilterView::is_enabled() const { return m_is_enabled; }

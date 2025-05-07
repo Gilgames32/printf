@@ -1,5 +1,6 @@
 #include "generator_view.hpp"
 
+#include <QtConcurrent/QtConcurrent>
 #include <iostream>
 
 #include "grid_tiling.hpp"
@@ -33,6 +34,24 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<Image
     }
 
     qDebug() << "Image generation completed and set to provider.";
+}
+
+QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, const QList<ImageSource*>& sources) {
+    return QtConcurrent::run([=]() {
+        try
+        {
+            generate(properties, sources);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            qDebug() << "Exception occurred during generation:" << e.what();
+        }
+        
+        
+        qDebug() << "Async generation completed.";
+        emit generationCompleted();
+    });
 }
 
 void GeneratorView::save(const QString& path) {
