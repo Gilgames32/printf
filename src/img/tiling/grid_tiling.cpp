@@ -16,9 +16,7 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
 }
 
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
-    if (images.empty()) {
-        return cv::Mat(); // TODO
-    }
+    if (images.empty()) return cv::Mat();
 
     auto gutter = preset.get_gutter_px();
     auto ppi = preset.get_ppi();
@@ -34,6 +32,9 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     auto tile_width = images[0]->get_width_px();
     auto tile_height = images[0]->get_height_px();
     auto document_width = preset.get_document_width_px() + 2 * gutter;  // FIXME proper gutter, cut and add margin idk
+
+    // TODO: check if any orientations fit and other validations
+    if (tile_width <= 0 || tile_height <= 0) return cv::Mat();
 
     auto quantity = std::accumulate(images.begin(), images.end(), 0,
                                     [](size_t sum, const ImageSource* img) { return sum + img->get_amount(); });
@@ -52,6 +53,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     } else {
         // neither fits
         // TODO: handle this
+        // TODO: take gutters and margin into consideration?
         return cv::Mat();
     }
 
@@ -73,7 +75,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     size_t rows = std::ceil((double)quantity / columns);
     size_t document_height = rows * tile_height;
 
-    cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
+    cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3); // FIXME? shouldnt hardcode this
     document.setTo(cv::Scalar(255, 255, 255));
 
     auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;

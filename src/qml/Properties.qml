@@ -54,6 +54,7 @@ Item {
                                 docProperties.resolution = value;
 
                         }
+                        from: 1
                         label.text: "Resolution"
                         unit.text: "ppi"
                         Layout.alignment: Qt.AlignRight
@@ -68,6 +69,7 @@ Item {
                                 docProperties.rollWidth = value;
 
                         }
+                        from: 1
                         label.text: "Paper Width"
                         unit.text: "mm"
                         Layout.alignment: Qt.AlignRight
@@ -142,15 +144,13 @@ Item {
                     onClicked: {
                         generator.generate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
                         // we somehow have to signal to it...
-                        var imageSource = generator.imageSource;
                         generator.imageSource = "";
-                        generator.imageSource = imageSource;
+                        generator.imageSource = generator.providedImagePath;
                     }
                 }
 
                 Button {
                     text: "Save as"
-
                     onClicked: {
                         saveDialog.open();
                     }
@@ -158,13 +158,13 @@ Item {
 
                 SavePicker {
                     id: saveDialog
+
                     onAcceptDelegate: (url) => {
                         generator.save(url);
                     }
                 }
 
             }
-
 
         }
 

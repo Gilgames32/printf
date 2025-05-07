@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 
 #include "convert.hpp"
 
@@ -16,7 +17,14 @@ DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_m
       correct_quantity(correct_quantity),
       guide(guide),
       min_height_mm(min_height_mm),
-      max_height_mm(max_height_mm) {}
+      max_height_mm(max_height_mm) {
+    if (ppi <= 0) throw std::invalid_argument("Invalid ppi");
+    if (roll_width_mm <= 0) throw std::invalid_argument("Invalid roll width");
+    if (margin_mm < 0) throw std::invalid_argument("Invalid margin");
+    if (gutter_mm < 0) throw std::invalid_argument("Invalid gutter");
+    if (min_height_mm <= 0) throw std::invalid_argument("Invalid minimum height");
+    if (max_height_mm <= 0 || min_height_mm > max_height_mm) throw std::invalid_argument("Invalid maximum height");
+}
 
 DocumentPreset::DocumentPreset(std::string path) {
     std::ifstream f(path);

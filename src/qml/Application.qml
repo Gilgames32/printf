@@ -20,7 +20,8 @@ ApplicationWindow {
     GeneratorView {
         id: generator
 
-        property var imageSource: "image://previewprovider/"
+        readonly property var providedImagePath: "image://previewprovider/"
+        property var imageSource: ""
     }
 
     SourceEntryView {

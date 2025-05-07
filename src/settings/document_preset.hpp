@@ -26,12 +26,12 @@ class DocumentPreset {
     DocumentPreset(
         // FIXME
         double ppi = 300,
-        double roll_width_mm = 600,
+        double roll_width_mm = 609.6,
         double margin_mm = 5,
-        double gutter_mm = 5,
+        double gutter_mm = 2,
         bool correct_quantity = false,
-        bool guide = false,
-        double min_height_mm = 1000,
+        bool guide = true,
+        double min_height_mm = 101.6,
         double max_height_mm = 18000
     );
   

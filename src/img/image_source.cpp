@@ -1,7 +1,20 @@
 #include "image_source.hpp"
 
+#include <stdexcept>
+
 ImageSource::ImageSource(cv::Mat source, size_t amount, double width_mm, double height_mm)
-    : original(source), amount(amount), cached(*this), filters(), size_filter(SizeFilter(source.cols, source.rows)), width_mm(width_mm), height_mm(height_mm) {}
+    : original(source),
+      amount(amount),
+      cached(*this),
+      filters(),
+      size_filter(SizeFilter(source.cols, source.rows)),
+      width_mm(width_mm),
+      height_mm(height_mm) {
+    if (source.cols <= 0 || source.rows <= 0) throw std::invalid_argument("Invalid source");
+    if (amount <= 0) throw std::invalid_argument("Invalid amount");
+    if (width_mm <= 0) throw std::invalid_argument("Invalid width");
+    if (height_mm <= 0) throw std::invalid_argument("Invalid height");
+}
 
 void ImageSource::add_filter(Filter* filter) {
     filters.push_back(filter);

@@ -44,6 +44,7 @@ RowLayout {
             onValueChangedDelegate: (value) => {
                 return onWidthChangedDelegate(value);
             }
+            from: 1
             label.text: "Width"
             unit.text: "mm"
             Layout.alignment: Qt.AlignRight
@@ -57,6 +58,7 @@ RowLayout {
             onValueChangedDelegate: (value) => {
                 return onHeightChangedDelegate(value);
             }
+            from: 1
             label.text: "Height"
             unit.text: "mm"
             Layout.alignment: Qt.AlignRight
