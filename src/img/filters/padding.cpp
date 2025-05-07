@@ -12,6 +12,7 @@ cv::Mat PaddingFilter::apply(const cv::Mat &image) const {
 
     if (guide) {
         // TODO: make this configurable
+        // TODO: also add option to show full lines
         int thickness = 1;
         cv::Scalar color = cv::Scalar(0, 0, 0);
         int width = padded.cols;

@@ -33,7 +33,6 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     auto tile_height = images[0]->get_height_px();
     auto document_width = preset.get_document_width_px() + 2 * gutter;  // FIXME proper gutter, cut and add margin idk
 
-    // TODO: check if any orientations fit and other validations
     if (tile_width <= 0 || tile_height <= 0) return cv::Mat();
 
     auto quantity = std::accumulate(images.begin(), images.end(), 0,

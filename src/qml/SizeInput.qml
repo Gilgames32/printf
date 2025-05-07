@@ -13,7 +13,7 @@ RowLayout {
         id: checkBox
 
         Layout.fillHeight: true
-        checked: true // TODO: on check force aspect ratio
+        checked: true
         clip: true
 
         Rectangle {

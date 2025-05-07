@@ -2,13 +2,6 @@
 #include <cstddef>
 #include <string>
 
-/*
-TODO:
-ppi
-roll witdth - margin * 2 = document width
-min max height
-*/
-
 class DocumentPreset {
   private:
     double ppi;

@@ -54,37 +54,6 @@ ImageSourceView::ImageSourceView(const std::string& path) : m_file_path(path), m
         m_image.convertTo(m_image, CV_8UC3);  // FIXME
     }
 
-    // blending to white if it has an alpha channel
-    if ((m_image.type() == CV_8UC4) || (m_image.channels() == 4)) {
-        // aplha blend to white
-        cv::Mat bgr, alpha;
-        std::vector<cv::Mat> channels;
-
-        cv::split(m_image, channels);
-        cv::merge(std::vector<cv::Mat>{channels[0], channels[1], channels[2]}, bgr);
-        alpha = channels[3];
-
-        bgr.convertTo(bgr, CV_32FC3, 1.0 / 255.0);
-        alpha.convertTo(alpha, CV_32FC1, 1.0 / 255.0);
-
-        cv::Mat alpha3c;
-        cv::Mat alpha_array[] = {alpha, alpha, alpha};
-        cv::merge(alpha_array, 3, alpha3c);
-
-        cv::Mat white = cv::Mat(bgr.size(), CV_32FC3, cv::Scalar(1.0, 1.0, 1.0));
-
-        cv::Mat blended;
-        cv::multiply(alpha3c, bgr, bgr);
-        cv::multiply(cv::Scalar(1.0, 1.0, 1.0) - alpha3c, white, white);
-        cv::add(bgr, white, blended);
-
-        blended.convertTo(m_image, CV_8UC3, 255.0);
-    }
-
-    if (m_image.type() != CV_8UC3) {
-        m_image.convertTo(m_image, CV_8UC3);  // FIXME
-    }
-
     m_width = m_image.cols / 10;  // TODO
     m_height = m_image.rows / 10;
 }
