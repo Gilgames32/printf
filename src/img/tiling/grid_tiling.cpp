@@ -75,7 +75,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     size_t rows = std::ceil((double)quantity / columns);
     size_t document_height = rows * tile_height;
 
-    cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
+    cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3); // FIXME? shouldnt hardcode this
     document.setTo(cv::Scalar(255, 255, 255));
 
     auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;
