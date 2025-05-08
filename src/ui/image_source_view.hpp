@@ -4,8 +4,10 @@
 #include <QtGui>
 #include <opencv2/opencv.hpp>
 #include <string>
+#include <vector>
 
 #include "image_source.hpp"
+#include "ifilter_view.hpp"
 
 class ImageSourceView : public QObject {
     Q_OBJECT
@@ -21,13 +23,14 @@ class ImageSourceView : public QObject {
     std::string m_file_path;
     cv::Mat m_image;
     int m_amount;
-    // TODO: float
+    // TODO: double everywhere where mm is used, size_t everywhere where px is used
     // TODO: 0 safety
     double m_width = 100;
     double m_height = 100;
+    std::vector<const IFilterView*> m_filters;
 
   public:
-    explicit ImageSourceView(const std::string& path);
+    ImageSourceView(const std::string& path);
 
     QString get_file_name() const;
 
@@ -50,6 +53,8 @@ class ImageSourceView : public QObject {
     Q_INVOKABLE void setPreset(const QString& presetPath);
     Q_INVOKABLE void setSizeToWidth(double width, bool keepAspectRatio = true);
     Q_INVOKABLE void setSizeToHeight(double height, bool keepAspectRatio = true);
+    Q_INVOKABLE void clearFilters();
+    Q_INVOKABLE void addFilter(const IFilterView* filter);
 
   signals:
     void nameChanged();

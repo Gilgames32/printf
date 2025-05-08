@@ -4,8 +4,9 @@
 #include <QtGui>
 #include <opencv2/opencv.hpp>
 #include <string>
+#include "ifilter_view.hpp"
 
-class MaskFilterView : public QObject {
+class MaskFilterView : public IFilterView {
     Q_OBJECT
     Q_PROPERTY(bool enabled MEMBER m_is_enabled NOTIFY isEnabledChanged)
     Q_PROPERTY(QString name READ get_file_name NOTIFY nameChanged)
@@ -18,7 +19,7 @@ class MaskFilterView : public QObject {
     cv::Mat m_image;
 
   public:
-    explicit MaskFilterView();
+    MaskFilterView();
 
     QString get_file_name() const;
 
@@ -30,9 +31,13 @@ class MaskFilterView : public QObject {
 
     float get_image_aspect_ratio() const;
 
-    void load_from_preset(const std::string& preset_path);
+    void load_from_preset(const std::string& preset_path, const std::string& subcategory = "");
 
-    Q_INVOKABLE void setPreset(const QString& presetPath);
+    Q_INVOKABLE void setPreset(const QString& presetPath, const QString& subcategory = "");
+
+    virtual IFilter* get_filter() const override;
+
+    virtual bool is_enabled() const override;
 
   signals:
     void isEnabledChanged();

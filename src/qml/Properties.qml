@@ -140,12 +140,20 @@ Item {
 
             RowLayout {
                 Button {
+                    id: generateButton
                     text: "Generate"
+                    
+                    Component.onCompleted: {
+                        generator.generationCompleted.connect(()=> {
+                            generator.imageSource = "";
+                            generator.imageSource = generator.providedImagePath;
+                            generateButton.enabled = true;
+                        });
+                    }
+                    
                     onClicked: {
-                        generator.generate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
-                        // we somehow have to signal to it...
-                        generator.imageSource = "";
-                        generator.imageSource = generator.providedImagePath;
+                        generateButton.enabled = false;
+                        generator.asyncGenerate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
                     }
                 }
 
@@ -153,6 +161,13 @@ Item {
                     text: "Save as"
                     onClicked: {
                         saveDialog.open();
+                    }
+                }
+
+                Button {
+                    text: "Print"
+                    onClicked: {
+                        
                     }
                 }
 

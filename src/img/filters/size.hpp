@@ -1,9 +1,9 @@
 #pragma once
 #include <opencv2/imgproc.hpp>
 
-#include "filter.hpp"
+#include "ifilter.hpp"
 
-class SizeFilter : public Filter {
+class SizeFilter : public IFilter {
   private:
     static const int sizeInterDown = cv::INTER_AREA;
     static const int sizeInterUp = cv::INTER_CUBIC;

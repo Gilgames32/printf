@@ -2,13 +2,6 @@
 #include <cstddef>
 #include <string>
 
-/*
-TODO:
-ppi
-roll witdth - margin * 2 = document width
-min max height
-*/
-
 class DocumentPreset {
   private:
     double ppi;
@@ -34,8 +27,6 @@ class DocumentPreset {
         double min_height_mm = 101.6,
         double max_height_mm = 18000
     );
-  
-    DocumentPreset(std::string path);
 
     double get_ppi() const;
 
@@ -46,6 +37,8 @@ class DocumentPreset {
     size_t get_min_height_px() const;
 
     size_t get_gutter_px() const;
+
+    size_t get_padding_px() const;
 
     bool get_guide() const;
 

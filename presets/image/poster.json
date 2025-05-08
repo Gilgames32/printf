@@ -2,5 +2,13 @@
     "name": "Nagyplakát",
     "width": 914,
     "height": 1600,
-    "suggested_resolution": 300
+    "amount": 1,
+    "document": {
+        "roll_width_mm": 914.4,
+        "resolution_ppi": 300,
+        "margin_mm": 0,
+        "gutter_mm": 0,
+        "correct_quantity": false,
+        "guide": false
+    }
 }

@@ -23,11 +23,11 @@ class DocumentPropertiesView : public QObject {
     bool m_guides;
 
   public:
-    explicit DocumentPropertiesView();
+    DocumentPropertiesView();
 
-    void load_from_preset(const std::string& preset_path);
+    void load_from_preset(const std::string& preset_path, const std::string& subcategory = "");
 
-    Q_INVOKABLE void setPreset(const QString& presetPath);
+    Q_INVOKABLE void setPreset(const QString& presetPath, const QString& subcategory = "");
 
     Q_INVOKABLE DocumentPreset getDocumentProperties() const;
 

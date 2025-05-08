@@ -1,9 +1,9 @@
 #pragma once
 #include <opencv2/imgproc.hpp>
 
-#include "filter.hpp"
+#include "ifilter.hpp"
 
-class PaddingFilter : public Filter {
+class PaddingFilter : public IFilter {
   private:
     size_t padding;
     bool guide;

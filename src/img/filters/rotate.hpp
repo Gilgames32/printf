@@ -1,9 +1,9 @@
 #pragma once
 #include <opencv2/imgproc.hpp>
 
-#include "filter.hpp"
+#include "ifilter.hpp"
 
-class RotateFilter : public Filter {
+class RotateFilter : public IFilter {
   private:
     static const cv::RotateFlags default_rotation_dir = cv::ROTATE_90_CLOCKWISE;
 

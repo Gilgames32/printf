@@ -2,5 +2,10 @@
     "name": "Körmatrica 70+2mm",
     "width": 72,
     "height": 72,
-    "suggested_resolution": 600
+    "document": {
+        "resolution_ppi": 600
+    },
+    "mask": {
+        "path": "assets/mask.png"
+    }
 }

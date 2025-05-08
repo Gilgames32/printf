@@ -2,5 +2,7 @@
     "name": "A0",
     "width": 841,
     "height": 1189,
-    "suggested_resolution": 300
+    "document": {
+        "resolution_ppi": 300
+    }
 }

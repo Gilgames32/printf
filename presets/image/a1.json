@@ -2,5 +2,7 @@
     "name": "A1",
     "width": 594,
     "height": 841,
-    "suggested_resolution": 300
+    "document": {
+        "resolution_ppi": 300
+    }
 }

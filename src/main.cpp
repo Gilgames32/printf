@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
     qRegisterMetaType<ImageSourceView *>("ImageSourceView*");
     qRegisterMetaType<DocumentPreset>("DocumentPreset");
     qRegisterMetaType<ImageSource *>("ImageSource*");
+    qRegisterMetaType<IFilterView *>("IFilterView*");
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("previewprovider", PreviewProvider::instance());

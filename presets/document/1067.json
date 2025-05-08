@@ -1,8 +1,4 @@
 {
     "name": "1066.8mm tekercs",
-    "roll_width_mm": 1066.8,
-    "resolution_ppi": 300,
-    "margin_mm": 5,
-    "gutter_mm": 2,
-    "guides": true
+    "roll_width_mm": 1066.8
 }
