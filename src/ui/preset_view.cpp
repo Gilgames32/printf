@@ -1,29 +1,26 @@
 #include "preset_view.hpp"
 
-
-PresetView::PresetView(QObject *parent) : QAbstractListModel(parent) { 
+PresetView::PresetView(QObject *parent) : QAbstractListModel(parent) {
     m_path = QString();
-    
+
     m_roleNames[NameRole] = "name";
     m_roleNames[PathRole] = "path";
 
     m_data = QList<std::pair<std::string, std::string>>();
 }
 
-PresetView::~PresetView() {
-    m_data.clear();
-}
+PresetView::~PresetView() { m_data.clear(); }
 
 QHash<int, QByteArray> PresetView::roleNames() const { return m_roleNames; }
 
 void PresetView::fetch_entries() {
     beginResetModel();
-    
+
     m_data.clear();
-    m_data.append(std::make_pair("None", "")); // TODO is this default path good?
-    
+    m_data.append(std::make_pair("None", ""));
+
     auto presets = jsonprobe::probe_presets(m_path.toStdString(), "name");
-    for (const auto& preset : presets) {
+    for (const auto &preset : presets) {
         m_data.append(preset);
     }
 
@@ -55,11 +52,7 @@ QVariant PresetView::data(const QModelIndex &index, int role) const {
     }
 }
 
-
-
-QString PresetView::get_path() const {
-    return m_path;
-}
+QString PresetView::get_path() const { return m_path; }
 
 void PresetView::set_path(const QString &path) {
     if (m_path != path) {
@@ -79,4 +72,3 @@ QString PresetView::getPath(int index) {
 
     return QString::fromStdString(m_data.value(index).second);
 }
-

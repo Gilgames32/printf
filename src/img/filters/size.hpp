@@ -8,9 +8,10 @@ class SizeFilter : public IFilter {
     static const int sizeInterDown = cv::INTER_AREA;
     static const int sizeInterUp = cv::INTER_CUBIC;
 
-  public:
-    int width; // TODO: make private
+    int width;
     int height;
+
+  public:
     SizeFilter(int width, int height);
 
     void set_size(int width, int height);
