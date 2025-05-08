@@ -18,20 +18,21 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
     if (images.empty()) return cv::Mat();
 
-    auto gutter = preset.get_gutter_px();
+    auto padding = preset.get_padding_px();
+    auto side_fix = padding - 1; // TODO: 1 is the line width, should be configurable
     auto ppi = preset.get_ppi();
     auto uniform_width_px = convert::mm_to_pixels(images[0]->width_mm, ppi);
     auto uniform_height_px = convert::mm_to_pixels(images[0]->height_mm, ppi);
 
     for (auto img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px);
-        img->add_filter(new PaddingFilter(gutter, preset.get_guide()));
+        img->add_filter(new PaddingFilter(padding, preset.get_guide()));
         img->burn();
     }
 
     auto tile_width = images[0]->get_width_px();
     auto tile_height = images[0]->get_height_px();
-    auto document_width = preset.get_document_width_px() + 2 * gutter;  // FIXME proper gutter, cut and add margin idk
+    auto document_width = preset.get_document_width_px() + 2 * side_fix;
 
     if (tile_width <= 0 || tile_height <= 0) return cv::Mat();
 
@@ -85,6 +86,8 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
 
         tile.get_image().copyTo(document(target_rect));
     }
+
+    document = document(cv::Rect(side_fix, side_fix, document_width - 2 * side_fix, document_height - 2 * side_fix));
 
     return document;
 }

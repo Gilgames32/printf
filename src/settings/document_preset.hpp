@@ -38,6 +38,8 @@ class DocumentPreset {
 
     size_t get_gutter_px() const;
 
+    size_t get_padding_px() const;
+
     bool get_guide() const;
 
     bool get_correct_quantity() const;

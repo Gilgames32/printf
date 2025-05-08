@@ -33,6 +33,8 @@ size_t DocumentPreset::get_min_height_px() const { return convert::mm_to_pixels(
 
 size_t DocumentPreset::get_gutter_px() const { return convert::mm_to_pixels(gutter_mm, ppi); }
 
+size_t DocumentPreset::get_padding_px() const { return convert::mm_to_pixels(gutter_mm / 2.0, ppi); }
+
 bool DocumentPreset::get_guide() const { return guide; }
 
 bool DocumentPreset::get_correct_quantity() const { return correct_quantity; }
