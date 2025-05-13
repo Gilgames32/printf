@@ -161,6 +161,13 @@ Item {
                 }
 
                 Button {
+                    id: saveButton
+
+                    Component.onCompleted: {
+                        generator.saveCompleted.connect(() => {
+                            saveButton.enabled = true;
+                        });
+                    }
                     Layout.fillWidth: true
                     Layout.minimumWidth: 64
                     text: "Save as"
@@ -182,7 +189,8 @@ Item {
                     id: saveDialog
 
                     onAcceptDelegate: (url) => {
-                        generator.save(url);
+                        saveButton.enabled = false;
+                        generator.asyncSave(url);
                     }
                 }
 

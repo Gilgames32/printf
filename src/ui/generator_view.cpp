@@ -73,3 +73,20 @@ void GeneratorView::save(const QString& path) {
         qDebug() << "Image saved successfully.";
     }
 }
+
+QFuture<void> GeneratorView::asyncSave(const QString& path) {
+    return QtConcurrent::run([=]() {
+        try
+        {
+            save(path);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            qDebug() << "Exception occurred during saving:" << e.what();
+        }
+
+        qDebug() << "Async saving completed.";
+        emit saveCompleted();
+    });
+}

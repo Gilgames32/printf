@@ -11,10 +11,13 @@ class GeneratorView : public QObject {
   public:
     GeneratorView();
 
-    Q_INVOKABLE void generate(const DocumentPreset& properties, const QList<ImageSource*>& sources);
+    void generate(const DocumentPreset& properties, const QList<ImageSource*>& sources);
     Q_INVOKABLE QFuture<void> asyncGenerate(const DocumentPreset& properties, const QList<ImageSource*>& sources);
-    Q_INVOKABLE void save(const QString& path);
+    
+    void save(const QString& path);
+    Q_INVOKABLE QFuture<void> asyncSave(const QString& path);
 
   signals:
     void generationCompleted();
+    void saveCompleted();
 };
