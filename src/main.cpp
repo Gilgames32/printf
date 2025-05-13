@@ -13,10 +13,10 @@ int main(int argc, char *argv[]) {
 
     qmlRegisterType<SourceEntryView>("printf", 1, 0, "SourceEntryView");
     qmlRegisterType<PresetView>("printf", 1, 0, "PresetView");
-    qmlRegisterType<MaskFilterView>("printf", 1, 0, "MaskFilterView");
     qmlRegisterType<DocumentPropertiesView>("printf", 1, 0, "DocumentPropertiesView");
     qmlRegisterType<GeneratorView>("printf", 1, 0, "GeneratorView");
-
+    
+    qRegisterMetaType<MaskFilterView *>("MaskFilterView*");
     qRegisterMetaType<ImageSourceView *>("ImageSourceView*");
     qRegisterMetaType<DocumentPreset>("DocumentPreset");
     qRegisterMetaType<ImageSource *>("ImageSource*");

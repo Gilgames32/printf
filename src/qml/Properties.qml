@@ -139,18 +139,21 @@ Item {
             }
 
             RowLayout {
+                width: parent.width
+
                 Button {
                     id: generateButton
+
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 64
                     text: "Generate"
-                    
                     Component.onCompleted: {
-                        generator.generationCompleted.connect(()=> {
+                        generator.generationCompleted.connect(() => {
                             generator.imageSource = "";
                             generator.imageSource = generator.providedImagePath;
                             generateButton.enabled = true;
                         });
                     }
-                    
                     onClicked: {
                         generateButton.enabled = false;
                         generator.asyncGenerate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
@@ -158,6 +161,8 @@ Item {
                 }
 
                 Button {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 64
                     text: "Save as"
                     onClicked: {
                         saveDialog.open();
@@ -165,9 +170,11 @@ Item {
                 }
 
                 Button {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 64
                     text: "Print"
                     onClicked: {
-                        
+                        console.log("Print clicked");
                     }
                 }
 
