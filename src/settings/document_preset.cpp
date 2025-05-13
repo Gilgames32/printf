@@ -25,15 +25,17 @@ DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_m
 
 double DocumentPreset::get_ppi() const { return ppi; }
 
-size_t DocumentPreset::get_document_width_px() const { return convert::mm_to_pixels(roll_width_mm - margin_mm * 2, ppi); }
+double DocumentPreset::get_ppm() const { return convert::ppi_to_dpi(ppi); }
 
-size_t DocumentPreset::get_max_height_px() const { return convert::mm_to_pixels(max_height_mm, ppi); }
+size_t DocumentPreset::get_document_width_px() const { return convert::mm_to_pixel(roll_width_mm - margin_mm * 2, ppi); }
 
-size_t DocumentPreset::get_min_height_px() const { return convert::mm_to_pixels(min_height_mm, ppi); }
+size_t DocumentPreset::get_max_height_px() const { return convert::mm_to_pixel(max_height_mm, ppi); }
 
-size_t DocumentPreset::get_gutter_px() const { return convert::mm_to_pixels(gutter_mm, ppi); }
+size_t DocumentPreset::get_min_height_px() const { return convert::mm_to_pixel(min_height_mm, ppi); }
 
-size_t DocumentPreset::get_padding_px() const { return convert::mm_to_pixels(gutter_mm / 2.0, ppi); }
+size_t DocumentPreset::get_gutter_px() const { return convert::mm_to_pixel(gutter_mm, ppi); }
+
+size_t DocumentPreset::get_padding_px() const { return convert::mm_to_pixel(gutter_mm / 2.0, ppi); }
 
 bool DocumentPreset::get_guide() const { return guide; }
 

@@ -21,8 +21,8 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     auto padding = preset.get_padding_px();
     auto side_fix = padding - 1; // TODO: 1 is the line width, should be configurable
     auto ppi = preset.get_ppi();
-    auto uniform_width_px = convert::mm_to_pixels(images[0]->width_mm, ppi);
-    auto uniform_height_px = convert::mm_to_pixels(images[0]->height_mm, ppi);
+    auto uniform_width_px = convert::mm_to_pixel(images[0]->width_mm, ppi);
+    auto uniform_height_px = convert::mm_to_pixel(images[0]->height_mm, ppi);
 
     for (auto img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px);

@@ -30,6 +30,8 @@ class DocumentPreset {
 
     double get_ppi() const;
 
+    double get_ppm() const;
+
     size_t get_document_width_px() const;
 
     size_t get_max_height_px() const;
