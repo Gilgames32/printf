@@ -9,7 +9,7 @@
 using json = nlohmann::json;
 
 // TODO: dont hardcode the initial amount
-ImageSourceView::ImageSourceView(const std::string& path) : m_file_path(path), m_amount(20) {
+ImageSourceView::ImageSourceView(const std::string& path) : m_file_path(path), m_amount(20), mask_filter_view() {
     if (m_file_path.rfind("file://", 0) == 0) {
         m_file_path = m_file_path.substr(7);
     }
@@ -102,11 +102,7 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
 
 ImageSource* ImageSourceView::get_image_source() const {
     auto img = new ImageSource(m_image, m_amount, m_width, m_height);
-    for (auto filter : m_filters)
-    {
-        if (filter->is_enabled()) img->add_filter(filter->get_filter());
-    }
-    
+    if (mask_filter_view.is_enabled()) img->add_filter(mask_filter_view.get_filter());
     return img;
 }
 
@@ -134,6 +130,4 @@ void ImageSourceView::setSizeToHeight(double height, bool keepAspectRatio) {
     emit heightChanged();
 }
 
-void ImageSourceView::clearFilters() { m_filters.clear(); }
-
-void ImageSourceView::addFilter(const IFilterView* filter) { m_filters.push_back(filter); }
+Q_INVOKABLE MaskFilterView* ImageSourceView::get_mask_filter_view() { return &mask_filter_view; }

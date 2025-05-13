@@ -5,24 +5,14 @@ import printf 1.0
 
 Column {
     property var presetModel: null
-    property alias maskObject: maskObject
     property var imageSource: null
-    
-    
-    Component.onCompleted: () => {
-        imageSource.addFilter(maskObject);
-    }
-    
-    MaskFilterView {
-        id: maskObject
-    }
 
     CheckBox {
         id: maskCheckBox
 
-        checked: maskObject.enabled
+        checked: imageSource.mask.enabled
         onCheckedChanged: {
-            maskObject.enabled = maskCheckBox.checked;
+            imageSource.mask.enabled = maskCheckBox.checked;
         }
         text: "Mask"
     }
@@ -40,7 +30,7 @@ Column {
             Image {
                 id: maskImage
 
-                source: "file://" + maskObject.absoluteFilePath
+                source: "file://" + imageSource.mask.absoluteFilePath
                 fillMode: Image.PreserveAspectFit
                 Layout.fillWidth: true
                 Layout.preferredWidth: 1
@@ -59,14 +49,14 @@ Column {
                         if (path == "")
                             return;
 
-                        maskObject.setPreset(presetModel.getPath(index));
+                        imageSource.mask.setPreset(presetModel.getPath(index));
                     }
                     model: presetModel
                 }
 
                 Text {
                     color: palette.text
-                    text: maskObject.filePath
+                    text: imageSource.mask.filePath
                     font.pixelSize: 12
                     Layout.fillWidth: true
                     clip: true

@@ -8,6 +8,7 @@
 
 #include "image_source.hpp"
 #include "ifilter_view.hpp"
+#include "mask_filter_view.hpp"
 
 class ImageSourceView : public QObject {
     Q_OBJECT
@@ -18,6 +19,7 @@ class ImageSourceView : public QObject {
     Q_PROPERTY(int amount MEMBER m_amount NOTIFY amountChanged)
     Q_PROPERTY(double width READ get_width NOTIFY widthChanged)
     Q_PROPERTY(double height READ get_height NOTIFY heightChanged)
+    Q_PROPERTY(MaskFilterView* mask READ get_mask_filter_view NOTIFY maskFilterViewChanged)
 
   private:
     std::string m_file_path;
@@ -27,7 +29,7 @@ class ImageSourceView : public QObject {
     // TODO: 0 safety
     double m_width = 100;
     double m_height = 100;
-    std::vector<const IFilterView*> m_filters;
+    MaskFilterView mask_filter_view;
 
   public:
     ImageSourceView(const std::string& path);
@@ -50,11 +52,11 @@ class ImageSourceView : public QObject {
 
     ImageSource* get_image_source() const;
 
+    MaskFilterView* get_mask_filter_view();
+
     Q_INVOKABLE void setPreset(const QString& presetPath);
     Q_INVOKABLE void setSizeToWidth(double width, bool keepAspectRatio = true);
     Q_INVOKABLE void setSizeToHeight(double height, bool keepAspectRatio = true);
-    Q_INVOKABLE void clearFilters();
-    Q_INVOKABLE void addFilter(const IFilterView* filter);
 
   signals:
     void nameChanged();
@@ -64,4 +66,5 @@ class ImageSourceView : public QObject {
     void amountChanged();
     void widthChanged();
     void heightChanged();
+    void maskFilterViewChanged();
 };

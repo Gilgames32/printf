@@ -9,7 +9,7 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
-MaskFilterView::MaskFilterView() : m_is_enabled(false) {}
+MaskFilterView::MaskFilterView() : m_is_enabled(false) { qDebug("maskmaskmask"); }
 
 QString MaskFilterView::get_file_name() const {
     return QString::fromStdString(std::filesystem::path(m_file_path).filename().string());
