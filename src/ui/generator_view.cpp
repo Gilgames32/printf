@@ -6,6 +6,7 @@
 
 #include "grid_tiling.hpp"
 #include "preview_provider.hpp"
+#include "pnghelper.hpp"
 
 GeneratorView::GeneratorView() {}
 
@@ -56,22 +57,23 @@ void GeneratorView::save(const QString& path, const DocumentPreset& properties) 
     if (out_path.rfind("file://", 0) == 0) {
         out_path = out_path.substr(7);
     }
-    // TODO: cleanup
+
     qDebug() << "Saving to" << out_path.c_str();
     QImage image = PreviewProvider::instance()->getImage();
-    if (image.isNull()) {
-        qDebug() << "No image to save.";
-        return;
-    }
-    if (!image.save(out_path.c_str())) {
-        // TODO: handle errors
-        qDebug() << "Failed to save image.";
-    } else {
+
+
+
+    try {
+        // TODO: save as jpeg
+        PNGHelper::save_png(out_path, image, properties.get_ppi());
+
+        auto exif_data = generate_exif_data(out_path, properties);
+        add_exif_data(out_path, exif_data);
+        
         qDebug() << "Image saved successfully.";
+    } catch (const std::exception& e) {
+        qDebug() << "Error saving image:" << e.what();
     }
-    
-    auto exif_data = generate_exif_data(out_path, properties);
-    add_exif_data(out_path, exif_data);
 }
 
 QFuture<void> GeneratorView::asyncSave(const QString& path, const DocumentPreset& properties) {

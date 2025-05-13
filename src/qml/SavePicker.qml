@@ -9,7 +9,7 @@ FileDialog {
 
     title: "Select Save Location"
 
-    nameFilters: ["Images (*.png *.jpg *.jpeg *.bmp)"]
+    nameFilters: ["PNG (*.png)"]
     fileMode: FileDialog.SaveFile
     
     onAccepted: {

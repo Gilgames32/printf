@@ -25,7 +25,7 @@ DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_m
 
 double DocumentPreset::get_ppi() const { return ppi; }
 
-double DocumentPreset::get_ppm() const { return convert::ppi_to_dpi(ppi); }
+double DocumentPreset::get_ppm() const { return convert::ppi_to_ppm(ppi); }
 
 size_t DocumentPreset::get_document_width_px() const { return convert::mm_to_pixel(roll_width_mm - margin_mm * 2, ppi); }
 
