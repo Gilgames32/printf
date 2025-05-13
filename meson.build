@@ -6,6 +6,7 @@ project('printf', 'cpp',
 nlohmann_json = dependency('nlohmann_json', required: true)
 opencv = dependency('opencv4', required: true)
 qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui', 'Qml', 'Quick'])
+exiv2 = dependency('exiv2', required: true)
 
 
 
@@ -71,5 +72,5 @@ srcs = files(
 # Executable
 executable('printf', [srcs, prep],
   include_directories: inc,
-  dependencies: [nlohmann_json, opencv, qt6_dep]
+  dependencies: [nlohmann_json, opencv, qt6_dep, exiv2],
 )

@@ -1,6 +1,7 @@
 #include "generator_view.hpp"
 
 #include <QtConcurrent/QtConcurrent>
+#include <exiv2/exiv2.hpp>
 #include <iostream>
 
 #include "grid_tiling.hpp"
@@ -38,23 +39,19 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<Image
 
 QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, const QList<ImageSource*>& sources) {
     return QtConcurrent::run([=]() {
-        try
-        {
+        try {
             generate(properties, sources);
-        }
-        catch(const std::exception& e)
-        {
+        } catch (const std::exception& e) {
             std::cerr << e.what() << '\n';
             qDebug() << "Exception occurred during generation:" << e.what();
         }
-        
-        
+
         qDebug() << "Async generation completed.";
         emit generationCompleted();
     });
 }
 
-void GeneratorView::save(const QString& path) {
+void GeneratorView::save(const QString& path, const DocumentPreset& properties) {
     auto out_path = path.toStdString();
     if (out_path.rfind("file://", 0) == 0) {
         out_path = out_path.substr(7);
@@ -72,16 +69,16 @@ void GeneratorView::save(const QString& path) {
     } else {
         qDebug() << "Image saved successfully.";
     }
+    
+    auto exif_data = generate_exif_data(out_path, properties);
+    add_exif_data(out_path, exif_data);
 }
 
-QFuture<void> GeneratorView::asyncSave(const QString& path) {
+QFuture<void> GeneratorView::asyncSave(const QString& path, const DocumentPreset& properties) {
     return QtConcurrent::run([=]() {
-        try
-        {
-            save(path);
-        }
-        catch(const std::exception& e)
-        {
+        try {
+            save(path, properties);
+        } catch (const std::exception& e) {
             std::cerr << e.what() << '\n';
             qDebug() << "Exception occurred during saving:" << e.what();
         }
@@ -89,4 +86,27 @@ QFuture<void> GeneratorView::asyncSave(const QString& path) {
         qDebug() << "Async saving completed.";
         emit saveCompleted();
     });
+}
+
+void GeneratorView::add_exif_data(const std::string& path, const Exiv2::ExifData& exif_data) {
+    auto image = Exiv2::ImageFactory::open(path);
+    
+    if (!image) {
+        throw std::runtime_error("Failed to open image file.");
+    }
+
+    image->setExifData(exif_data);
+    image->writeMetadata();
+}
+
+Exiv2::ExifData GeneratorView::generate_exif_data(const std::string& path, const DocumentPreset& properties) {
+    auto ppi = Exiv2::Rational(properties.get_ppi(), 1);
+
+    Exiv2::ExifData exif_data;
+    exif_data["Exif.Image.ProcessingSoftware"] = "printf";
+    exif_data["Exif.Image.XResolution"] = ppi;
+    exif_data["Exif.Image.YResolution"] = ppi;
+    exif_data["Exif.Image.ResolutionUnit"] = 2; // inches
+
+    return exif_data;
 }

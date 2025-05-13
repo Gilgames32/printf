@@ -190,7 +190,7 @@ Item {
 
                     onAcceptDelegate: (url) => {
                         saveButton.enabled = false;
-                        generator.asyncSave(url);
+                        generator.asyncSave(url, docProperties.getDocumentProperties());
                     }
                 }
 
