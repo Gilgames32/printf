@@ -23,8 +23,8 @@ class SourceEntryView : public QAbstractListModel {
     QList<ImageSourceView *> m_data;
 
   public:
-    virtual int rowCount(const QModelIndex &parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const override;
+    virtual QVariant data(const QModelIndex &index, int role) const override;
 
     int get_count() const;
 

@@ -15,10 +15,6 @@ Rectangle {
     radius: 5
     implicitHeight: paddingCol.implicitHeight + 20 // FIXME: hack
 
-    Component.onCompleted: () => {
-        entry.clearFilters();
-    }
-
     Item {
         id: container
 
@@ -131,7 +127,7 @@ Rectangle {
                         return;
 
                     entry.setPreset(path);
-                    maskInput.maskObject.setPreset(path, "mask");
+                    entry.mask.setPreset(path, "mask");
                     docProperties.setPreset(path, "document");
                 }
                 model: imagePresetModel
