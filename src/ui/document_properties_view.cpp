@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 // TODO: remove constants
 DocumentPropertiesView::DocumentPropertiesView()
-    : m_resolution(300), m_roll_width(609.6), m_margin(5), m_correct_quantity(false), m_guides(true), m_gutter(2) {}
+    : m_resolution(300), m_roll_width(609.6), m_margin(0), m_correct_quantity(false), m_guides(true), m_gutter(2) {}
 
 void DocumentPropertiesView::load_from_preset(const std::string& preset_path, const std::string& subcategory) {
     std::cout << "Loading preset from: " << preset_path << std::endl;

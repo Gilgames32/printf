@@ -20,7 +20,7 @@ class DocumentPreset {
         // FIXME
         double ppi = 300,
         double roll_width_mm = 609.6,
-        double margin_mm = 5,
+        double margin_mm = 0,
         double gutter_mm = 2,
         bool correct_quantity = false,
         bool guide = true,
