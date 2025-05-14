@@ -71,7 +71,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
         }
     }
 
-    size_t columns = std::floor(document_width / tile_width);  // TODO: test cast
+    size_t columns = std::floor((double)document_width / tile_width);
     size_t rows = std::ceil((double)quantity / columns);
     size_t document_height = rows * tile_height;
 

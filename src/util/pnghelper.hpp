@@ -1,3 +1,4 @@
+#pragma once
 #include <QImage>
 
 class PNGHelper {

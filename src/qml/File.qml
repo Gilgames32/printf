@@ -13,7 +13,7 @@ Rectangle {
 
     color: palette.base
     radius: 5
-    implicitHeight: paddingCol.implicitHeight + 20 // FIXME: hack
+    implicitHeight: paddingCol.implicitHeight + 2 * dmargin
 
     Item {
         id: container
