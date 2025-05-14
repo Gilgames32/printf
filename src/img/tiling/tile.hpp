@@ -4,7 +4,7 @@
 
 class Tile {
   private:
-    ImageSource* image;
+    std::shared_ptr<ImageSource> image;
     size_t width, height;
 
   public:
@@ -13,7 +13,7 @@ class Tile {
 
     bool rotated = false;
 
-    Tile(ImageSource* img) : image(img), width(img->get_width_px()), height(img->get_height_px()) {}
+    Tile(std::shared_ptr<ImageSource> img) : image(img), width(img->get_width_px()), height(img->get_height_px()) {}
 
     void rotate() {
         std::swap(width, height);

@@ -2,6 +2,7 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <memory>
 
 #include "image_source_view.hpp"
 #include <image_source.hpp>
@@ -32,7 +33,7 @@ class SourceEntryView : public QAbstractListModel {
     Q_INVOKABLE void clear();
     Q_INVOKABLE void addFiles(const QStringList &files);
 
-    Q_INVOKABLE QList<ImageSource*> getImageSources() const;
+    Q_INVOKABLE QList<std::shared_ptr<ImageSource>> getImageSources() const;
 
   signals:
     void amountChanged();

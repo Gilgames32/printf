@@ -56,9 +56,8 @@ void SourceEntryView::addFiles(const QStringList &files) {
     emit amountChanged();
 }
 
-QList<ImageSource *> SourceEntryView::getImageSources() const {
-    // TODO: shared pointer
-    QList<ImageSource *> sources;
+QList<std::shared_ptr<ImageSource>> SourceEntryView::getImageSources() const {
+    QList<std::shared_ptr<ImageSource>> sources;
     for (const auto &source : m_data) {
         sources.append(source->get_image_source());
     }

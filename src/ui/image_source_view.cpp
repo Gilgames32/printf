@@ -100,8 +100,8 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
     }
 }
 
-ImageSource* ImageSourceView::get_image_source() const {
-    auto img = new ImageSource(m_image, m_amount, m_width, m_height);
+std::shared_ptr<ImageSource> ImageSourceView::get_image_source() const {
+    auto img = std::make_shared<ImageSource>(m_image, m_amount, m_width, m_height);
     if (mask_filter_view.is_enabled()) img->add_filter(mask_filter_view.get_filter());
     return img;
 }

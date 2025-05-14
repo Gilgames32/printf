@@ -21,15 +21,9 @@ class ImageSource : ICachableImage {
     double height_mm;
     ImageSource(cv::Mat source, size_t amount, double width_mm = 0, double height_mm = 0);
 
-    virtual ~ImageSource() { clear_filters(); }
-    ImageSource(const ImageSource& other)
-        : original(other.original),
-          cached(*this),
-          amount(other.amount),
-          filters(other.filters),  // FIXME
-          size_filter(other.size_filter) {
-        std::cout << "Copy constructor called" << std::endl;
-    }
+    virtual ~ImageSource();
+
+    ImageSource(const ImageSource& other) = delete;
 
     void add_filter(IFilter* filter);
 

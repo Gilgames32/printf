@@ -16,6 +16,8 @@ ImageSource::ImageSource(cv::Mat source, size_t amount, double width_mm, double 
     if (height_mm <= 0) throw std::invalid_argument("Invalid height");
 }
 
+ImageSource::~ImageSource() { clear_filters(); }
+
 void ImageSource::add_filter(IFilter* filter) {
     filters.push_back(filter);
     cached.set_dirty();

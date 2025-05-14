@@ -50,7 +50,7 @@ class ImageSourceView : public QObject {
 
     void load_from_preset(const std::string& preset_path);
 
-    ImageSource* get_image_source() const;
+    std::shared_ptr<ImageSource> get_image_source() const;
 
     MaskFilterView* get_mask_filter_view();
 

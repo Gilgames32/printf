@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 typedef std::vector<std::pair<std::string, std::string>> ProbeList;
 

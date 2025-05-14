@@ -16,11 +16,11 @@ int main(int argc, char *argv[]) {
     qmlRegisterType<DocumentPropertiesView>("printf", 1, 0, "DocumentPropertiesView");
     qmlRegisterType<GeneratorView>("printf", 1, 0, "GeneratorView");
     
-    qRegisterMetaType<MaskFilterView *>("MaskFilterView*");
-    qRegisterMetaType<ImageSourceView *>("ImageSourceView*");
+    qRegisterMetaType<MaskFilterView>("MaskFilterView");
+    qRegisterMetaType<ImageSourceView>("ImageSourceView");
     qRegisterMetaType<DocumentPreset>("DocumentPreset");
-    qRegisterMetaType<ImageSource *>("ImageSource*");
-    qRegisterMetaType<IFilterView *>("IFilterView*");
+    qRegisterMetaType<ImageSource>("ImageSource");
+    qRegisterMetaType<IFilterView>("IFilterView");
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("previewprovider", PreviewProvider::instance());

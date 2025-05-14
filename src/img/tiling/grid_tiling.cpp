@@ -15,7 +15,7 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
     return (document_width - tile_width * std::min(amount, columns)) * tile_height;
 }
 
-cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSource*> images) {
+cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) {
     if (images.empty()) return cv::Mat();
 
     auto padding = preset.get_padding_px();
@@ -37,8 +37,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     if (tile_width <= 0 || tile_height <= 0) return cv::Mat();
 
     auto quantity = std::accumulate(images.begin(), images.end(), 0,
-                                    [](size_t sum, const ImageSource* img) { return sum + img->get_amount(); });
-
+                                    [](size_t sum, const std::shared_ptr<ImageSource> img) { return sum + img->get_amount(); });
     bool rotate = false;
     // fits both ways
     if (tile_width <= document_width && tile_height <= document_width) {
@@ -65,7 +64,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<ImageSour
     }
 
     std::vector<Tile> tiles = {};
-    for (ImageSource* img : images) {
+    for (auto img : images) {
         for (size_t i = 0; i < img->get_amount(); i++) {
             tiles.push_back(Tile(img));
         }
