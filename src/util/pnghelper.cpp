@@ -1,12 +1,10 @@
 #include "pnghelper.hpp"
 
-#include <png.h>
-
 #include <stdexcept>
-
 #include "convert.hpp"
 #include "spng.h"
 
+// TODO: cleanup
 void PNGHelper::save_png(const std::string& path, const QImage& image, double dpi) {
     if (image.format() != QImage::Format_RGB888) {
         throw std::runtime_error("Image format is not RGB888");
@@ -41,7 +39,7 @@ void PNGHelper::save_png(const std::string& path, const QImage& image, double dp
     ihdr.width = width;
     ihdr.height = height;
     ihdr.bit_depth = 8;
-    ihdr.color_type = SPNG_COLOR_TYPE_TRUECOLOR; // No alpha channel
+    ihdr.color_type = SPNG_COLOR_TYPE_TRUECOLOR;  // No alpha channel
     ihdr.compression_method = 0;
     ihdr.filter_method = 0;
     ihdr.interlace_method = 0;
@@ -74,4 +72,27 @@ void PNGHelper::save_png(const std::string& path, const QImage& image, double dp
 
     fclose(file);
     spng_ctx_free(ctx);
+}
+
+void PNGHelper::add_exif_data(const std::string& path, const DocumentPreset& properties) {
+    auto image = Exiv2::ImageFactory::open(path);
+
+    if (!image) {
+        throw std::runtime_error("Failed to open image file.");
+    }
+
+    image->setExifData(generate_exif_data(path, properties));
+    image->writeMetadata();
+}
+
+Exiv2::ExifData PNGHelper::generate_exif_data(const std::string& path, const DocumentPreset& properties) {
+    auto ppi = Exiv2::Rational(properties.get_ppi(), 1);
+
+    Exiv2::ExifData exif_data;
+    exif_data["Exif.Image.ProcessingSoftware"] = "printf";
+    exif_data["Exif.Image.XResolution"] = ppi;
+    exif_data["Exif.Image.YResolution"] = ppi;
+    exif_data["Exif.Image.ResolutionUnit"] = 2;  // inches
+
+    return exif_data;
 }

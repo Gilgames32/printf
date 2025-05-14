@@ -66,9 +66,7 @@ void GeneratorView::save(const QString& path, const DocumentPreset& properties) 
     try {
         // TODO: save as jpeg
         PNGHelper::save_png(out_path, image, properties.get_ppi());
-
-        auto exif_data = generate_exif_data(out_path, properties);
-        add_exif_data(out_path, exif_data);
+        PNGHelper::add_exif_data(out_path, properties);
         
         qDebug() << "Image saved successfully.";
     } catch (const std::exception& e) {
@@ -88,27 +86,4 @@ QFuture<void> GeneratorView::asyncSave(const QString& path, const DocumentPreset
         qDebug() << "Async saving completed.";
         emit saveCompleted();
     });
-}
-
-void GeneratorView::add_exif_data(const std::string& path, const Exiv2::ExifData& exif_data) {
-    auto image = Exiv2::ImageFactory::open(path);
-    
-    if (!image) {
-        throw std::runtime_error("Failed to open image file.");
-    }
-
-    image->setExifData(exif_data);
-    image->writeMetadata();
-}
-
-Exiv2::ExifData GeneratorView::generate_exif_data(const std::string& path, const DocumentPreset& properties) {
-    auto ppi = Exiv2::Rational(properties.get_ppi(), 1);
-
-    Exiv2::ExifData exif_data;
-    exif_data["Exif.Image.ProcessingSoftware"] = "printf";
-    exif_data["Exif.Image.XResolution"] = ppi;
-    exif_data["Exif.Image.YResolution"] = ppi;
-    exif_data["Exif.Image.ResolutionUnit"] = 2; // inches
-
-    return exif_data;
 }
