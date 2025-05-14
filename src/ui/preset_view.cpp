@@ -20,7 +20,7 @@ void PresetView::fetch_entries() {
     m_data.append(std::make_pair("None", ""));
 
     auto presets = jsonprobe::probe_presets(m_path.toStdString(), "name");
-    for (const auto &preset : presets) {
+    for (const auto &preset : *presets) {
         m_data.append(preset);
     }
 

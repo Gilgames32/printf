@@ -7,11 +7,11 @@
 
 using json = nlohmann::json;
 
-ProbeList jsonprobe::probe_presets(const std::string& preset_dir_path, const std::string& display,
-                                   const std::string& extension) {
+std::unique_ptr<ProbeList> jsonprobe::probe_presets(const std::string& preset_dir_path, const std::string& display,
+                                                    const std::string& extension) {
     std::filesystem::path preset_dir(preset_dir_path);
 
-    ProbeList presets;  // TODO: shared pointer
+    std::unique_ptr<ProbeList> presets = std::make_unique<ProbeList>();
 
     if (std::filesystem::exists(preset_dir) && std::filesystem::is_directory(preset_dir)) {
         for (const auto& entry : std::filesystem::directory_iterator(preset_dir)) {
@@ -21,7 +21,7 @@ ProbeList jsonprobe::probe_presets(const std::string& preset_dir_path, const std
                 j = json::parse(f);
                 f.close();
                 if (j.contains("name")) {
-                    presets.push_back({j["name"], entry.path().string()});
+                    presets->push_back({j["name"], entry.path().string()});
                 }
             }
         }
@@ -30,7 +30,7 @@ ProbeList jsonprobe::probe_presets(const std::string& preset_dir_path, const std
     }
 
     // sort by name
-    std::sort(presets.begin(), presets.end());
+    std::sort(presets->begin(), presets->end());
 
     return presets;
 }
