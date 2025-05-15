@@ -29,7 +29,7 @@ RowLayout {
     }
 
     Item {
-        Layout.preferredWidth: 112 - checkbox.width + spacing - 1 // TODO: 
+        Layout.preferredWidth: 89 // magic
     }
 
 }

@@ -80,7 +80,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     size_t columns = std::floor((double)document_width / tile_width);
     size_t rows = std::ceil((double)quantity / columns);
     size_t document_height = rows * tile_height;
-    cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3); // FIXME? shouldnt hardcode this
+    cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 
     // copy tiles to document

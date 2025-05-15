@@ -9,19 +9,29 @@ RowLayout {
     property var to: 100000
     property var num: from
     property var inum: num // internal number so that outisde binding is not affected
+    readonly property var maxDecimalDigits: 2
     property var onValueChangedDelegate: (value) => {
         return console.log("Value changed to: " + value);
     }
 
     function getFormattedNum() {
-        // TODO: :skull:
-        return textInput.focus ? inum : inum.toFixed(inum % 1 == 0 ? 0 : (inum * 10) % 1 == 0 ? 1 : 2);
+        if (textInput.focus) {
+            return inum;
+        } else {
+            let decimals = 0;
+            let str = String(inum);
+            if (str.indexOf('.') !== -1)
+                decimals = Math.min(str.split('.')[1].length, maxDecimalDigits);
+
+            return inum.toFixed(decimals);
+        }
     }
 
     spacing: 10
     onNumChanged: {
         if (inum == num)
             return ;
+
         inum = num;
     }
 

@@ -32,7 +32,7 @@ class ImageSourceView : public QObject {
     MaskFilterView mask_filter_view;
 
   public:
-    ImageSourceView(const std::string& path);
+    ImageSourceView(const std::string& path, int amount = 20); // TODO: config
 
     QString get_file_name() const;
 

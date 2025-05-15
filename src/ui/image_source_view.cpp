@@ -5,11 +5,11 @@
 #include <opencv2/opencv.hpp>
 #include <stdexcept>
 
+#include "convert.hpp"
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
-// TODO: dont hardcode the initial amount
-ImageSourceView::ImageSourceView(const std::string& path) : m_file_path(path), m_amount(20), mask_filter_view() {
+ImageSourceView::ImageSourceView(const std::string& path, int amount) : m_file_path(path), m_amount(amount), mask_filter_view() {
     if (m_file_path.rfind("file://", 0) == 0) {
         m_file_path = m_file_path.substr(7);
     }
@@ -51,11 +51,11 @@ ImageSourceView::ImageSourceView(const std::string& path) : m_file_path(path), m
     }
 
     if (m_image.type() != CV_8UC3) {
-        m_image.convertTo(m_image, CV_8UC3);  // FIXME
+        m_image.convertTo(m_image, CV_8UC3);
     }
 
-    m_width = m_image.cols / 10;  // TODO
-    m_height = m_image.rows / 10;
+    m_width = convert::pixel_to_mm(m_image.cols, 72.0);
+    m_height = convert::pixel_to_mm(m_image.rows, 72.0);
 }
 
 QString ImageSourceView::get_file_name() const {
