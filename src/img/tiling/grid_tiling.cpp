@@ -16,25 +16,31 @@ size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t t
 }
 
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) {
-    if (images.empty()) return cv::Mat();
+    if (images.empty()) throw std::invalid_argument("No images provided");
 
     auto padding = preset.get_padding_px();
-    auto side_fix = padding - 1; // TODO: 1 is the line width, should be configurable
     auto ppi = preset.get_ppi();
     auto uniform_width_px = convert::mm_to_pixel(images[0]->width_mm, ppi);
     auto uniform_height_px = convert::mm_to_pixel(images[0]->height_mm, ppi);
 
+    // set uniform sizes and padding
     for (auto img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px);
         img->add_filter(new PaddingFilter(padding, preset.get_guide()));
         img->burn();
     }
 
-    auto tile_width = images[0]->get_width_px();
-    auto tile_height = images[0]->get_height_px();
+    // padding is added to every tile but its not needed on the sides
+    // so extra padding is added to the document width, which is removed after tiling
+    auto side_fix = padding - preset.get_line_width();
     auto document_width = preset.get_document_width_px() + 2 * side_fix;
 
-    if (tile_width <= 0 || tile_height <= 0) return cv::Mat();
+    auto tile_width = images[0]->get_width_px();
+    auto tile_height = images[0]->get_height_px();
+
+    if (tile_width <= 0 || tile_height <= 0) {
+        throw std::invalid_argument("Invalid image size");
+    }
 
     auto quantity = std::accumulate(images.begin(), images.end(), 0,
                                     [](size_t sum, const std::shared_ptr<ImageSource> img) { return sum + img->get_amount(); });
@@ -51,11 +57,10 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         rotate = true;
     } else {
         // neither fits
-        // TODO: handle this
-        // TODO: take gutters and margin into consideration?
-        return cv::Mat();
+        throw std::invalid_argument("Image does not fit in document");
     }
 
+    // apply rotation
     if (rotate) {
         std::swap(tile_width, tile_height);
         for (auto img : images) {
@@ -63,6 +68,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         }
     }
 
+    // instantiate tiles based on amounts
     std::vector<Tile> tiles = {};
     for (auto img : images) {
         for (size_t i = 0; i < img->get_amount(); i++) {
@@ -70,15 +76,15 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         }
     }
 
+    // create document
     size_t columns = std::floor((double)document_width / tile_width);
     size_t rows = std::ceil((double)quantity / columns);
     size_t document_height = rows * tile_height;
-
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3); // FIXME? shouldnt hardcode this
     document.setTo(cv::Scalar(255, 255, 255));
 
+    // copy tiles to document
     auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;
-
     for (size_t i = 0; i < corrected_quantity; i++) {
         Tile& tile = tiles[i % quantity];
         cv::Rect target_rect = cv::Rect((i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
@@ -86,6 +92,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         tile.get_image().copyTo(document(target_rect));
     }
 
+    // remove padding from sides
     document = document(cv::Rect(side_fix, side_fix, document_width - 2 * side_fix, document_height - 2 * side_fix));
 
     return document;
