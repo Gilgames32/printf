@@ -5,7 +5,7 @@
 
 class PaddingFilter : public IFilter {
   private:
-    size_t padding;
+    int padding;
     bool guide;
     int bleed; // -1 for full lines
     int line_thickness;
@@ -14,7 +14,7 @@ class PaddingFilter : public IFilter {
 
   public:
     // TODO config
-    PaddingFilter(size_t padding, bool guide = false, int bleed = 0,
+    PaddingFilter(int padding, bool guide = false, int bleed = 0,
                   int line_thickness = 1, cv::Scalar line_color = cv::Scalar(0, 0, 0));
 
     cv::Mat apply(const cv::Mat &image) const override;

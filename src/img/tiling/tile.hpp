@@ -5,7 +5,7 @@
 class Tile {
   private:
     std::shared_ptr<ImageSource> image;
-    size_t width, height;
+    int width, height;
 
   public:
     cv::Point corner;
@@ -20,11 +20,11 @@ class Tile {
         rotated = !rotated;
     }
 
-    size_t get_area() const { return width * height; }
+    int get_area() const { return width * height; }
 
-    size_t get_width() const { return width; }
+    int get_width() const { return width; }
 
-    size_t get_height() const { return height; }
+    int get_height() const { return height; }
 
     cv::Mat get_image() { return image->get_img(); }
 };

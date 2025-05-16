@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-ImageSource::ImageSource(cv::Mat source, size_t amount, double width_mm, double height_mm)
+ImageSource::ImageSource(cv::Mat source, int amount, double width_mm, double height_mm)
     : original(source),
       amount(amount),
       cached(*this),

@@ -18,9 +18,9 @@ class CachedImage : ICache {
     
     cv::Mat get_img();
     
-    size_t get_width();
+    int get_width();
 
-    size_t get_height();
+    int get_height();
 
     void set_dirty() override;
 };

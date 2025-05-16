@@ -25,8 +25,6 @@ class ImageSourceView : public QObject {
     std::string m_file_path;
     cv::Mat m_image;
     int m_amount;
-    // TODO: double everywhere where mm is used, size_t everywhere where px is used
-    // TODO: 0 safety
     double m_width = 100;
     double m_height = 100;
     MaskFilterView mask_filter_view;

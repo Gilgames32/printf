@@ -8,8 +8,8 @@
 #include "tile.hpp"
 #include "convert.hpp"
 
-size_t GridTiling::calc_waste(size_t document_width, size_t tile_width, size_t tile_height, size_t amount) {
-    size_t columns = std::floor(document_width / tile_width);
+int GridTiling::calc_waste(int document_width, int tile_width, int tile_height, int amount) {
+    int columns = std::floor(document_width / tile_width);
 
     // the amount can be less than the number of columns
     return (document_width - tile_width * std::min(amount, columns)) * tile_height;
@@ -43,7 +43,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     }
 
     auto quantity = std::accumulate(images.begin(), images.end(), 0,
-                                    [](size_t sum, const std::shared_ptr<ImageSource> img) { return sum + img->get_amount(); });
+                                    [](int sum, const std::shared_ptr<ImageSource> img) { return sum + img->get_amount(); });
     bool rotate = false;
     // fits both ways
     if (tile_width <= document_width && tile_height <= document_width) {
@@ -71,21 +71,21 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     // instantiate tiles based on amounts
     std::vector<Tile> tiles = {};
     for (auto img : images) {
-        for (size_t i = 0; i < img->get_amount(); i++) {
+        for (int i = 0; i < img->get_amount(); i++) {
             tiles.push_back(Tile(img));
         }
     }
 
     // create document
-    size_t columns = std::floor((double)document_width / tile_width);
-    size_t rows = std::ceil((double)quantity / columns);
-    size_t document_height = rows * tile_height;
+    int columns = std::floor((double)document_width / tile_width);
+    int rows = std::ceil((double)quantity / columns);
+    int document_height = rows * tile_height;
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 
     // copy tiles to document
     auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;
-    for (size_t i = 0; i < corrected_quantity; i++) {
+    for (int i = 0; i < corrected_quantity; i++) {
         Tile& tile = tiles[i % quantity];
         cv::Rect target_rect = cv::Rect((i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
 

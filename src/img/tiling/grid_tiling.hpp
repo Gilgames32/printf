@@ -3,7 +3,7 @@
 
 class GridTiling : public Tiling {
     // calculates the wasted area on the sides of the document
-    size_t calc_waste(size_t document_width, size_t tile_width, size_t tile_height, size_t amount);
+    int calc_waste(int document_width, int tile_width, int tile_height, int amount);
 
   public:
     cv::Mat generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) override;

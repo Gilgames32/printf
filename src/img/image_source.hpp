@@ -13,14 +13,14 @@ class ImageSource : ICachableImage {
   private:
     cv::Mat original;
     CachedImage cached;
-    size_t amount;
+    int amount;
     std::vector<std::shared_ptr<IFilter>> filters;
     SizeFilter size_filter;
 
   public:
     double width_mm;
     double height_mm;
-    ImageSource(cv::Mat source, size_t amount, double width_mm = 0, double height_mm = 0);
+    ImageSource(cv::Mat source, int amount, double width_mm = 0, double height_mm = 0);
 
     virtual ~ImageSource();
 
@@ -34,13 +34,13 @@ class ImageSource : ICachableImage {
 
     cv::Mat get_img() { return cached.get_img(); }
 
-    size_t get_width_px() { return cached.get_width(); }
+    int get_width_px() { return cached.get_width(); }
 
-    size_t get_height_px() { return cached.get_height(); }
+    int get_height_px() { return cached.get_height(); }
 
     void set_size_px(int width, int height);
 
-    size_t get_amount() const { return amount; }
+    int get_amount() const { return amount; }
 
     cv::Mat get_cachable() const override { return apply_filters(); }
 

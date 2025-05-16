@@ -13,12 +13,12 @@ void CachedImage::regenerate() {
     isDirty = false;
 }
 
-size_t CachedImage::get_width() {
+int CachedImage::get_width() {
     regenerate();
     return cache.cols;
 }
 
-size_t CachedImage::get_height() {
+int CachedImage::get_height() {
     regenerate();
     return cache.rows;
 }

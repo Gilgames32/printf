@@ -1,6 +1,6 @@
 #include "padding.hpp"
 
-PaddingFilter::PaddingFilter(size_t padding, bool guide, int bleed, int line_thickness, cv::Scalar line_color)
+PaddingFilter::PaddingFilter(int padding, bool guide, int bleed, int line_thickness, cv::Scalar line_color)
     : padding(padding), guide(guide), bleed(bleed), line_thickness(line_thickness), line_color(line_color) {}
 
 cv::Mat PaddingFilter::apply(const cv::Mat &image) const {
