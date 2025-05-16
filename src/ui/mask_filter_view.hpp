@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <opencv2/opencv.hpp>
 #include <string>
+#include <memory>
 #include "ifilter_view.hpp"
 
 class MaskFilterView : public IFilterView {
@@ -35,7 +36,7 @@ class MaskFilterView : public IFilterView {
 
     Q_INVOKABLE void setPreset(const QString& presetPath, const QString& subcategory = "");
 
-    virtual IFilter* get_filter() const override;
+    virtual std::shared_ptr<IFilter> get_filter() const override;
 
     virtual bool is_enabled() const override;
 

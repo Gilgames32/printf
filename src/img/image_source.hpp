@@ -2,6 +2,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <memory>
 
 #include "cached_image.hpp"
 #include "ifilter.hpp"
@@ -13,7 +14,7 @@ class ImageSource : ICachableImage {
     cv::Mat original;
     CachedImage cached;
     size_t amount;
-    std::vector<IFilter*> filters;
+    std::vector<std::shared_ptr<IFilter>> filters;
     SizeFilter size_filter;
 
   public:
@@ -25,7 +26,7 @@ class ImageSource : ICachableImage {
 
     ImageSource(const ImageSource& other) = delete;
 
-    void add_filter(IFilter* filter);
+    void add_filter(std::shared_ptr<IFilter> filter);
 
     void clear_filters();
 

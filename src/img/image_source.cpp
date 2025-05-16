@@ -18,15 +18,12 @@ ImageSource::ImageSource(cv::Mat source, size_t amount, double width_mm, double 
 
 ImageSource::~ImageSource() { clear_filters(); }
 
-void ImageSource::add_filter(IFilter* filter) {
+void ImageSource::add_filter(std::shared_ptr<IFilter> filter) {
     filters.push_back(filter);
     cached.set_dirty();
 }
 
 void ImageSource::clear_filters() {
-    for (auto filter : filters) {
-        delete filter;
-    }
     filters.clear();
     cached.set_dirty();
 }

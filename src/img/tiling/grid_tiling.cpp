@@ -26,7 +26,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     // set uniform sizes and padding
     for (auto img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px);
-        img->add_filter(new PaddingFilter(padding, preset.get_guide()));
+        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide()));
         img->burn();
     }
 
@@ -64,7 +64,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     if (rotate) {
         std::swap(tile_width, tile_height);
         for (auto img : images) {
-            img->add_filter(new RotateFilter());
+            img->add_filter(std::make_shared<RotateFilter>());
         }
     }
 
