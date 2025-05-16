@@ -24,7 +24,7 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<std::
 }
 
 QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources) {
-    return QtConcurrent::run([=]() {
+    return QtConcurrent::run([=, this]() {
         try {
             generate(properties, sources);
         } catch (const std::exception& e) {
@@ -53,7 +53,7 @@ void GeneratorView::save(const QString& path, const DocumentPreset& properties) 
 }
 
 QFuture<void> GeneratorView::asyncSave(const QString& path, const DocumentPreset& properties) {
-    return QtConcurrent::run([=]() {
+    return QtConcurrent::run([=, this]() {
         try {
             save(path, properties);
         } catch (const std::exception& e) {

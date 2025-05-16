@@ -4,7 +4,7 @@ project('printf', 'cpp',
 
 # Dependencies
 nlohmann_json = dependency('nlohmann_json', required: true)
-opencv = dependency('opencv4', required: true)
+opencv = dependency('opencv4', required: true, include_type: 'system')
 qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui', 'Qml', 'Quick'])
 exiv2 = dependency('exiv2', required: true)
 spng = dependency('spng', required: true)

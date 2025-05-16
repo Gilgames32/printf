@@ -4,8 +4,8 @@
 
 ImageSource::ImageSource(cv::Mat source, int amount, double width_mm, double height_mm)
     : original(source),
-      amount(amount),
       cached(*this),
+      amount(amount),
       filters(),
       size_filter(SizeFilter(source.cols, source.rows)),
       width_mm(width_mm),
