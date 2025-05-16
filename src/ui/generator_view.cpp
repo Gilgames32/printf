@@ -30,6 +30,7 @@ QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, con
         } catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
             qDebug() << "Exception occurred during generation:" << e.what();
+            PreviewProvider::instance()->setImage(QImage());
         }
         emit generationCompleted();
     });
@@ -58,6 +59,7 @@ QFuture<void> GeneratorView::asyncSave(const QString& path, const DocumentPreset
         } catch (const std::exception& e) {
             std::cerr << e.what() << '\n';
             qDebug() << "Exception occurred during saving:" << e.what();
+            PreviewProvider::instance()->setImage(QImage());
         }
         emit saveCompleted();
     });

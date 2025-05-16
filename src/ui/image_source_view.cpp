@@ -54,8 +54,8 @@ ImageSourceView::ImageSourceView(const std::string& path, int amount) : m_file_p
         m_image.convertTo(m_image, CV_8UC3);
     }
 
-    m_width = convert::pixel_to_mm(m_image.cols, 72.0);
-    m_height = convert::pixel_to_mm(m_image.rows, 72.0);
+    m_width = convert::pixel_to_mm(m_image.cols, 96.0);
+    m_height = convert::pixel_to_mm(m_image.rows, 96.0);
 }
 
 QString ImageSourceView::get_file_name() const {
