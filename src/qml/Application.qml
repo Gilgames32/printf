@@ -17,6 +17,10 @@ ApplicationWindow {
         colorGroup: SystemPalette.Active
     }
 
+    ErrorSignal {
+        id: errorSignal
+    }
+
     GeneratorView {
         id: generator
 
@@ -43,13 +47,26 @@ ApplicationWindow {
             Layout.preferredWidth: 1
         }
 
-        Preview {
-            id: preview
-
-            previewSource: generator.imageSource
+        ColumnLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: 2
+
+            Preview {
+                id: preview
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                previewSource: generator.imageSource
+            }
+
+            OutputBar {
+                id: outputBar
+
+                Layout.fillWidth: true
+                width: parent.width
+            }
+
         }
 
         Properties {

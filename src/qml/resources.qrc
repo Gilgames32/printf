@@ -12,5 +12,6 @@
         <file>UnitCheckBox.qml</file>
         <file>SizeInput.qml</file>
         <file>MaskInput.qml</file>
+        <file>OutputBar.qml</file>
     </qresource>
 </RCC>

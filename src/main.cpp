@@ -7,6 +7,7 @@
 #include "preset_view.hpp"
 #include "preview_provider.hpp"
 #include "source_entry_view.hpp"
+#include "error_signal.hpp"
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
@@ -15,6 +16,7 @@ int main(int argc, char *argv[]) {
     qmlRegisterType<PresetView>("printf", 1, 0, "PresetView");
     qmlRegisterType<DocumentPropertiesView>("printf", 1, 0, "DocumentPropertiesView");
     qmlRegisterType<GeneratorView>("printf", 1, 0, "GeneratorView");
+    qmlRegisterType<ErrorSignal>("printf", 1, 0, "ErrorSignal");
     
     qRegisterMetaType<MaskFilterView>("MaskFilterView");
     qRegisterMetaType<ImageSourceView>("ImageSourceView");

@@ -8,7 +8,7 @@ Item {
     Rectangle {
         id: flickArea
 
-        color: palette.dark
+        color: palette.base
         anchors.fill: parent
     }
 

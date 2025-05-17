@@ -7,6 +7,8 @@
 #include "grid_tiling.hpp"
 #include "preview_provider.hpp"
 #include "pnghelper.hpp"
+#include "error_signal.hpp"
+#include "convert.hpp"
 
 GeneratorView::GeneratorView() {}
 
@@ -25,12 +27,18 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<std::
 
 QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources) {
     return QtConcurrent::run([=, this]() {
+        ErrorSignal::iinfo("Generating image...");
         try {
             generate(properties, sources);
+            const QImage& img = PreviewProvider::instance()->getImage();
+            const auto width = img.width();
+            const auto height = img.height();
+            const auto ppi = properties.get_ppi();
+            ErrorSignal::iinfo(QString("%1 x %2 px - %3 x %4 mm").arg(width).arg(height).arg(convert::pixel_to_mm(width, ppi)).arg(convert::pixel_to_mm(height, ppi)));
         } catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
-            qDebug() << "Exception occurred during generation:" << e.what();
             PreviewProvider::instance()->setImage(QImage());
+            ErrorSignal::ierror(e.what());
         }
         emit generationCompleted();
     });
@@ -54,12 +62,14 @@ void GeneratorView::save(const QString& path, const DocumentPreset& properties) 
 
 QFuture<void> GeneratorView::asyncSave(const QString& path, const DocumentPreset& properties) {
     return QtConcurrent::run([=, this]() {
+        ErrorSignal::iinfo("Saving image...");
         try {
             save(path, properties);
+            ErrorSignal::iinfo("Saved image to " + path);
         } catch (const std::exception& e) {
             std::cerr << e.what() << '\n';
-            qDebug() << "Exception occurred during saving:" << e.what();
             PreviewProvider::instance()->setImage(QImage());
+            ErrorSignal::ierror(e.what());
         }
         emit saveCompleted();
     });

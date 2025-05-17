@@ -22,6 +22,7 @@ moc_headers = files(
   'src/ui/document_properties_view.hpp',
   'src/ui/generator_view.hpp',
   'src/ui/ifilter_view.hpp',
+  'src/ui/error_signal.hpp',
 )
 
 qresources = files('src/qml/resources.qrc')
@@ -63,6 +64,7 @@ srcs = files(
   'src/ui/document_properties_view.cpp',
   'src/ui/generator_view.cpp',
   'src/ui/preview_provider.cpp',
+  'src/ui/error_signal.cpp',
   'src/util/jsonprobe.cpp',
   'src/util/pnghelper.cpp',
   'src/main.cpp',
