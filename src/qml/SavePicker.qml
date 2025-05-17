@@ -9,6 +9,7 @@ FileDialog {
 
     title: "Select Save Location"
 
+    defaultSuffix: "png"
     nameFilters: ["PNG (*.png)"]
     fileMode: FileDialog.SaveFile
     

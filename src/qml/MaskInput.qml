@@ -12,6 +12,7 @@ Column {
 
         checked: imageSource.mask.enabled
         onCheckedChanged: {
+            generator.dirty = true
             imageSource.mask.enabled = maskCheckBox.checked;
         }
         text: "Mask"
@@ -48,7 +49,8 @@ Column {
                         let path = presetModel.getPath(index);
                         if (path == "")
                             return;
-
+                        
+                        generator.dirty = true
                         imageSource.mask.setPreset(presetModel.getPath(index));
                     }
                     model: presetModel

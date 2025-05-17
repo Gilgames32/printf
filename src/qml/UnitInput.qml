@@ -32,6 +32,7 @@ RowLayout {
         if (inum == num)
             return ;
 
+        generator.dirty = true;
         inum = num;
     }
 

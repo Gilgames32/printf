@@ -66,4 +66,4 @@ std::shared_ptr<IFilter> MaskFilterView::get_filter() const {
     return std::make_shared<MaskFilter>(mask);
 }
 
-bool MaskFilterView::is_enabled() const { return m_is_enabled; }
+bool MaskFilterView::is_enabled() const { return m_is_enabled && !m_file_path.empty(); }

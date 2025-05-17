@@ -3,6 +3,7 @@ import QtQuick.Controls 6.9
 
 Item {
     property alias previewSource: image.source
+    property alias previewStatus: image.status
 
     Rectangle {
         id: flickArea

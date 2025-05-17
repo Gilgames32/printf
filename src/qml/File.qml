@@ -8,7 +8,6 @@ Rectangle {
     property var dataModel: null
     property var imagePresetModel: null
     property var maskPresetModel: null
-
     property var entry: model.entry
 
     color: palette.base
@@ -68,6 +67,7 @@ Rectangle {
                             Layout.preferredHeight: 30
                             text: "X"
                             onClicked: {
+                                generator.dirty = true;
                                 dataModel.remove(model.index);
                             }
                         }
@@ -104,9 +104,11 @@ Rectangle {
                             stepSize: 1
                             editable: true
                             onValueChanged: () => {
-                                if (entry.amount != value)
-                                    entry.amount = value;
+                                if (entry.amount == value)
+                                    return ;
 
+                                generator.dirty = true;
+                                entry.amount = value;
                             }
                         }
 
@@ -124,7 +126,7 @@ Rectangle {
                 onActivated: (index) => {
                     let path = imagePresetModel.getPath(index);
                     if (path == "")
-                        return;
+                        return ;
 
                     entry.setPreset(path);
                     entry.mask.setPreset(path, "mask");
@@ -145,7 +147,6 @@ Rectangle {
 
                         sizeWidth: entry.width
                         sizeHeight: entry.height
-
                         onWidthChangedDelegate: (value) => {
                             if (entry.width != value)
                                 entry.setSizeToWidth(value, sizeInput.locked);

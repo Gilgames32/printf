@@ -14,6 +14,15 @@ Item {
         anchors.margins: 10
         anchors.rightMargin: 0
 
+        ImagePicker {
+            id: imagePicker
+
+            onAcceptDelegate: (files) => {
+                generator.dirty = true;
+                sourceEntryView.addFiles(files);
+            }
+        }
+
         Button {
             id: openButton
 
@@ -21,15 +30,6 @@ Item {
             onClicked: {
                 imagePicker.open();
             }
-
-            ImagePicker {
-                id: imagePicker
-
-                onAcceptDelegate: (files) => {
-                    sourceEntryView.addFiles(files);
-                }
-            }
-
         }
 
         ListView {

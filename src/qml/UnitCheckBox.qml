@@ -24,6 +24,7 @@ RowLayout {
 
         checked: false
         onCheckedChanged: {
+            generator.dirty = true
             onValueChangedDelegate(checkbox.checked);
         }
     }

@@ -152,6 +152,7 @@ Item {
                             generator.imageSource = "";
                             generator.imageSource = generator.providedImagePath;
                             generateButton.enabled = true;
+                            generator.dirty = false;
                         });
                     }
                     onClicked: {
@@ -174,6 +175,7 @@ Item {
                     onClicked: {
                         saveDialog.open();
                     }
+                    enabled: !generator.dirty && preview.previewStatus == Image.Ready
                 }
 
                 Button {
@@ -183,6 +185,7 @@ Item {
                     onClicked: {
                         console.log("Print clicked");
                     }
+                    enabled: false
                 }
 
                 SavePicker {

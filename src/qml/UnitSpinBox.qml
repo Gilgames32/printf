@@ -29,7 +29,10 @@ RowLayout {
         to: 1000
         stepSize: 1
         editable: true
-        onValueChanged: onValueChangedDelegate(spinbox.value)
+        onValueChanged: () => {
+            generator.dirty = true
+            onValueChangedDelegate(spinbox.value)
+        } 
     }
 
     Text {

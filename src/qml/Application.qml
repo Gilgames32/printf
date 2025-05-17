@@ -22,6 +22,7 @@ ApplicationWindow {
 
         readonly property var providedImagePath: "image://previewprovider/"
         property var imageSource: ""
+        property var dirty: true
     }
 
     SourceEntryView {
