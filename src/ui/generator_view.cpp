@@ -37,7 +37,7 @@ QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, con
 }
 
 void GeneratorView::save(const QString& path, const DocumentPreset& properties) {
-    const QImage& image = PreviewProvider::instance()->getImage();
+    const QImage& image = PreviewProvider::instance()->getImage().convertToFormat(QImage::Format_RGB888);
     if (image.isNull()) {
         throw std::runtime_error("Image is null");
     }
