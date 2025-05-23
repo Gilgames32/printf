@@ -14,14 +14,14 @@ class SourceEntryView {
 Application *- SourceEntryView
 
 class ImageSourceView {
-    ImageSource* get_imagesource()
+    ImageSource get_imagesource()
     void load_from_json(json)
-    std::map<string, string> propbe_presets()
+    map<string, string> propbe_presets()
 }
 SourceEntryView *-- "*" ImageSourceView
 
 abstract FilterView {
-    Filter* get_filter()
+    Filter get_filter()
     void load_from_json(json)
 }
 ImageSourceView *-- "*" FilterView
@@ -39,12 +39,12 @@ class SizeView {
 FilterView <|-- SizeView
 
 
-class DocumentPresetView {
-    DocumentPreset* get_preset()
+class DocumentPropertiesView {
+    DocumentProperties get_properties()
     void load_from_json(json)
-    std::map<string, string> propbe_presets()
+    map<string, string> propbe_presets()
 }
-DocumentPresetView --* Application
+DocumentPropertiesView --* Application
 
 
 class ControlView {
@@ -54,10 +54,10 @@ class ControlView {
 }
 ControlView -* Application
 
-class PreView{
+class Preview{
     void set_image(cv::Mat)
 }
-PreView --* Application
+Preview --* Application
 
 
 abstract Tiling {

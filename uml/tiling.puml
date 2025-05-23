@@ -2,7 +2,7 @@
 
 title Csempézés
 
-abstract Tiling {
+interface Tiling {
     cv::Mat generate(DocumentPreset preset, std::vector<ImgSource> images)
 }
 

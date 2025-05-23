@@ -2,11 +2,11 @@
 
 title Kép forrás
 
-class ImgSource {
-    cv::Mat original
-    cv::Mat cached
-    size_t amount
-    std::vector<Filter> filters
+class ImageSource {
+    Mat original
+    CachedImage cached
+    int amount
+    Filter[] filters
     
     bool rotated
     size_t width, height
@@ -14,29 +14,64 @@ class ImgSource {
     void add_filter(Filter filter)
     void clear_filters()
     void apply_filters()
-    cv::Mat get_img()
+    Mat get_img()
 }
 
 abstract Filter {
-    cv::Mat apply(cv::Mat &img)
+    Mat apply(Mat img)
 }
-ImgSource *-- Filter
+ImageSource *-- Filter
 
 
 class Mask {
-    cv::Mat mask
-    cv::Mat apply(cv::Mat &img)
+    Mat mask
+    Mat apply(Mat img)
 }
 Filter <|-- Mask
 
+class Size {
+    int width
+    int height
+    Mat apply(Mat img)
+}
+Filter <|-- Size
+
+class Padding {
+    int padding
+    Mat apply(Mat img)
+}
+Filter <|-- Padding
+
+class Rotate {
+    bool rotate
+    Mat apply(Mat img)
+}
+Filter <|-- Rotate
 
 class Tile {
-    ImgSource image
-    cv::Point corner
+    ImageSource image
+    Point corner
     bool rotated
 }
-ImgSource -* Tile
+ImageSource -* Tile
+
+class CachedImage {
+    ICachableImage source
+    Mat cache
+    bool dirty
+}
+CachedImage *- ImageSource
 
 
+interface ICache {
+    void set_dirty()
+}
+
+interface ICachableImage {
+    Mat get_cachable()
+}
+
+ICache <|-- CachedImage
+ICachableImage <|-- ImageSource
 
 @enduml
