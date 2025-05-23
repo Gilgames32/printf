@@ -40,5 +40,5 @@
 - preset syntax
 - telepítés
 
-# elérhetőség, open source note, levy2 
+# elérhetőség, open source note, levy2 (köszönet)
 
