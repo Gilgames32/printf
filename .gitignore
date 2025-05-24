@@ -51,7 +51,7 @@ output/
 *.out
 *.toc
 *.thm
-*.pdf
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+thesis.pdf
