@@ -1,1 +1,38 @@
 \chapter{Felhasználói kézikönyv}
+
+\section{A program kezelése}
+
+A felhasználói felület intuitív, szinte minden el van látva címkékkel. A képek mérete melletti pipával tudjuk állítani, hogy a méret megadásakor tartsa-e az eredeti méretarányt. A legördülő menükben tudunk az előbeállítások közül választani. Az előnézetet a görgővel tudjuk nagyítani és az egérrel lehet mozgazni.
+
+\section{Az előbeállítások}
+
+Az előbállítások a \texttt{presets} mappában találhatók, 4 almappára bontva. Minden előbeállítás JSON formátumban értendő. A mappák és a bennük szerplő JSON fájlok kulcsai az alábbiak:
+\begin{itemize}
+    \item \texttt{document}
+    \begin{itemize}
+        \item \texttt{name}: az előbeállítás neve
+        \item \texttt{roll\_width\_mm}: a tekercs szélessége milliméterben
+        \item \texttt{resolution\_ppi}: a dokumentum felbontása pixel per inchben
+        \item \texttt{margin\_mm}: a margó milliméterben, nem lesz része a dokumentumnak
+        \item \texttt{gutter\_mm}: a képek közti térköz milliméterben
+        \item \texttt{correct\_quantity}: ha \texttt{true}, a rács maradék cellái ki lesznek töltve képekkel\footnote{amennyiben az eredeti algoritmust használjuk, ami rácsba rendezi a bemeneti képeket; az ilyenkor keletkező maradék helyet hivatott kitölteni}
+        \item \texttt{guide}: ha \texttt{true} és \texttt{gutter\_mm} \begin{math}
+            \geq 0
+        \end{math}, akkor segédvonalakat rak a képek sarkaiba
+    \end{itemize}
+
+    \item \texttt{mask}
+    \begin{itemize}
+        \item \texttt{name}: az előbeállítás neve
+        \item \texttt{path}: a maszk kép fájl elérési útvonala
+    \end{itemize}
+
+    \item \texttt{image}
+    \begin{itemize}
+        \item \texttt{name}: az előbeállítás neve
+        \item \texttt{amount}: a nyomtatni kívánt mennyiség
+        \item \texttt{width}: a szélesség milliméterben
+        \item \texttt{height}: a magasság milliméterben
+        \item továbbá beágyazhatunk más kategóriára vonatkozó beállításokat
+    \end{itemize}
+\end{itemize}

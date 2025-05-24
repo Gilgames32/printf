@@ -24,17 +24,11 @@ A modell implementálása a tervek alapján gördülékenyen ment, és a régi m
 
 \subsection{A Qt és a felhasználói felület}
 
-Ehhez a projekthez használtam először Qt-ot, ezért eleinte nagyon lassan haladt a felület fejlesztése. A Qt Quick használata mellett döntöttem, melynek segítségével egy deklaratív UI leíró nyelven (\href{https://en.wikipedia.org/wiki/QML}{QML}) lehet elkészíteni a felhasználó felületet. Néhány dologban hasonlít más UI leíró nyelvekre, nem kellett nulláról kezdenem, de azért még így is akadtak nehézségek bőven. Legfőképp a view és a modell összeköttetése, amivel hamar szembe találtam magam. Hogy egy osztályt elérnjünk QML-ből, ahhoz az osztályunknak nem elég a Qt osztályokból származnija, hanem még különféle makrókkal el kell lássuk a tagváltozóinkat, a függvényeinket, és még az osztályainkait is. Ezen osztályok header fájljait fordítás előtt fel kell dolgoznunk a Qt MOC\footnote{Meta-Object Compiler}-ével, hogy az osztályaink elérhetőek legyenek QML-ből, és hogy ezekről futásidejű típusinformációink is legyenek. 
+Ehhez a projekthez használtam először Qt-ot, ezért eleinte nagyon lassan haladt a felület fejlesztése. A Qt Quick használata mellett döntöttem, melynek segítségével egy deklaratív UI leíró nyelven (\href{https://en.wikipedia.org/wiki/QML}{QML}) lehet elkészíteni a felhasználó felületet. Néhány dologban hasonlít más UI leíró nyelvekre, nem kellett nulláról kezdenem, de azért még így is akadtak nehézségek bőven. Legfőképp a view és a modell összeköttetése, amivel hamar szembe találtam magam. Hogy egy osztályt elérnjünk QML-ből, ahhoz az osztályunknak nem elég a Qt osztályokból származnia, hanem még különféle makrókkal el kell lássuk a tagváltozóinkat, a függvényeinket, és még az osztályainkait is. Ezen osztályok header fájljait fordítás előtt fel kell dolgoznunk a Qt MOC\footnote{Meta-Object Compiler}-ével, hogy az osztályaink elérhetőek legyenek QML-ből, és hogy ezekről futásidejű típusinformációink is legyenek. 
 
 Túlságosan nem mennék részletekbe a UI-t illetően, csupán pár érdekesebb részt emelnék ki. A lista, amin a bemenetek láthatóak lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Ezt az implementáció során figyelembe is vettem, és egy indirekcióval oldottam meg, arra viszont nem figyeltem, hogy a filterek modelljével való összeköttetés UI szinten valósult meg, és ez az összeköttetés csak addig van jelen, amíg az elem látható. Erre sajnos csak az éles tesztnél találtam rá, mert itt teszteltem először háromnál több képpel a programot. A hiba azóta javítva lett.
 
-Egy másik érdekesség talán az előbeállítások betöltésének folyamata. A program JSON fájlokból olvas be, ezek létezését először az adott mappában felderíti, majd rögzíti a név és elérési út párokat. Betöltéskor a JSON-ben jelenlévő értékek felülírják az eddigi beállításainkat, a nem szereplő beállítások pedig nem lesznek hatással. A beállítások a már említett módon elkülönülnek (papír, dokumentum, nyomtató), de tovább tudnak propagálni más részekre. Így lehetséges például az, hogy a nagyplakát papírbeállítás hatással van a tekercs szélességére, vagy a matrica beállítás a képpontsűrűségre. 
-
-\begin{figure}
-    \includegraphics[width=\textwidth]{figures/ui_showcase.png}
-    \caption{A felhasználói felület}
-    \label{fig:ui_screenshot}
-\end{figure}
+Egy másik érdekesség talán az előbeállítások betöltésének folyamata. A program JSON fájlokból olvas be, ezek létezését először az adott mappában felderíti, majd rögzíti a név és elérési út párokat. Betöltéskor a JSON-ben jelenlévő értékek felülírják az eddigi beállításainkat, a nem szereplő beállítások pedig nem lesznek hatással. A beállítások a már említett módon elkülönülnek (papír, dokumentum, maszk), de tovább tudnak propagálni más részekre. Így lehetséges például az, hogy a nagyplakát papírbeállítás hatással van a tekercs szélességére, vagy a matrica beállítás a képpontsűrűségre. 
 
 \subsection{Több szálon futás}
 
@@ -47,3 +41,9 @@ Miután már a többszálúságot megoldottam a kép elmentése nem kimondottan 
 \subsection{Refaktorálás}
 
 A félév vége felé haladva elkezdtem refaktorálni a forráskódot. Elkezdtem használni a shared és unique pointereket, megelőzve ezzel a legvalószínűbb memóriaszivárgásokat. A kód nincs dokumentálva, de követi a clean code elveit. 
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{figures/ui_showcase.png}
+    \caption{A felhasználói felület}
+    \label{fig:ui_screenshot}
+\end{figure}
