@@ -31,9 +31,11 @@
 - élesben próba tesztek, eredmények
 - visszajelzések
 - közben felmerült problémák, és azok megoldásai
+- seeeegfault
 
 # összegézés
 - összegzés, kitekintés, lehetséges funkciók
+- összehasonlítás
 
 # felhasználói kézikönyv
 - ...
