@@ -10,6 +10,16 @@
 				"isDefault": true
 			},
 			"problemMatcher": ["$gcc"]
-		}
+		},
+		{
+            "label": "meson_setup",
+            "type": "shell",
+            "command": "meson setup build",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        }
 	]
 }

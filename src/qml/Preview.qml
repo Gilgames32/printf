@@ -58,21 +58,21 @@ Item {
         Text {
             text: "Loading preview..."
             anchors.centerIn: parent
-            color: palette.mid
+            color: palette.midlight
             visible: image.status == Image.Loading
         }
 
         Text {
             text: "//TODO: greeting"
             anchors.centerIn: parent
-            color: palette.mid
+            color: palette.midlight
             visible: image.status == Image.Null
         }
 
         Text {
             text: "Error generating image"
             anchors.centerIn: parent
-            color: palette.mid
+            color: palette.midlight
             visible: image.status == Image.Error
         }
 

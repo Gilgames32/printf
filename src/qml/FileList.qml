@@ -76,7 +76,7 @@ Item {
                         anchors.margins: dmargin
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: palette.mid
+                        color: palette.midlight
                         visible: sourceEntryView.count == 0
                     }
 
@@ -85,7 +85,7 @@ Item {
                 Rectangle {
                     color: "transparent"
                     anchors.fill: parent
-                    border.color: palette.mid
+                    border.color: palette.midlight
                     border.width: 1
                     radius: 5
                     visible: sourceEntryView.count == 0
