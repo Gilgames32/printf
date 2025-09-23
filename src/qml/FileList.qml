@@ -57,6 +57,15 @@ Item {
                     visible: sourceEntryView.count == 0 // FIXME: cant put it behind the list items like before, smth broke this idk
                 }
 
+                Rectangle {
+                    color: palette.mid
+                    anchors.fill: parent
+                    border.color: palette.midlight
+                    border.width: 1
+                    radius: 5
+                    visible: sourceEntryView.count == 0
+                }
+
                 DropArea {
                     id: dropArea
 
@@ -70,7 +79,7 @@ Item {
                     Text {
                         id: noFilesText
 
-                        text: "Double click to open or drag files here"
+                        text: "Double click to open\nor drag files here"
                         wrapMode: Text.WordWrap
                         anchors.fill: parent
                         anchors.margins: dmargin
@@ -80,15 +89,6 @@ Item {
                         visible: sourceEntryView.count == 0
                     }
 
-                }
-
-                Rectangle {
-                    color: "transparent"
-                    anchors.fill: parent
-                    border.color: palette.midlight
-                    border.width: 1
-                    radius: 5
-                    visible: sourceEntryView.count == 0
                 }
 
             }

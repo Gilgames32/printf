@@ -10,7 +10,7 @@ Rectangle {
     property var maskPresetModel: null
     property var entry: model.entry
 
-    color: palette.base
+    color: palette.mid
     radius: 5
     implicitHeight: paddingCol.implicitHeight + 2 * dmargin
 
@@ -97,7 +97,6 @@ Rectangle {
                         SpinBox {
                             id: spinbox
 
-                            Layout.preferredWidth: 60
                             value: entry.amount
                             from: 1
                             to: 1000
