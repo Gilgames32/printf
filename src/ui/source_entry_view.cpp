@@ -1,4 +1,5 @@
 #include "source_entry_view.hpp"
+#include "pdf_source_view.hpp"
 
 SourceEntryView::SourceEntryView(QObject *parent) : QAbstractListModel(parent) { m_data = QList<ImageSourceView *>(); }
 
@@ -47,8 +48,16 @@ void SourceEntryView::clear() {
 
 void SourceEntryView::addFiles(const QStringList &files) {
     for (const QString &file : files) {
-        auto *input_file = new ImageSourceView(file.toStdString());
-
+        ImageSourceView *input_file;
+        if (file.endsWith(".pdf", Qt::CaseInsensitive)) {
+            input_file = new PDFSourceView();
+            input_file->load(file.toStdString()); // TODO configurable default amount
+        }
+        else {
+            input_file = new ImageSourceView();
+            input_file->load(file.toStdString());
+        }
+        
         beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
         m_data.append(input_file);
         endInsertRows();

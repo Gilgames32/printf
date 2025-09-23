@@ -83,11 +83,14 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 
+    // center tiles // TODO configurable
+    int horizontal_offset = (document_width - (columns * tile_width)) / 2;
+
     // copy tiles to document
     auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;
     for (int i = 0; i < corrected_quantity; i++) {
         Tile& tile = tiles[i % quantity];
-        cv::Rect target_rect = cv::Rect((i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
+        cv::Rect target_rect = cv::Rect(horizontal_offset + (i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
 
         tile.get_image().copyTo(document(target_rect));
     }

@@ -21,16 +21,19 @@ class ImageSourceView : public QObject {
     Q_PROPERTY(double height READ get_height NOTIFY heightChanged)
     Q_PROPERTY(MaskFilterView* mask READ get_mask_filter_view NOTIFY maskFilterViewChanged)
 
-  private:
+  protected:
     std::string m_file_path;
     cv::Mat m_image;
     int m_amount;
-    double m_width = 100;
-    double m_height = 100;
+    double m_width;
+    double m_height;
     MaskFilterView mask_filter_view;
+    virtual void load_image();
 
   public:
-    ImageSourceView(const std::string& path, int amount = 20); // TODO: config
+    ImageSourceView();
+
+    void load(const std::string& path, int amount = 1);
 
     QString get_file_name() const;
 

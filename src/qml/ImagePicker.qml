@@ -8,7 +8,7 @@ FileDialog {
     property var onRejectDelegate: () => console.log("File selection canceled");
 
     title: "Select an Image"
-    nameFilters: ["Image files (*.png *.jpg *.jpeg)"]
+    nameFilters: ["Image files (*.png *.jpg *.jpeg *.pdf)"]
     fileMode: FileDialog.OpenFiles
 
     onAccepted: {
