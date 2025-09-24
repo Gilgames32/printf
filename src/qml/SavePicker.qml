@@ -1,6 +1,6 @@
 import QtQuick 6.9
 import QtQuick.Controls 6.9
-import QtQuick.Dialogs 6.9
+import Qt.labs.platform 1.1
 
 FileDialog {
     id: fileDialog
@@ -14,7 +14,7 @@ FileDialog {
     fileMode: FileDialog.SaveFile
     
     onAccepted: {
-        onAcceptDelegate(fileDialog.selectedFile);
+        onAcceptDelegate(fileDialog.file);
     }
     onRejected: {
         onRejectDelegate();

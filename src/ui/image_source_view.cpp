@@ -105,7 +105,7 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
     if (j.contains("width") && j.contains("height")) {
         int width = j["width"];
         int height = j["height"];
-        if (float(width) / float(height) >= 1.0 != get_image_aspect_ratio() >= 1.0) {
+        if ((float(width) / float(height) >= 1.0) != (get_image_aspect_ratio() >= 1.0)) {
             std::swap(width, height);
         }
         m_width = width;
