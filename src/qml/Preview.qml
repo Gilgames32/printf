@@ -5,13 +5,10 @@ Item {
     property alias previewSource: image.source
     property alias previewStatus: image.status
 
+    property var mousePos: Qt.point(0, 0)
     property var zoom: 1.0
     onZoomChanged: {
-        // TODO: mouse position as the zoom center
-        var zoomPoint = Qt.point(flickable.width/2 + flickable.contentX,
-                                flickable.height/2 + flickable.contentY);
-
-        flickable.resizeContent((image.width * zoom), (image.height * zoom), zoomPoint);
+        flickable.resizeContent((image.width * zoom), (image.height * zoom), mousePos);
         //flickable.returnToBounds();
     }
 
@@ -27,6 +24,7 @@ Item {
 
         anchors.fill: parent
         onWheel: (wheel) => {
+            mousePos = Qt.point(wheel.x, wheel.y);
             zoom *= wheel.angleDelta.y > 0 ? 1.25 : 1/1.25
             flickable.returnToBounds();
         }
