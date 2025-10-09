@@ -1,6 +1,7 @@
 #include "image_source.hpp"
 
 #include <stdexcept>
+#include "rotate.hpp"
 
 ImageSource::ImageSource(cv::Mat source, int amount, double width_mm, double height_mm)
     : original(source),
@@ -44,7 +45,12 @@ cv::Mat ImageSource::burn() {
     return get_img();
 }
 
-void ImageSource::set_size_px(int width, int height) {
+void ImageSource::set_size_px(int width, int height, bool auto_rotate) {
+    if (auto_rotate && ((cached.get_width() > cached.get_height()) != (width > height))) {
+        std::swap(width, height);
+        add_filter(std::make_shared<RotateFilter>());
+    }
+
     size_filter.set_size(width, height);
     cached.set_dirty();
 }

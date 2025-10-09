@@ -181,7 +181,7 @@ Item {
                 Button {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 64
-                    text: "Print"
+                    text: "Printf"
                     onClicked: {
                         console.log("Print clicked");
                     }

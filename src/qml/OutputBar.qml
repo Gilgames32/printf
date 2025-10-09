@@ -23,6 +23,7 @@ Rectangle {
 
     height: 40
     color: palette.base
+    clip: true
 
     Row {
         anchors.fill: parent

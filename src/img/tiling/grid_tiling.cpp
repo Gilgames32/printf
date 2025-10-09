@@ -25,7 +25,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
 
     // set uniform sizes and padding
     for (auto img : images) {
-        img->set_size_px(uniform_width_px, uniform_height_px);
+        img->set_size_px(uniform_width_px, uniform_height_px, true);
         img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), padding)); // TODO configurable bleed
         img->burn();
     }

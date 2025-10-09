@@ -38,7 +38,7 @@ class ImageSource : ICachableImage {
 
     int get_height_px() { return cached.get_height(); }
 
-    void set_size_px(int width, int height);
+    void set_size_px(int width, int height, bool auto_rotate = false);
 
     int get_amount() const { return amount; }
 
