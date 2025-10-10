@@ -65,6 +65,10 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
     }
 
     // recursive strip packing
+    int x = 0, y = 0;
+    int current_row_height = 0;
+    auto side_fix = padding - preset.get_line_width();
+    auto document_width = preset.get_document_width_px() + 2 * side_fix;
 
     // find best heuristic
 
