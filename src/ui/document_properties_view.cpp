@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 // TODO: remove constants
 DocumentPropertiesView::DocumentPropertiesView()
-    : m_resolution(300), m_roll_width(609.6), m_margin(0), m_correct_quantity(false), m_gutter(2), m_guides(true) {}
+    : m_resolution(300), m_roll_width(914.4), m_margin(0), m_correct_quantity(false), m_gutter(2), m_guides(true), m_line_width(1), m_bleed(10) {}
 
 void DocumentPropertiesView::load_from_preset(const std::string& preset_path, const std::string& subcategory) {
     std::cout << "Loading preset from: " << preset_path << std::endl;
@@ -52,6 +52,14 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path, co
         m_gutter = j["gutter_mm"].get<double>();
         emit gutterChanged();
     }
+    if (j.contains("line_width_px")) {
+        m_line_width = j["line_width_px"].get<int>();
+        emit lineWidthChanged();
+    }
+    if (j.contains("bleed_mm")) {
+        m_bleed = j["bleed_mm"].get<double>();
+        emit bleedChanged();
+    }
     if (j.contains("correct_quantity")) {
         m_correct_quantity = j["correct_quantity"].get<bool>();
         emit correctQuantityChanged();
@@ -65,8 +73,5 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path, co
 void DocumentPropertiesView::setPreset(const QString& presetPath, const QString& subcategory) { load_from_preset(presetPath.toStdString(), subcategory.toStdString()); }
 
 DocumentPreset DocumentPropertiesView::getDocumentProperties() const {
-    return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides,
-                          1000,  // TODO: remove constant
-                          18000  // TODO: remove constant
-    );
+    return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides, m_line_width, m_bleed);
 }

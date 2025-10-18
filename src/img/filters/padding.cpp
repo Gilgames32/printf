@@ -11,7 +11,7 @@ cv::Mat PaddingFilter::apply(const cv::Mat &image) const {
         padded = image;
     }
 
-    if (guide) {
+    if (guide and line_thickness > 0) {
         int width = padded.cols;
         int height = padded.rows;
 
