@@ -26,7 +26,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     // set uniform sizes and padding
     for (auto img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px, true);
-        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width())); // TODO configurable bleed
+        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
         img->burn();
     }
 
@@ -60,19 +60,18 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         throw std::invalid_argument("Image does not fit in document");
     }
 
-    // apply rotation
-    if (rotate) {
-        std::swap(tile_width, tile_height);
-        for (auto img : images) {
-            img->set_rotated(true);
-        }
-    }
-
     // instantiate tiles based on amounts
     std::vector<Tile> tiles = {};
     for (auto img : images) {
         for (int i = 0; i < img->get_amount(); i++) {
             tiles.push_back(Tile(img));
+        }
+    }
+    // apply rotation
+    if (rotate) {
+        std::swap(tile_width, tile_height);
+        for (auto& tile : tiles) {
+            tile.rotate();
         }
     }
 

@@ -60,7 +60,7 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
         auto width_px = convert::mm_to_pixel(img->width_mm, ppi);
         auto height_px = convert::mm_to_pixel(img->height_mm, ppi);
         img->set_size_px(width_px, height_px, true);
-        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), padding));  // TODO configurable bleed
+        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
         img->burn();
     }
 
