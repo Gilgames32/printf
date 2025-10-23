@@ -64,7 +64,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     if (rotate) {
         std::swap(tile_width, tile_height);
         for (auto img : images) {
-            img->add_filter(std::make_shared<RotateFilter>());
+            img->set_rotated(true);
         }
     }
 

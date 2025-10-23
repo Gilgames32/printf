@@ -27,7 +27,10 @@ class Tile {
 
     int get_height() const { return height; }
 
-    cv::Mat get_image() { return image->get_img(); }
+    cv::Mat get_image() {
+        image->set_rotated(rotated);
+        return image->get_img(); 
+    }
 
     std::shared_ptr<ImageSource> get_source() { return image; }
 };

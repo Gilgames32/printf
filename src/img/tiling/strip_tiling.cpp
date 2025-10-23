@@ -104,7 +104,15 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
 
     // place tiles on the document
 
-    return cv::Mat(100, 100, CV_8UC3, cv::Scalar(255, 255, 255));
+    cv::Mat document(total_height, document_width, CV_8UC3, cv::Scalar(255, 255, 255));
+    for (auto tile : placed) {
+        cv::Rect target_rect = cv::Rect(tile->corner.x, tile->corner.y, tile->get_width(), tile->get_height());
+        
+        tile->get_image().copyTo(document(target_rect));
+    }
+    document = document(cv::Rect(side_fix, side_fix, document_width - 2 * side_fix, total_height - 2 * side_fix));
+
+    return document;
 }
 
 void StripTiling::recursive_packing(int x, int y, int row_width, int row_height, std::vector<std::shared_ptr<Tile>>& remaining, std::vector<std::shared_ptr<Tile>>& placed) {
@@ -132,7 +140,7 @@ void StripTiling::recursive_packing(int x, int y, int row_width, int row_height,
         rotate = is_rotated;
     };
 
-    for (int i = 0; i < remaining.size(); i++) {
+    for (size_t i = 0; i < remaining.size(); i++) {
         auto tile = remaining[i];
         int tile_width = tile->get_width();
         int tile_height = tile->get_height();
@@ -187,9 +195,6 @@ void StripTiling::recursive_packing(int x, int y, int row_width, int row_height,
             recursive_packing(x, y + tile_height, tile_width, row_height - tile_height, remaining, placed);
             recursive_packing(x + tile_width, y, row_width - tile_width, row_height, remaining, placed);
         }
-        break;
-    
-    default:
         break;
     }
 
