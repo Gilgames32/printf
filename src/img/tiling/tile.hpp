@@ -27,6 +27,10 @@ class Tile {
 
     int get_height() const { return height; }
 
+    int get_diagonal_suqared() const { return width * width + height * height; }
+
+    int get_aspect_ratio() const { return (double) width / (double) height; }
+
     cv::Mat get_image() {
         image->set_rotated(rotated);
         return image->get_img(); 
