@@ -13,6 +13,7 @@ class DocumentPreset {
     bool correct_quantity;
     bool guide;
     int line_width_px;
+    double bleed_mm;
 
     double min_height_mm;
     double max_height_mm;
@@ -20,8 +21,8 @@ class DocumentPreset {
   public:
     DocumentPreset(
         // FIXME
-        double ppi = 300, double roll_width_mm = 609.6, double margin_mm = 0, double gutter_mm = 2,
-        bool correct_quantity = false, bool guide = true, int line_width_px = 1, double min_height_mm = 101.6,
+        double ppi = 300, double roll_width_mm = 914.4, double margin_mm = 0, double gutter_mm = 2,
+        bool correct_quantity = false, bool guide = true, int line_width_px = 10, double bleed_mm = 10, double min_height_mm = 101.6,
         double max_height_mm = 18000);
 
     double get_ppi() const { return ppi; }
@@ -40,7 +41,9 @@ class DocumentPreset {
 
     bool get_guide() const { return guide; }
 
-    bool get_correct_quantity() const { return correct_quantity; }
+    int get_line_width() const { return guide ? line_width_px : 0; };
 
-    bool get_line_width() const { return guide ? line_width_px : 0; };
+    int get_bleed_px() const { return convert::mm_to_pixel(bleed_mm, ppi); }
+
+    bool get_correct_quantity() const { return correct_quantity; }
 };

@@ -26,13 +26,13 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     // set uniform sizes and padding
     for (auto img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px, true);
-        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), padding)); // TODO configurable bleed
+        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width())); // TODO configurable bleed
         img->burn();
     }
 
     // padding is added to every tile but its not needed on the sides
     // so extra padding is added to the document width, which is removed after tiling
-    auto side_fix = padding - preset.get_line_width();
+    auto side_fix = std::max(padding - preset.get_line_width(), 0);
     auto document_width = preset.get_document_width_px() + 2 * side_fix;
 
     auto tile_width = images[0]->get_width_px();
