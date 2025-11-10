@@ -200,21 +200,16 @@ void StripTiling::recursive_packing(int x, int y, int row_width, int row_height,
         recursive_packing(x + tile_width, y, row_width - tile_width, row_height, remaining, placed);
         break;
     case 4:
-        int min_width = std::min_element(remaining.begin(), remaining.end(), [](const auto& a, const auto& b) {
-            return a->get_width() < b->get_width();
-        })->get()->get_width();
-        
-        int min_height = std::min_element(remaining.begin(), remaining.end(), [](const auto& a, const auto& b) {
-            return a->get_height() < b->get_height();
-        })->get()->get_height();
-
-        int min_side = std::min(min_width, min_height);
-        
-        if (row_width - tile_width > min_side) {
-            recursive_packing(x + tile_width, y, row_width - tile_width, row_height, remaining, placed);
+        int min_side = std::numeric_limits<int>::max();
+        for (auto t : remaining) {
+            min_side = std::min({min_side, t->get_width(), t->get_height()});
         }
-        else if (row_height - tile_height > min_side) {
+
+        if (row_width - tile_width < min_side) {
             recursive_packing(x, y + tile_height, row_width, row_height - tile_height, remaining, placed);
+        }
+        else if (row_height - tile_height < min_side) {
+            recursive_packing(x + tile_width, y, row_width - tile_width, row_height, remaining, placed);
         }
         else if (tile_width < min_side) {
             recursive_packing(x + tile_width, y, row_width - tile_width, row_height, remaining, placed);
