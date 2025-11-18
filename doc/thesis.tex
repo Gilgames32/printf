@@ -1,3 +1,4 @@
+
 % !TeX spellcheck = hu_HU
 % !TeX encoding = UTF-8
 % !TeX program = xelatex
@@ -23,7 +24,9 @@
 
 \newcommand{\vikcim}{Dokumentumok nyomtatását optimalizáló szoftver fejlesztése} % Cím
 \newcommand{\viktanszek}{\bmeiit} % Tanszék
-\newcommand{\vikdoktipus}{\bsconlab} % Dokumentum típusa (\bsc vagy \msc)
+\newcommand{\vikdoktipus}{\bsc} % Dokumentum típusa (\bsc vagy \msc)
+\newcommand{\vikmunkatipusat}{szakdolgozatot} % a "hallgató nyilatkozat" részhez: szakdolgozatot vagy diplomatervet
+
 
 \newcommand{\szerzoMeta}{\vikszerzoVezeteknev{} \vikszerzoKeresztnev} % egy szerző esetén
 
@@ -43,6 +46,8 @@
 
 \tableofcontents\vfill
 
+\include{include/declaration} %Hallgatói nyilatkozat
+
 \pagenumbering{arabic}
 
 %TODO import your own content
@@ -53,6 +58,24 @@
 \include{content/testing}
 \include{content/summary}
 \include{content/handbook}
+
+%TODO Acknowledgements
+%\include{content/acknowledgement}
+
+
+%TODO List of Figures, Tables
+%\listoffigures\addcontentsline{toc}{chapter}{\listfigurename}
+%\listoftables\addcontentsline{toc}{chapter}{\listtablename}
+
+
+
+%TODO Bibliography
+%\addcontentsline{toc}{chapter}{\bibname}
+%\bibliography{bib/mybib}
+
+
+%TODO Appendix
+%\include{content/appendices}
 
 %\label{page:last}
 \end{document}
