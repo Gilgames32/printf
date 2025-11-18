@@ -46,6 +46,7 @@ Item {
 
                 ColumnLayout {
                     spacing: 10
+                    width: parent.width
 
                     UnitInput {
                         num: docProperties.resolution
@@ -104,6 +105,50 @@ Item {
                         Layout.alignment: Qt.AlignRight
                         Layout.fillWidth: true
                         label.Layout.fillWidth: true
+                    }
+
+                    GroupBox {
+                        id: guidesGroupBox
+
+                        Layout.fillWidth: true
+                        visible: guidesCheckBox.num
+
+                        ColumnLayout {
+                            width: parent.width
+                            spacing: 10
+
+                            UnitSpinBox {
+                                id: lineWidthSpinBox
+
+                                num: docProperties.lineWidth
+                                onValueChangedDelegate: (value) => {
+                                    if (docProperties.lineWidth != value)
+                                        docProperties.lineWidth = value;
+                                }
+                                label.text: "Line Width"
+                                unit.text: "px"
+                                Layout.alignment: Qt.AlignRight
+                                Layout.fillWidth: true
+                                label.Layout.fillWidth: true
+                            }
+
+                            UnitSpinBox {
+                                id: bleedSpinBox
+
+                                num: docProperties.bleed
+                                onValueChangedDelegate: (value) => {
+                                    if (docProperties.bleed != value)
+                                        docProperties.bleed = value;
+                                }
+                                label.text: "Bleed"
+                                unit.text: "mm"
+                                Layout.alignment: Qt.AlignRight
+                                Layout.fillWidth: true
+                                label.Layout.fillWidth: true
+                            }
+
+                        }
+
                     }
 
                     UnitSpinBox {
@@ -181,7 +226,7 @@ Item {
                 Button {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 64
-                    text: "Print"
+                    text: "Printf"
                     onClicked: {
                         console.log("Print clicked");
                     }

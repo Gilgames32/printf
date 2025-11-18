@@ -5,6 +5,13 @@ Item {
     property alias previewSource: image.source
     property alias previewStatus: image.status
 
+    property var mousePos: Qt.point(0, 0)
+    property var zoom: 1.0
+    onZoomChanged: {
+        flickable.resizeContent((image.width * zoom), (image.height * zoom), mousePos);
+        //flickable.returnToBounds();
+    }
+
     Rectangle {
         id: flickArea
 
@@ -17,11 +24,9 @@ Item {
 
         anchors.fill: parent
         onWheel: (wheel) => {
-            let zoomFactor = 1.1;
-            if (wheel.angleDelta.y > 0)
-                image.scale *= zoomFactor;
-            else
-                image.scale /= zoomFactor;
+            mousePos = Qt.point(wheel.x, wheel.y);
+            zoom *= wheel.angleDelta.y > 0 ? 1.25 : 1/1.25
+            flickable.returnToBounds();
         }
     }
 
@@ -29,14 +34,15 @@ Item {
         id: flickable
 
         anchors.fill: parent
-        contentWidth: Math.max(image.width * image.scale, flickArea.width)
-        contentHeight: Math.max(image.height * image.scale, flickArea.height)
+        contentWidth: Math.max(image.width * zoom, flickArea.width)
+        contentHeight: Math.max(image.height * zoom, flickArea.height)
         clip: true
 
         Image {
             id: image
 
             anchors.centerIn: parent
+            scale: zoom
             fillMode: Image.PreserveAspectFit
             smooth: false
             mipmap: false
@@ -45,37 +51,16 @@ Item {
             onStatusChanged: {
                 if (status != Image.Ready)
                     return ;
-
-                scale = 1;
+                
                 // fit image
                 if (width > height)
-                    scale = flickArea.width / width;
+                    zoom = flickArea.width / width;
                 else
-                    scale = flickArea.height / height;
+                    zoom = flickArea.height / height;
+                flickable.returnToBounds();
             }
         }
-
-        Text {
-            text: "Loading preview..."
-            anchors.centerIn: parent
-            color: palette.mid
-            visible: image.status == Image.Loading
-        }
-
-        Text {
-            text: "//TODO: greeting"
-            anchors.centerIn: parent
-            color: palette.mid
-            visible: image.status == Image.Null
-        }
-
-        Text {
-            text: "Error generating image"
-            anchors.centerIn: parent
-            color: palette.mid
-            visible: image.status == Image.Error
-        }
-
+        
         MouseArea {
             anchors.fill: parent
             onWheel: (wheel) => {
@@ -85,7 +70,27 @@ Item {
                 return mouseArea.positionChanged(mouse);
             } // emit the signal to the main mouse area
         }
+    }
 
+    Text {
+        text: "Loading preview..."
+        anchors.centerIn: parent
+        color: palette.midlight
+        visible: image.status == Image.Loading
+    }
+
+    Text {
+        text: "//TODO: greeting"
+        anchors.centerIn: parent
+        color: palette.midlight
+        visible: image.status == Image.Null
+    }
+
+    Text {
+        text: "Error generating image"
+        anchors.centerIn: parent
+        color: palette.midlight
+        visible: image.status == Image.Error
     }
 
 }

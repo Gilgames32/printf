@@ -8,6 +8,7 @@
 #include "ifilter.hpp"
 #include "icachable.hpp"
 #include "size.hpp"
+#include "rotate.hpp"
 
 class ImageSource : ICachableImage {
   private:
@@ -16,6 +17,7 @@ class ImageSource : ICachableImage {
     int amount;
     std::vector<std::shared_ptr<IFilter>> filters;
     SizeFilter size_filter;
+    RotateFilter rotate_filter;
 
   public:
     double width_mm;
@@ -38,7 +40,9 @@ class ImageSource : ICachableImage {
 
     int get_height_px() { return cached.get_height(); }
 
-    void set_size_px(int width, int height);
+    void set_size_px(int width, int height, bool auto_rotate = false);
+
+    void set_rotated(bool rotated = true);
 
     int get_amount() const { return amount; }
 

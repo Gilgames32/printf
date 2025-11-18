@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "grid_tiling.hpp"
+#include "strip_tiling.hpp"
 #include "preview_provider.hpp"
 #include "pnghelper.hpp"
 #include "error_signal.hpp"
@@ -15,8 +16,19 @@ GeneratorView::GeneratorView() {}
 void GeneratorView::generate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources) {
     std::vector<std::shared_ptr<ImageSource>> sources_vector(sources.constBegin(), sources.constEnd());
     
-    GridTiling tiling = GridTiling();  // TODO: other tiling methods
-    cv::Mat result = tiling.generate(properties, sources_vector);
+    if (sources_vector.empty()) {
+        throw std::invalid_argument("No image sources provided");
+    }
+    
+    Tiling* tiling;
+    if (sources_vector.size() == 1) {
+        tiling = new GridTiling();
+    } else {
+        tiling = new StripTiling();
+    }
+    cv::Mat result = tiling->generate(properties, sources_vector);
+    delete tiling;
+
     if (result.empty()) {
         throw std::runtime_error("Failed to generate image");
     }

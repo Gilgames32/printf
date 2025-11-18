@@ -43,6 +43,7 @@ Column {
                 Layout.preferredWidth: 3
 
                 ComboBox {
+                    Layout.fillWidth: true
                     width: parent.width
                     textRole: "name"
                     onActivated: (index) => {

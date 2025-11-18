@@ -25,14 +25,14 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
 
     // set uniform sizes and padding
     for (auto img : images) {
-        img->set_size_px(uniform_width_px, uniform_height_px);
-        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide()));
+        img->set_size_px(uniform_width_px, uniform_height_px, true);
+        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
         img->burn();
     }
 
     // padding is added to every tile but its not needed on the sides
     // so extra padding is added to the document width, which is removed after tiling
-    auto side_fix = padding - preset.get_line_width();
+    auto side_fix = std::max(padding - preset.get_line_width(), 0);
     auto document_width = preset.get_document_width_px() + 2 * side_fix;
 
     auto tile_width = images[0]->get_width_px();
@@ -60,19 +60,18 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         throw std::invalid_argument("Image does not fit in document");
     }
 
-    // apply rotation
-    if (rotate) {
-        std::swap(tile_width, tile_height);
-        for (auto img : images) {
-            img->add_filter(std::make_shared<RotateFilter>());
-        }
-    }
-
     // instantiate tiles based on amounts
     std::vector<Tile> tiles = {};
     for (auto img : images) {
         for (int i = 0; i < img->get_amount(); i++) {
             tiles.push_back(Tile(img));
+        }
+    }
+    // apply rotation
+    if (rotate) {
+        std::swap(tile_width, tile_height);
+        for (auto& tile : tiles) {
+            tile.rotate();
         }
     }
 
@@ -83,11 +82,14 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 
+    // center tiles // TODO configurable
+    int horizontal_offset = (document_width - (columns * tile_width)) / 2;
+
     // copy tiles to document
     auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;
     for (int i = 0; i < corrected_quantity; i++) {
         Tile& tile = tiles[i % quantity];
-        cv::Rect target_rect = cv::Rect((i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
+        cv::Rect target_rect = cv::Rect(horizontal_offset + (i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
 
         tile.get_image().copyTo(document(target_rect));
     }

@@ -13,6 +13,8 @@ class DocumentPropertiesView : public QObject {
     Q_PROPERTY(bool correctQuantity MEMBER m_correct_quantity NOTIFY correctQuantityChanged)
     Q_PROPERTY(double gutter MEMBER m_gutter NOTIFY gutterChanged)
     Q_PROPERTY(bool guides MEMBER m_guides NOTIFY guidesChanged)
+    Q_PROPERTY(int lineWidth MEMBER m_line_width NOTIFY lineWidthChanged)
+    Q_PROPERTY(double bleed MEMBER m_bleed NOTIFY bleedChanged)
 
   private:
     double m_resolution;
@@ -21,6 +23,8 @@ class DocumentPropertiesView : public QObject {
     bool m_correct_quantity;
     double m_gutter;
     bool m_guides;
+    int m_line_width;
+    double m_bleed;
 
   public:
     DocumentPropertiesView();
@@ -38,4 +42,6 @@ class DocumentPropertiesView : public QObject {
     void correctQuantityChanged();
     void gutterChanged();
     void guidesChanged();
+    void lineWidthChanged();
+    void bleedChanged();
 };

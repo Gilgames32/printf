@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_mm, double gutter_mm, bool correct_quantity,
-                               bool guide, int line_width_px, double min_height_mm, double max_height_mm)
+                               bool guide, int line_width_px, double bleed_mm, double min_height_mm, double max_height_mm)
     : ppi(ppi),
       roll_width_mm(roll_width_mm),
       margin_mm(margin_mm),
@@ -11,6 +11,7 @@ DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_m
       correct_quantity(correct_quantity),
       guide(guide),
       line_width_px(line_width_px),
+      bleed_mm(bleed_mm),
       min_height_mm(min_height_mm),
       max_height_mm(max_height_mm) {
     if (ppi <= 0) throw std::invalid_argument("Invalid ppi");
@@ -18,6 +19,7 @@ DocumentPreset::DocumentPreset(double ppi, double roll_width_mm, double margin_m
     if (margin_mm < 0) throw std::invalid_argument("Invalid margin");
     if (gutter_mm < 0) throw std::invalid_argument("Invalid gutter");
     if (line_width_px < 0) throw std::invalid_argument("Invalid line width");
+    if (bleed_mm < 0) throw std::invalid_argument("Invalid bleed");
     if (min_height_mm <= 0) throw std::invalid_argument("Invalid minimum height");
     if (max_height_mm <= 0 || min_height_mm > max_height_mm) throw std::invalid_argument("Invalid maximum height");
 }

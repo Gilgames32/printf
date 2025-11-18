@@ -1,3 +1,4 @@
+#include <QApplication>
 #include <QtGui>
 #include <QtQml>
 
@@ -10,7 +11,7 @@
 #include "error_signal.hpp"
 
 int main(int argc, char *argv[]) {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     qmlRegisterType<SourceEntryView>("printf", 1, 0, "SourceEntryView");
     qmlRegisterType<PresetView>("printf", 1, 0, "PresetView");

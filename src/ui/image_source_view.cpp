@@ -9,19 +9,23 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
-ImageSourceView::ImageSourceView(const std::string& path, int amount) : m_file_path(path), m_amount(amount), mask_filter_view() {
-    if (m_file_path.rfind("file://", 0) == 0) {
-        m_file_path = m_file_path.substr(7);
+ImageSourceView::ImageSourceView(): m_file_path(""), m_image(cv::Mat()), m_amount(1), m_width(0), m_height(0), mask_filter_view() {}
+
+void ImageSourceView::load(const std::string& path, int amount) {
+    m_amount = amount;
+    
+    if (path.rfind("file://", 0) == 0) {
+        m_file_path = path.substr(7);
+    }
+    else {
+        m_file_path = path;
     }
 
     if (!std::filesystem::exists(m_file_path)) {
         throw std::invalid_argument("File does not exist: " + m_file_path);
     }
 
-    m_image = cv::imread(m_file_path, cv::IMREAD_UNCHANGED);
-    if (m_image.empty()) {
-        throw std::runtime_error("Failed to load image: " + m_file_path);
-    }
+    load_image();
 
     // blending to white if it has an alpha channel
     if ((m_image.type() == CV_8UC4) || (m_image.channels() == 4)) {
@@ -58,6 +62,13 @@ ImageSourceView::ImageSourceView(const std::string& path, int amount) : m_file_p
     m_height = convert::pixel_to_mm(m_image.rows, 96.0);
 }
 
+void ImageSourceView::load_image() {
+    m_image = cv::imread(m_file_path, cv::IMREAD_UNCHANGED);
+    if (m_image.empty()) {
+        throw std::runtime_error("Failed to load image: " + m_file_path);
+    }
+}
+
 QString ImageSourceView::get_file_name() const {
     return QString::fromStdString(std::filesystem::path(m_file_path).filename().string());
 }
@@ -90,12 +101,16 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
         m_amount = j["amount"];
         emit amountChanged();
     }
-    if (j.contains("width")) {
-        m_width = j["width"];
+
+    if (j.contains("width") && j.contains("height")) {
+        int width = j["width"];
+        int height = j["height"];
+        if ((float(width) / float(height) >= 1.0) != (get_image_aspect_ratio() >= 1.0)) {
+            std::swap(width, height);
+        }
+        m_width = width;
+        m_height = height;
         emit widthChanged();
-    }
-    if (j.contains("height")) {
-        m_height = j["height"];
         emit heightChanged();
     }
 }

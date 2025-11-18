@@ -1,6 +1,7 @@
 #include "image_source.hpp"
 
 #include <stdexcept>
+#include "rotate.hpp"
 
 ImageSource::ImageSource(cv::Mat source, int amount, double width_mm, double height_mm)
     : original(source),
@@ -8,6 +9,7 @@ ImageSource::ImageSource(cv::Mat source, int amount, double width_mm, double hei
       amount(amount),
       filters(),
       size_filter(SizeFilter(source.cols, source.rows)),
+      rotate_filter(RotateFilter()),
       width_mm(width_mm),
       height_mm(height_mm) {
     if (source.cols <= 0 || source.rows <= 0) throw std::invalid_argument("Invalid source");
@@ -31,6 +33,7 @@ void ImageSource::clear_filters() {
 cv::Mat ImageSource::apply_filters() const {
     cv::Mat image = original;
     image = size_filter.apply(image);
+    image = rotate_filter.apply(image);
     for (auto filter : filters) {
         image = filter->apply(image);
     }
@@ -41,10 +44,22 @@ cv::Mat ImageSource::burn() {
     original = apply_filters();
     clear_filters();
     size_filter.set_size(original.cols, original.rows);
+    rotate_filter.set_rotated(false);
     return get_img();
 }
 
-void ImageSource::set_size_px(int width, int height) {
+void ImageSource::set_size_px(int width, int height, bool auto_rotate) {
+    if (auto_rotate && ((cached.get_width() > cached.get_height()) != (width > height))) {
+        std::swap(width, height);
+        set_rotated(true);
+    }
+
     size_filter.set_size(width, height);
     cached.set_dirty();
+}
+
+void ImageSource::set_rotated(bool rotated) { 
+    if (rotate_filter.get_rotated() == rotated) return;
+    rotate_filter.set_rotated(rotated); 
+    cached.set_dirty(); 
 }
