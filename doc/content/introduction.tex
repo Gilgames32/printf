@@ -1,21 +1,35 @@
 \chapter{\bevezetes}
 
-Nagyjából egy évvel ezelőtt csatlakoztam a KBPR kollégiumi öntevékeny körbe. A kör végzi el a kollégium szinte minden nyomtatási munkáját különböző partnerek nyomtatóin, többek közt egy Canon imagePROGRAF PRO-4600 plotteren. Papírtekercsekre nyomtatunk, viszont a kinyomtatott dokumentumok nem mindig tekercs szélességűek. Ez kimondottan gyakori eset, hiszen a legtöbb esetben A4-es méretben nyomtatunk, csak vastagabb, minőségibb papírra. Ilyen esetekre szolgált egy \href{fig:old_ui}{Adobe Photoshop script}, ami megpróbálta úgy elrendezni a megadott dokumentumokat, hogy azok egy tekercs szélességű rácson a lehető legkevesebb papírfelesleggel helyezkedjenek el, majd hozzáadott segédvonalakat, amik mentén később a kívánt méretre lehet vágni a kinyomtatott papírt.
+\section{Problémafelvetés}
 
-Ez a script több hallgató keze műve volt, más-más verziói különböző funkcionalitást voltak képtelenek megvalósítani. Több sebből vérzett, de a legkevésbé sem tudom emiatt az eredeti szerzőit hibáztatni - a scriptet egy évvel ezelőtt erőteljesen refaktoráltam, és saját magam is szembesültem az Adobe ExtendScript nehézségeivel. A projekt nyílt forráskódú és a \href{https://github.com/SCH-KB-PR/kbpr-ps}{https://github.com/SCH-KB-PR/kbpr-ps} oldalon érhető el.
+A Schönherz Zoltán kollégiumban hetente megannyi plakát kerül kinyomtatásra. Ezt a feladatot a \vik lelkes hallgatói látják el, kisebb irodai nyomtatók mellett egy Canon imagePROGRAF PRO-4600 plotteren is. A plotteren különböző célokra különböző szélességű és anyagtulajdonságú papírtekercsekre nyomtatunk. Leggyakrabban egy adott, kisebb méretű dokumentumot kell nagy mennyiségben kinyomtatnunk. Ha ezeket próbálnánk meg egyesével kinyomtatni, a nyomtató egymás fölé helyezve nyomtatná ki a dokumentumokat, melyek méretei eltörpülnek a tekecs teljes szélessége mellett, így ez hatalmas papírfelesleget eredményezne.
 
-Felmerült az is, hogy keressünk már létező, erre specializálódó szoftvert. Egy plottercsere után erre sor is került, ugyanis járt mellé több különböző hivatalos Canon szoftver, azonban egyikük sem felelt meg a céljainknak, hasonlóképp mindegyikből hiányzott egy-egy funkció, amire szükségünk volt, nem beszélve arról, hogy hasonlóképp lassúak és nehezen használhatóak voltak, és hogy kizárólag Windows operációs rendszer alatt működnek.
+Ilyen esetekre szolgált egy \href{fig:old_ui}{Adobe Photoshop script}, mely négyzetrácsszerűen felosztotta a papírtekercset, és a rács celláiba helyezte el a dokumentumokat. A szkript emellet egyéb hasznos funkciókkal is rendelkezett, például segédvonalakkal látta el az elkészült dokumentumot a cellák mentén, ami lehetővé tette a precíz vágást a nyomdai vágóasztalokon.
+Ez a szkript több hallgató keze műve volt, hat különböző verzióját egyszerre használtuk, mert egyik sem volt teljesen megfelelő minden felhasználási esetre. Csatlakozásomkor ezt a szkriptet saját magam is refaktoráltam, kijavítva az előző verziók hibáit, egyesítve funkcióikat illetve ellátva néhány új extra funkcióval. A projekt nyílt forráskódú és a \href{https://github.com/SCH-KB-PR/kbpr-ps}{https://github.com/SCH-KB-PR/kbpr-ps} oldalon érhető el.
 
-A refaktorált script egy nagy erőlelépést jelentett, és gyorsan áttértünk a használatára. Azonban ez sem volt tökéletes, főként a Photoshop hatalmas overheadje miatt: a dokumentumok generálása sokáig tartott, és volt, hogy a rendelkezésre álló 8 GB ram sem volt elég. Ezeket a program script jellegéből adódóan nem volt lehetőségem tovább optimalizálni, ezért is szerettem volna elkészíteni egy hasonló programot, ami már a kezdetektől fogva törekszik az optimalizációra. Felmerült továbbá az az ötlet is, hogy tudjunk különböző méretű képeket egyszerre nyomtatni, erre még később kitérek.
+Felmerült az is, hogy keressünk már létező, erre specializálódott szoftvert. A régi plotter cseréje után erre sort is kerítettünk, az új mellé különféle hivatalos szoftvert kaptunk, melyek hasonló célokra voltak tervezve. Sajnos ezek a szoftverek több sebből is véreztek, rengeteg számunkra fontos funkció hiányzott belőlük, a szkripthez hasonlóan egyik sem volt minden szempontból működőképes, nem beszélve arról, hogy nem volt hozzáférésünk a forráskódhoz, ellehetetlenítve ezzel a sajátos felhasználásunkhoz elengedhetetlen extra funkciókat, és kizárólag Windows operációs rendszerek alatt futottak.
 
-Az ötlet még 2024 végén érkezett, amikor egy közös szoftverfejlesztési projektet szerettünk volna egy barátommal, Orbán Levente Lászlóval. Eleinte nem volt szilárd elképzelésünk, viszont annyi biztos volt, hogy nyílt forráskódú és elsősorban Linux operációs rendszert támogató programot szeretnénk közösen készíteni, ahol a nyelvi elemek terén ő tudna engem, a tervezés terén pedig én tudnám őt mentorálni. Az ő hozzájárulásával választottam az akkor még felettébb kezdetleges projektet az önálló laboratóriumom témájának, és a munkáját részletezni fogom.
+A refaktorált szkript már egy nagy erőlelépést jelentett, így jobb híján maradtunk a használatánál. Tudtuk, hogy nem tökéletes, főkét a Photoshop hatalmas overheadje miatt a dokumentumok generálása túl sokáig tartott, és volt, hogy a rendelkezésre álló 8 GB rendelkezésre álló memória sem volt elég a teljes dokumentumhoz. Sajnos az Adobe ExtendScript szkriptnyelv jellegéből adódóan felettébb limitáltak a lehetőségek bármi nemű optimalizálásra. Gyakorta előjöttek olyan esetek is, hogy különböző méretű dokumentumokat szerettünk volna nyomtatni, de a szkript csak egységes cellaméretekkel volt képes dolgozni, külön nyomtatni pedig némi extra papírfelesleggel járt.
 
-\break
-
-A továbbiakban szeretnék részletesebben kitérni a program specifikációjára, a rendszer tervére, annak megvalósítására és a felmerült nehézségekre, majd a szoftver tesztelésre, értékelésére, végül a projekt jövőjére. Mellékletként egy rövid felhasználói kézikönyvet is készítettem.
-
-\begin{figure}[h]
+\begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/script_showcase.png}
     \label{fig:old_ui}
     \caption{A kör által Photoshop script felhasználói felülete}
 \end{figure}
+
+\section{Célkitűzés}
+
+Az volt a célom, hogy a nyomtatást egyszerűbbé, gyorsabbá és hatékonyabbá tegyem, törekedve a minimális keletkező papírfeleslegre, a szkriptek funkcióit megtartva illetve egyéb hasznos ötletekkel kibővítve. 
+
+\section{A feladat értelmezése}
+
+A feladat egy dokumentumok nyomtatását optimalizáló szoftver elkészítése, ami minimalizálja az elrendezésből adódó papírfelesleget, törekedve a program lefutásának gyorsaságára és annak könnyen használhatóságára.
+
+\section{A feladat indokoltásga}
+
+A plotterekhez kapott hivatalos szoftvereken kívül nem találtunk más, a célra megfelelő eszközt az interneten. Ebből adódóan úgy láttam, hogy indokolt lenne egy erre specializálódó programot készíteni, és hogy a programomat egy nyílt forráskódú projektként szeretném karbantartani, hogy más nyomdák is át tudjanak térni a használatára.
+
+\section{A dolgozat felépítése}
+
+TODO
+%A továbbiakban szeretnék részletesebben kitérni a program specifikációjára, a rendszer tervére, annak megvalósítására és a felmerült nehézségekre, majd a szoftver tesztelésre, értékelésére, végül a projekt jövőjére. Mellékletként egy rövid felhasználói kézikönyvet is készítettem.
