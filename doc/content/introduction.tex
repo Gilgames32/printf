@@ -9,12 +9,12 @@ Ez a szkript több hallgató keze műve volt, hat különböző verzióját egys
 
 Felmerült az is, hogy keressünk már létező, erre specializálódott szoftvert. A régi plotter cseréje után erre sort is kerítettünk, az új mellé különféle hivatalos szoftvert kaptunk, melyek hasonló célokra voltak tervezve. Sajnos ezek a szoftverek több sebből is véreztek, rengeteg számunkra fontos funkció hiányzott belőlük, a szkripthez hasonlóan egyik sem volt minden szempontból működőképes, nem beszélve arról, hogy nem volt hozzáférésünk a forráskódhoz, ellehetetlenítve ezzel a sajátos felhasználásunkhoz elengedhetetlen extra funkciókat, és kizárólag Windows operációs rendszerek alatt futottak.
 
-A refaktorált szkript már egy nagy erőlelépést jelentett, így jobb híján maradtunk a használatánál. Tudtuk, hogy nem tökéletes, főkét a Photoshop hatalmas overheadje miatt a dokumentumok generálása túl sokáig tartott, és volt, hogy a rendelkezésre álló 8 GB rendelkezésre álló memória sem volt elég a teljes dokumentumhoz. Sajnos az Adobe ExtendScript szkriptnyelv jellegéből adódóan felettébb limitáltak a lehetőségek bármi nemű optimalizálásra. Gyakorta előjöttek olyan esetek is, hogy különböző méretű dokumentumokat szerettünk volna nyomtatni, de a szkript csak egységes cellaméretekkel volt képes dolgozni, külön nyomtatni pedig némi extra papírfelesleggel járt.
+A refaktorált szkript már egy nagy erőlelépést jelentett, így jobb híján maradtunk a használatánál. Tudtuk, hogy nem tökéletes, főkét a Photoshop hatalmas overheadje miatt a dokumentumok generálása túl sokáig tartott, és volt, hogy a rendelkezésre álló 8 GB memória sem volt elég egy teljes dokumentumhoz. Sajnos az Adobe ExtendScript szkriptnyelv jellegéből adódóan felettébb limitáltak a lehetőségek bármi nemű optimalizálásra. Gyakorta előjöttek olyan esetek is, hogy különböző méretű dokumentumokat szerettünk volna nyomtatni, de a szkript csak egységes cellaméretekkel volt képes dolgozni, külön nyomtatni pedig némi extra papírfelesleggel járt.
 
 \begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/script_showcase.png}
     \label{fig:old_ui}
-    \caption{A kör által Photoshop script felhasználói felülete}
+    \caption{A refaktorált Photoshop script felhasználói felülete}
 \end{figure}
 
 \section{Célkitűzés}

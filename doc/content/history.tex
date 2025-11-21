@@ -1,0 +1,66 @@
+% Előzmények (irodalomkutatás, hasonló alkotások), az ezekből levonható következtetések
+
+% előző scriptek
+% hivatalos programok is csak griden
+% hol használnak még ilyet nyomtatáson kívül (üveg)
+% ládapakolás, np nehéz
+% extra megkötés, vágóasztallal vágás
+% talált irodalom
+% felhasznált pszeudokód? idk
+% egyéb algoritmusok a strip packingen kívül
+
+\chapter{Előzmények}
+
+\section{Hivatalos szoftverek}
+
+A Canon imagePROGRAF PRO-4600 plotterhez több különféle nyomtatási segédprogramot is kaptunk. Megpróbáltunk áttérni a használatukra, viszont alapvető funckiók hiányoztak belőlük. A legtöbb program csak kézzel való elrendezést tett lehetővé, a mi esetünkben ez viszont egy visszalépést jelentett volna a szkripttel szemben.
+
+\section{A Photoshop szkriptről}
+
+TODO normális formázás és vesszők
+
+A szkript által használt algoritmus felettébb egyszerű. A dokumentumot egy rács mentén cellákra osztjuk fel, ahol minden cella mérete a kinyomtatni kívánt kép méretének felel meg.
+Nem mindegy, hogy a cellák fekvő vagy álló tájolással vannak elhelyezve a dokumentumon, ugyanis ez különböző mennyiségű felesleget eredményezhet.
+
+TODO kép
+
+Az orientáció kiszámításához megvizsgáljuk mindkét esetet, egy teljesen kitöltött sorra. Legyen a tekercs szélessége $W$, a keletkező felesleg pedig $A$. Vegyünk egy képet, ahol a kép szélessége $w$, magassága $h$, orientációja $r$. Ekkor a keletkező felesleg
+
+$$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h$$
+
+illetve ellentétes orientáció esetén
+
+$$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w$$
+
+
+A kevesebb felesleget eredényező eset határozza meg az orientációt. Az orientáció alapján kiszámolható az rács oszlopainak száma, $m$. Ez $n$ kinyomtatni kívánt kép esetén $k$ oszlopot eredményez, ahol
+
+$$k = \bigg\lceil \cfrac{n}{m} \bigg\rceil$$
+
+Amennyiben
+
+$$ n \mod m \neq 0$$
+
+úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
+
+TODO kép
+
+Emiatt született meg az opció a mennyiség korrigálására, mely megnöveli $n$-t úgy, hogy a korrigálás előtti esetleges üres cellákba is kerüljenek képek.
+
+$$n' = k * m$$
+
+TODO kép
+
+Ez a megoldás sajnos nem tökéletes. Ha az utolsó sorunk cellái nincsenek teljesen kitöltve, akkor nem biztos, hogy $r$ orientáció valóban kevesebb felesleggel fog járni.
+
+TODO még magyarázat hogy ezt hogyan vagy hogy erre még visszatérek idk
+
+\section{Különböző méretű képek elrendezése}
+
+A különböző méretű dobozok fix területre történő elhelyezése a ládapakolási problémára vezethető vissza. A mi problémánk egy speciális esete ennek. A tekercs szélessége fix, a magassága viszont tetszőleges, de minimalizálni szeretnénk. Az eredménynek vágóasztallal vághatónak kell lennie.
+
+\subsection{Guillotine vágás}
+
+\subsection{Szalagra csempéző algoritmus}
+
+\subsection{Egyéb algoritmusok}
