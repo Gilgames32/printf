@@ -26,20 +26,20 @@ TODO kép
 
 Az orientáció kiszámításához megvizsgáljuk mindkét esetet, egy teljesen kitöltött sorra. Legyen a tekercs szélessége $W$, a keletkező felesleg pedig $A$. Vegyünk egy képet, ahol a kép szélessége $w$, magassága $h$, orientációja $r$. Ekkor a keletkező felesleg
 
-$$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h$$
+$$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h,$$
 
 illetve ellentétes orientáció esetén
 
-$$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w$$
+$$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w,$$
 
 
 A kevesebb felesleget eredényező eset határozza meg az orientációt. Az orientáció alapján kiszámolható az rács oszlopainak száma, $m$. Ez $n$ kinyomtatni kívánt kép esetén $k$ oszlopot eredményez, ahol
 
-$$k = \bigg\lceil \cfrac{n}{m} \bigg\rceil$$
+$$k = \bigg\lceil \cfrac{n}{m} \bigg\rceil.$$
 
 Amennyiben
 
-$$ n \mod m \neq 0$$
+$$ n \mod m \neq 0,$$
 
 úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
 
