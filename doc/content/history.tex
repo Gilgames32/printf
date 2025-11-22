@@ -30,7 +30,7 @@ $$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h,$
 
 illetve ellentétes orientáció esetén
 
-$$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w,$$
+$$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w.$$
 
 
 A kevesebb felesleget eredényező eset határozza meg az orientációt. Az orientáció alapján kiszámolható az rács oszlopainak száma, $m$. Ez $n$ kinyomtatni kívánt kép esetén $k$ oszlopot eredményez, ahol
@@ -61,6 +61,29 @@ A különböző méretű dobozok fix területre történő elhelyezése a ládap
 
 \subsection{Guillotine vágás}
 
-\subsection{Szalagra csempéző algoritmus}
+A guillotine vágás egy olyan folyamat, ahol egy nagyobb lemezt vágunk fel előre megadott, kisebb téglalapokra, guillotine vágásokkal. A guillotine vágások, más néven széltől-szélig vágások egyik oldaltól a másik oldalig tartó egyenes vágások, melyek az téglalapot két részre osztják fel. Ezt az eljárást elsősorban üveg, acél, fa illetve kartonpapír lapok felvágásakor alkalmazzák. Több különböző szempont alapján is próbálhatjuk optimalizálni a problémát, például maximalizálni a kapott elemek területét, értékét vagy számát illetve minimalizálni a szükséges vágások számát vagy a keletkező felseleget.
 
-\subsection{Egyéb algoritmusok}
+A guillotine vágás esetén a lemezek mérete előre meg van adva, és a kisebb téglalapok mennyisége nincsen megkötve. A mi esetünk ugyan nagyban hasonlít a guillotine vágásra, leszámítva, hogy a képek mennyisége fix, és csak a tekercs szélessége adott. Ennek tudatában folytattuk tovább a kutatómunkát barátommal és kollégámmal, Orbán Levente Lászlóval.
+
+% TODO forrás megjelölés: https://en.wikipedia.org/wiki/Guillotine_cutting
+
+\subsection{Tekercsre pakolás probléma}
+
+A tekercsre pakolás probléma egy két dimenziós geometriai minimalizálási probléma. Adott egy tekercs fix szélességgel és tetszőleges magassággal, valamint a tekercsre helyezendő téglalapok. Meghatározandó egy elrendezés, mely átfedés nélkül helyezi el a téglalapokat a tekercsre, minimalizálva a felhasznált tekercsrész magasságát. Legtöbbet a textil- és papírtekercsek feldolgozásával foglalkozó kontextusokban találkozhatunk ilyen megoldásokkal.
+
+Sajnos a tekercsre pakolási probléma erősen NP-nehéz, mert magában tartalmazza a ládapakolási problémát fix magasságú elemekkel. 
+
+% TODO forrás megjelölés: https://en.wikipedia.org/wiki/Strip_packing_problem
+
+A feladatunk tehát visszavezethető a tekercsre pakolás és a guillotine vágás keveréke, egy tekercsre kell guillotine-nal vágható elrendezésben pakolnunk az elemeinket. Szerencsénkre ez már egy ismert speciális esete a tekercsre pakolásnak, és több különféle algoritmus is létezik már rá.
+
+\section{A választott algoritmusok}
+
+Egyetlen méret nyomtatása esetén a régi szkript kapcsán ismertetett rácsra helyezés javított változata már egy optimális megoldás, és megvan az opciónk, hogy korrigáljuk a mennyiséget az esetleges ki nem töltött cellák alapján. 
+Különböző méretű képek esetén a probléma erősen NP-nehéz voltából adódóan úgy döntöttünk, hogy nem fogunk optimális megoldást keresni, ugyanis fontos szempont volt a program futásának ideje, és mert az esetek túlnyomó többségében nem nyomtatunk több különböző méretben egyszerre.  
+
+Leventének köszönhetően találtuk meg a 
+
+% TODO https://sci-hub.se/10.1016/j.ipl.2015.08.008
+
+% TODO egyéb heurisztikák
