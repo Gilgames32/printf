@@ -15,6 +15,8 @@ class DocumentPropertiesView : public QObject {
     Q_PROPERTY(bool guides MEMBER m_guides NOTIFY guidesChanged)
     Q_PROPERTY(int lineWidth MEMBER m_line_width NOTIFY lineWidthChanged)
     Q_PROPERTY(double bleed MEMBER m_bleed NOTIFY bleedChanged)
+    Q_PROPERTY(double minHeight MEMBER m_min_height NOTIFY minHeightChanged)
+    Q_PROPERTY(double maxHeight MEMBER m_max_height NOTIFY maxHeightChanged)
 
   private:
     double m_resolution;
@@ -25,6 +27,8 @@ class DocumentPropertiesView : public QObject {
     bool m_guides;
     int m_line_width;
     double m_bleed;
+    double m_min_height;
+    double m_max_height;
 
   public:
     DocumentPropertiesView();
@@ -44,4 +48,6 @@ class DocumentPropertiesView : public QObject {
     void guidesChanged();
     void lineWidthChanged();
     void bleedChanged();
+    void minHeightChanged();
+    void maxHeightChanged();
 };

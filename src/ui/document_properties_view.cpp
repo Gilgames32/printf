@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 // TODO: remove constants
 DocumentPropertiesView::DocumentPropertiesView()
-    : m_resolution(300), m_roll_width(914.4), m_margin(0), m_correct_quantity(false), m_gutter(2), m_guides(true), m_line_width(1), m_bleed(10) {}
+    : m_resolution(300), m_roll_width(914.4), m_margin(0), m_correct_quantity(false), m_gutter(2), m_guides(true), m_line_width(1), m_bleed(10), m_min_height(101.6), m_max_height(18000) {}
 
 void DocumentPropertiesView::load_from_preset(const std::string& preset_path, const std::string& subcategory) {
     std::cout << "Loading preset from: " << preset_path << std::endl;
@@ -68,10 +68,19 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path, co
         m_guides = j["guide"].get<bool>();
         emit guidesChanged();
     }
+    // TODO: move this to printer presets
+    if (j.contains("min_height_mm")) {
+        m_min_height = j["min_height_mm"].get<double>();
+        emit minHeightChanged();
+    }
+    if (j.contains("max_height_mm")) {
+        m_max_height = j["max_height_mm"].get<double>();
+        emit maxHeightChanged();
+    }
 }
 
 void DocumentPropertiesView::setPreset(const QString& presetPath, const QString& subcategory) { load_from_preset(presetPath.toStdString(), subcategory.toStdString()); }
 
 DocumentPreset DocumentPropertiesView::getDocumentProperties() const {
-    return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides, m_line_width, m_bleed);
+    return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides, m_line_width, m_bleed, m_min_height, m_max_height);
 }
