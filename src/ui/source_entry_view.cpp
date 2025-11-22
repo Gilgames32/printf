@@ -65,10 +65,10 @@ void SourceEntryView::addFiles(const QStringList &files) {
     emit amountChanged();
 }
 
-QList<std::shared_ptr<ImageSource>> SourceEntryView::getImageSources() const {
+QList<std::shared_ptr<ImageSource>> SourceEntryView::getImageSources(const DocumentPreset &preset) {
     QList<std::shared_ptr<ImageSource>> sources;
-    for (const auto &source : m_data) {
-        sources.append(source->get_image_source());
+    for (auto &source : m_data) {
+        sources.append(source->get_image_source(preset));
     }
     return sources;
 }

@@ -1,9 +1,16 @@
 #include "pdf_source_view.hpp"
 #include <poppler-qt6.h>
+#include <iostream>
 
 PDFSourceView::PDFSourceView() : ImageSourceView() {}
 
-void PDFSourceView::load_image() {
+std::shared_ptr<ImageSource> PDFSourceView::get_image_source(const DocumentPreset& preset) {
+    load_image(preset.get_ppi());
+    convert_image();
+    return ImageSourceView::get_image_source(preset);
+}
+
+void PDFSourceView::load_image(double ppi) {
 
     auto doc = Poppler::Document::load(QString::fromStdString(m_file_path));
     if (!doc) {
@@ -19,7 +26,7 @@ void PDFSourceView::load_image() {
     doc->setRenderHint(Poppler::Document::TextAntialiasing);
     doc->setRenderHint(Poppler::Document::ThinLineSolid);
 
-    QImage img = page->renderToImage(300, 300); // TODO follow document size
+    QImage img = page->renderToImage(ppi, ppi);
     if (img.isNull()) {
         throw std::runtime_error("Failed to render the pdf: " + m_file_path);
     }

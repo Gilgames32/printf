@@ -5,7 +5,8 @@
 #include <memory>
 
 #include "image_source_view.hpp"
-#include <image_source.hpp>
+#include "image_source.hpp"
+#include "document_preset.hpp"
 
 class SourceEntryView : public QAbstractListModel {
     Q_OBJECT
@@ -33,7 +34,7 @@ class SourceEntryView : public QAbstractListModel {
     Q_INVOKABLE void clear();
     Q_INVOKABLE void addFiles(const QStringList &files);
 
-    Q_INVOKABLE QList<std::shared_ptr<ImageSource>> getImageSources() const;
+    Q_INVOKABLE QList<std::shared_ptr<ImageSource>> getImageSources(const DocumentPreset &preset);
 
   signals:
     void amountChanged();
