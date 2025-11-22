@@ -39,3 +39,19 @@ output/
 
 # vscode
 .vscode/settings.json
+
+# latex
+*.aux
+*.bbl
+*.blg
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.toc
+*.thm
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+thesis.pdf
