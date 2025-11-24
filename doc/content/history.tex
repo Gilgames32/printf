@@ -28,7 +28,7 @@ Az orientáció kiszámításához megvizsgáljuk mindkét esetet, egy teljesen 
 
 $$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h,$$
 
-illetve ellentétes orientáció esetén
+\noindent illetve ellentétes orientáció esetén
 
 $$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w.$$
 
@@ -37,17 +37,19 @@ A kevesebb felesleget eredényező eset határozza meg az orientációt. Az orie
 
 $$k = \bigg\lceil \cfrac{n}{m} \bigg\rceil.$$
 
-Amennyiben
+\noindent Amennyiben
 
 $$ n \mod m \neq 0,$$
 
-úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
+\noindent úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
 
 TODO kép
 
-Emiatt született meg az opció a mennyiség korrigálására, mely megnöveli $n$-t úgy, hogy a korrigálás előtti esetleges üres cellákba is kerüljenek képek.
+TODO fix indentation
 
-$$n' = k * m$$
+Emiatt született meg az opció a mennyiség korrigálására, mely megnöveli $n$-t úgy, hogy a korrigálás előtti esetleges üres cellákba is kerüljenek képek:
+
+$$n' = k * m.$$
 
 TODO kép
 
