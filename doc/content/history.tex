@@ -82,10 +82,27 @@ A feladatunk tehát visszavezethető a tekercsre pakolás és a guillotine vág�
 \section{A választott algoritmusok}
 
 Egyetlen méret nyomtatása esetén a régi szkript kapcsán ismertetett rácsra helyezés javított változata már egy optimális megoldás, és megvan az opciónk, hogy korrigáljuk a mennyiséget az esetleges ki nem töltött cellák alapján. 
+
 Különböző méretű képek esetén a probléma erősen NP-nehéz voltából adódóan úgy döntöttünk, hogy nem fogunk optimális megoldást keresni, ugyanis fontos szempont volt a program futásának ideje, és mert az esetek túlnyomó többségében nem nyomtatunk több különböző méretben egyszerre.  
 
-Leventének köszönhetően találtuk meg a 
+Leventének köszönhetően találtuk meg a \cite{ph} cikket, melyben pont egy számunkra kedvező heurisztikus megoldást mutatnak be. Az algoritmus heurisztikus voltából adódóan nem ad mindig optimális megolást, komplexitása azonban csupán $O(n^2)$. A megoldás egy rekurzív megközelítést alkalmaz, ami elősegíti, hogy az eredmény biztosan vágóasztallal vágható legyen. A koncepció egyszerű: egy téglalapra helyezzük az elemeinket, minden lehelyezett elem további téglalapokat határoz meg. Egy elem elhelyezésénél öt esetet különböztethetünk meg.
 
-% TODO https://sci-hub.se/10.1016/j.ipl.2015.08.008
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{figures/priority.pdf}
+    \caption{A lehetséges esetek egy elem elehelyezésekor. A fekete téglalapok az elemet jelölik.}
+    \label{fig:placements}
+\end{figure}
+
+Az \href{fig:placements}{(a)} eset a legkedvezőbb, ebben az esetben a rendelkezésre álló helyet az elem teljesen kitölti. A \href{fig:placements}{(b)} és \href{fig:placements}{(c)} esetek kedvezőbbek, mint \href{fig:placements}{(d)}, mert ekkor az üresen maradt hely egyetlen téglalapot eredményez. Az \href{fig:placements}{(e)} esetben semmilyen elemet sem tudunk a téglalapra helyezni, a terület ekkor felesleggé válik.
+
+Első lépésben minden elemünket a rövidebbik élére állítjuk, majd valamilyen heurisztika alapján sorba rendezzük őket (pl. magasság szerint csökkenő sorrendbe). Az ábra (\ref{fig:placements}) alapján \href{fig:placements}{(a)}-\href{fig:placements}{(e)} esetekhez rendre prioritásokat rendelünk, ahol \href{fig:placements}{(a)} prioritása a legnagyobb. Meghatározzuk a hátralevő elemeink prioritását, és vesszük a legnagyobb prioritásút. Ha két elemnek megegyezik a prioritása, a sorba rendezésbeli helyük alapján a sorban előrébb lévő elemet vesszük. 
+
+Az így kapott elemet elhelyezzük a téglalapra. A \href{fig:placements}{(d)} esetben nem mindegy sem az elem orientációja, sem hogy hogyan osztjuk tovább a téglalapot.
+
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{figures/partitioning.pdf}
+    \caption{A lehetséges esetek egy elem elehelyezésekor. A fekete téglalapok az elemet jelölik.}
+    \label{fig:partitioning}
+\end{figure}
 
 % TODO egyéb heurisztikák
