@@ -17,8 +17,6 @@ A Canon imagePROGRAF PRO-4600 plotterhez több különféle nyomtatási segédpr
 
 \section{A Photoshop szkriptről}
 
-TODO normális formázás és vesszők
-
 A szkript által használt algoritmus felettébb egyszerű. A dokumentumot egy rács mentén cellákra osztjuk fel, ahol minden cella mérete a kinyomtatni kívánt kép méretének felel meg.
 Nem mindegy, hogy a cellák fekvő vagy álló tájolással vannak elhelyezve a dokumentumon, ugyanis ez különböző mennyiségű felesleget eredményezhet.
 
@@ -44,8 +42,6 @@ $$ n \mod m \neq 0,$$
 \noindent úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
 
 TODO kép
-
-TODO fix indentation
 
 Emiatt született meg az opció a mennyiség korrigálására, mely megnöveli $n$-t úgy, hogy a korrigálás előtti esetleges üres cellákba is kerüljenek képek:
 
@@ -95,14 +91,21 @@ Leventének köszönhetően találtuk meg a \cite{ph} cikket, melyben pont egy s
 
 Az \href{fig:placements}{(a)} eset a legkedvezőbb, ebben az esetben a rendelkezésre álló helyet az elem teljesen kitölti. A \href{fig:placements}{(b)} és \href{fig:placements}{(c)} esetek kedvezőbbek, mint \href{fig:placements}{(d)}, mert ekkor az üresen maradt hely egyetlen téglalapot eredményez. Az \href{fig:placements}{(e)} esetben semmilyen elemet sem tudunk a téglalapra helyezni, a terület ekkor felesleggé válik.
 
-Első lépésben minden elemünket a rövidebbik élére állítjuk, majd valamilyen heurisztika alapján sorba rendezzük őket (pl. magasság szerint csökkenő sorrendbe). Az ábra (\ref{fig:placements}) alapján \href{fig:placements}{(a)}-\href{fig:placements}{(e)} esetekhez rendre prioritásokat rendelünk, ahol \href{fig:placements}{(a)} prioritása a legnagyobb. Meghatározzuk a hátralevő elemeink prioritását, és vesszük a legnagyobb prioritásút. Ha két elemnek megegyezik a prioritása, a sorba rendezésbeli helyük alapján a sorban előrébb lévő elemet vesszük. 
+Első lépésben minden elemünket a rövidebbik élére állítjuk, majd valamilyen heurisztika alapján sorba rendezzük őket (pl. magasság szerint csökkenő sorrendbe). Az ábra (\ref{fig:placements}) alapján \href{fig:placements}{(a)}-\href{fig:placements}{(e)} esetekhez rendre prioritásokat rendelünk, ahol \href{fig:placements}{(a)} prioritása a legnagyobb. 
+Meghatározzuk a hátralevő elemeink prioritását, mind álló, mind fekvő helyzetben, és vesszük a legnagyobb prioritásút, feljegyezve annak orientációját. Ha két elemnek megegyezik a prioritása, a sorba rendezésbeli helyük alapján a sorban előrébb lévő elemet vesszük, azon belül pedig a fekvő tájolású elemet részesítjük előnyben.
 
-Az így kapott elemet elhelyezzük a téglalapra. A \href{fig:placements}{(d)} esetben nem mindegy sem az elem orientációja, sem hogy hogyan osztjuk tovább a téglalapot.
+Az így kapott elemet az feljegyzett orientációban a téglalapra helyezzük. A \href{fig:placements}{(d)} esetben nem mindegy, hogy hogyan osztjuk tovább a téglalapot. A hátralevő elemeink közül megkeressük a legrövidebb előforduló oldal hosszát, legyen ez $s_\text{min}$. 
 
 \begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/partitioning.pdf}
-    \caption{A lehetséges esetek egy elem elehelyezésekor. A fekete téglalapok az elemet jelölik.}
+    \caption{A téglalap lehetséges felosztása}
     \label{fig:partitioning}
 \end{figure}
+
+Az ábra (\ref{fig:partitioning}) alapján amennyiben $w - s_1 < s_\text{min}$, úgy \href{fig:partitioning}{(d\textsubscript{1})} szerint osztjuk fel, mert ekkor T\textsubscript{2} téglalapra egyik esetben sem fér el egyik elem sem, azaz ez a rész felesleggé válik, vagyis azt az esetet választjuk, ahol ez kisebb. Hasonlóképpen ha $h - s_2 < s_\text{min}$, akkor \href{fig:partitioning}{(d\textsubscript{2})} szerint osztjuk fel a téglalapot, és T\textsubscript{1} lesz a felesleg. Amennyiben egyik feltétel sem teljesül, úgy kétféleképp is feloszthatjuk a téglalapot. A felosztást $s_1 < s_\text{min}$ feltétel határozza meg: ha teljesül, akkor \href{fig:partitioning}{(d\textsubscript{1})} esetet választjuk, mert ellenkező esetben T\textsubscript{1} felesleggé válna.
+
+A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek prioritásait és rekurzívan folytatjuk a pakolást, amíg el nem helyeztünk minden elemet, vagy már nincsen téglalap, amire elemeket tudnánk helyezni.
+
+% TODO how to sort?
 
 % TODO egyéb heurisztikák
