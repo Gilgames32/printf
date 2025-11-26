@@ -20,7 +20,11 @@ A Canon imagePROGRAF PRO-4600 plotterhez több különféle nyomtatási segédpr
 A szkript által használt algoritmus felettébb egyszerű. A dokumentumot egy rács mentén cellákra osztjuk fel, ahol minden cella mérete a kinyomtatni kívánt kép méretének felel meg.
 Nem mindegy, hogy a cellák fekvő vagy álló tájolással vannak elhelyezve a dokumentumon, ugyanis ez különböző mennyiségű felesleget eredményezhet.
 
-TODO kép
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{figures/wastecalc.pdf}
+    \caption{Soronként keletkező felesleg eltérő tájolások mellett}
+    \label{fig:wastecalc}
+\end{figure}
 
 Az orientáció kiszámításához megvizsgáljuk mindkét esetet, egy teljesen kitöltött sorra. Legyen a tekercs szélessége $W$, a keletkező felesleg pedig $A$. Vegyünk egy képet, ahol a kép szélessége $w$, magassága $h$, orientációja $r$. Ekkor a keletkező felesleg
 
@@ -41,13 +45,15 @@ $$ n \mod m \neq 0,$$
 
 \noindent úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
 
-TODO kép
-
 Emiatt született meg az opció a mennyiség korrigálására, mely megnöveli $n$-t úgy, hogy a korrigálás előtti esetleges üres cellákba is kerüljenek képek:
 
 $$n' = k * m.$$
 
-TODO kép
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{figures/correct_quantity.pdf}
+    \caption{A mennyiség korrigálás}
+    \label{fig:correct_quantity}
+\end{figure}
 
 Ez a megoldás sajnos nem tökéletes. Ha az utolsó sorunk cellái nincsenek teljesen kitöltve, akkor nem biztos, hogy $r$ orientáció valóban kevesebb felesleggel fog járni.
 
@@ -106,6 +112,6 @@ Az ábra (\ref{fig:partitioning}) alapján amennyiben $w - s_1 < s_\text{min}$, 
 
 A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek prioritásait és rekurzívan folytatjuk a pakolást, amíg el nem helyeztünk minden elemet, vagy már nincsen téglalap, amire elemeket tudnánk helyezni.
 
-% TODO how to sort?
+Adott elemekre más-más sorba rendezési heurisztikák más-más elrendezéseket eredményeznek, ezért nem mindegy, hogy hogyan választjuk meg. Az elemhalmazunktól nagyban függ, hogy éppen milyen szempont alapján érdemes őket sorba rendeznünk, de ezt nehéz előre meghatározni. Érdemes az algoritmust több különböző sorba rendezés szerint futtatni, és az eredmények közül a legkedvezőbbet választani. Ilyen rendezések lehetnek példálul magasság, terület, kerület, átló szerinti csökkenő sorrendek.
 
 % TODO egyéb heurisztikák
