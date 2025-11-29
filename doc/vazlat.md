@@ -80,7 +80,7 @@ A bevezető szokás szerint a diplomaterv felépítésével záródik, azaz anna
 
 # felhasználói kézikönyv
 - ...
-- preset syntax
+- preset syntax, json schema?
 - telepítés
 
 # elérhetőség, open source note, levy2 (köszönet)

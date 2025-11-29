@@ -9,7 +9,7 @@
 % felhasznált pszeudokód? idk
 % egyéb algoritmusok a strip packingen kívül
 
-\chapter{Előzmények}
+\chapter{Előzmények és irodalomkutatás}
 
 \section{Hivatalos szoftverek}
 
@@ -17,7 +17,7 @@ A Canon imagePROGRAF PRO-4600 plotterhez több különféle nyomtatási segédpr
 
 \section{A Photoshop szkriptről}
 
-A szkript által használt algoritmus felettébb egyszerű. A dokumentumot egy rács mentén cellákra osztjuk fel, ahol minden cella mérete a kinyomtatni kívánt kép méretének felel meg.
+A szkript által használt algoritmus felettébb egyszerű. A dokumentumot\footnote{A dokumentum az elkészült kép, a program kimenete, melyen a bemeneti forrásfájljaink szerepelnek.} egy rács mentén cellákra osztjuk fel, ahol minden cella mérete a kinyomtatni kívánt kép méretének felel meg.
 Nem mindegy, hogy a cellák fekvő vagy álló tájolással vannak elhelyezve a dokumentumon, ugyanis ez különböző mennyiségű felesleget eredményezhet.
 
 \begin{figure}[!h]
@@ -69,6 +69,8 @@ A guillotine vágás egy olyan folyamat, ahol egy nagyobb lemezt vágunk fel el�
 
 A guillotine vágás esetén a lemezek mérete előre meg van adva, és a kisebb téglalapok mennyisége nincsen megkötve. A mi esetünk ugyan nagyban hasonlít a guillotine vágásra, leszámítva, hogy a képek mennyisége fix, és csak a tekercs szélessége adott. Ennek tudatában folytattuk tovább a kutatómunkát barátommal és kollégámmal, Orbán Levente Lászlóval.
 
+TODO guillotine vágás kép
+
 % TODO forrás megjelölés: https://en.wikipedia.org/wiki/Guillotine_cutting
 
 \subsection{Tekercsre pakolás probléma}
@@ -112,6 +114,6 @@ Az ábra (\ref{fig:partitioning}) alapján amennyiben $w - s_1 < s_\text{min}$, 
 
 A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek prioritásait és rekurzívan folytatjuk a pakolást, amíg el nem helyeztünk minden elemet, vagy már nincsen téglalap, amire elemeket tudnánk helyezni.
 
-Adott elemekre más-más sorba rendezési heurisztikák más-más elrendezéseket eredményeznek, ezért nem mindegy, hogy hogyan választjuk meg. Az elemhalmazunktól nagyban függ, hogy éppen milyen szempont alapján érdemes őket sorba rendeznünk, de ezt nehéz előre meghatározni. Érdemes az algoritmust több különböző sorba rendezés szerint futtatni, és az eredmények közül a legkedvezőbbet választani. Ilyen rendezések lehetnek példálul magasság, terület, kerület, átló szerinti csökkenő sorrendek.
+Adott elemekre más-más sorba rendezési heurisztikák más-más elrendezéseket eredményeznek, ezért nem mindegy, hogy hogyan választjuk meg. Az elemhalmazunktól nagyban függ, hogy éppen milyen szempont alapján érdemes őket sorba rendeznünk, de ezt nehéz előre meghatározni. Érdemes az algoritmust több különböző sorba rendezés szerint futtatni, és az eredmények közül a legkedvezőbbet választani. Ilyen rendezések lehetnek például magasság, terület, kerület, átló szerinti csökkenő sorrendek.
 
 % TODO egyéb heurisztikák
