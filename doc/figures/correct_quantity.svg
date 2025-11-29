@@ -2,15 +2,15 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="175mm"
-   height="50mm"
-   viewBox="0 0 175 50"
+   width="100mm"
+   height="110mm"
+   viewBox="0 0 100 110"
    version="1.1"
    id="svg1"
    xml:space="preserve"
    inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
-   sodipodi:docname="wastecalc.svg"
-   inkscape:export-filename="wastecalc.pdf"
+   sodipodi:docname="correct_quantity.svg"
+   inkscape:export-filename="correct_quantity.pdf"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -22,20 +22,25 @@
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
-     inkscape:showpageshadow="2"
+     inkscape:showpageshadow="true"
      inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
+     inkscape:pagecheckerboard="false"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="1.4805976"
-     inkscape:cx="328.24584"
-     inkscape:cy="-23.301402"
-     inkscape:window-width="1957"
-     inkscape:window-height="1033"
+     inkscape:zoom="1.0469406"
+     inkscape:cx="223.98596"
+     inkscape:cy="211.09125"
+     inkscape:window-width="1600"
+     inkscape:window-height="928"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g12" /><defs
+     inkscape:current-layer="layer1"
+     showborder="true"
+     borderlayer="true"
+     inkscape:antialias-rendering="true"
+     labelstyle="default"
+     inkscape:clip-to-page="false" /><defs
      id="defs1"><pattern
        inkscape:collect="always"
        xlink:href="#Strips1_1"
@@ -93,7 +98,8 @@
      inkscape:groupmode="layer"
      id="layer1"><g
        id="g12"
-       inkscape:label="g1"><rect
+       inkscape:label="g1"
+       transform="translate(5.125,5.2499995)"><rect
          style="fill:url(#pattern12);fill-opacity:1;stroke:#ffffff;stroke-width:0.499999;stroke-dasharray:none;stroke-dashoffset:1.88976;stroke-opacity:1"
          id="rect3"
          width="40.500046"
@@ -220,7 +226,7 @@
          inkscape:label="inf" /></g><g
        id="g12-6"
        inkscape:label="g2"
-       transform="translate(84.749999,0.0625005)"><rect
+       transform="translate(5.125,50.249999)"><rect
          style="fill:url(#pattern12-6);fill-opacity:1;stroke:#ffffff;stroke-width:0.499998;stroke-dasharray:none;stroke-dashoffset:1.88976;stroke-opacity:1"
          id="rect3-4"
          width="1.7478074"
