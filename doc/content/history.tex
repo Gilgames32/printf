@@ -13,11 +13,11 @@
 
 \section{Hivatalos szoftverek}
 
-A Canon imagePROGRAF PRO-4600 plotterhez több különféle nyomtatási segédprogramot is kaptunk. Megpróbáltunk áttérni a használatukra, viszont alapvető funckiók hiányoztak belőlük. A legtöbb program csak kézzel való elrendezést tett lehetővé, a mi esetünkben ez viszont egy visszalépést jelentett volna a szkripttel szemben.
+A Canon imagePROGRAF PRO-4600 plotterhez több különféle nyomtatási segédprogramot is jár. A használatukra való áttérés meghiúsult, mert alapvető funckiók hiányoztak belőlük. A legtöbb program csak kézzel való elrendezést tett lehetővé, a mi esetünkben ez viszont egy visszalépést jelentett volna a szkripttel szemben.
 
 \section{A Photoshop szkriptről}
 
-A szkript által használt algoritmus felettébb egyszerű. A dokumentumot\footnote{A dokumentum az elkészült kép, a program kimenete, melyen a bemeneti forrásfájljaink szerepelnek.} egy rács mentén cellákra osztjuk fel, ahol minden cella mérete a kinyomtatni kívánt kép méretének felel meg.
+A szkript által használt algoritmus felettébb egyszerű. A dokumentumo\footnote{A dokumentum az elkészült kép, a program kimenete, melyen a bemeneti forrásfájljaink szerepelnek.} egy rács mentén cellákra kerül felosztásra, ahol minden cella mérete a kinyomtatni kívánt kép méretének felel meg.
 Nem mindegy, hogy a cellák fekvő vagy álló tájolással vannak elhelyezve a dokumentumon, ugyanis ez különböző mennyiségű felesleget eredményezhet.
 
 \begin{figure}[!h]
@@ -26,7 +26,7 @@ Nem mindegy, hogy a cellák fekvő vagy álló tájolással vannak elhelyezve a 
     \label{fig:wastecalc}
 \end{figure}
 
-Az orientáció kiszámításához megvizsgáljuk mindkét esetet, egy teljesen kitöltött sorra. Legyen a tekercs szélessége $W$, a keletkező felesleg pedig $A$. Vegyünk egy képet, ahol a kép szélessége $w$, magassága $h$, orientációja $r$. Ekkor a keletkező felesleg
+Az orientáció kiszámításához meg kell vizsgálni mindkét esetet egy teljesen kitöltött sorra. Legyen a tekercs szélessége $W$, a keletkező felesleg pedig $A$. Vegyünk egy képet, ahol a kép szélessége $w$, magassága $h$, orientációja $r$. Ekkor a keletkező felesleg
 
 $$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h,$$
 
@@ -35,7 +35,7 @@ $$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h,$
 $$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w.$$
 
 
-A kevesebb felesleget eredényező eset határozza meg az orientációt. Az orientáció alapján kiszámolható az rács oszlopainak száma, $m$. Ez $n$ kinyomtatni kívánt kép esetén $k$ oszlopot eredményez, ahol
+A kevesebb felesleget eredényező eset határozza meg az orientációt. Az orientáció alapján kiszámolható a rács oszlopainak száma, $m$. Ez $n$ kinyomtatni kívánt kép esetén $k$ oszlopot eredményez, ahol
 
 $$k = \bigg\lceil \cfrac{n}{m} \bigg\rceil.$$
 
@@ -44,7 +44,6 @@ $$k = \bigg\lceil \cfrac{n}{m} \bigg\rceil.$$
 $$ n \mod m \neq 0,$$
 
 \noindent úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
-
 Emiatt született meg az opció a mennyiség korrigálására, mely megnöveli $n$-t úgy, hogy a korrigálás előtti esetleges üres cellákba is kerüljenek képek:
 
 $$n' = k * m.$$
@@ -55,9 +54,11 @@ $$n' = k * m.$$
     \label{fig:correct_quantity}
 \end{figure}
 
-Ez a megoldás sajnos nem tökéletes. Ha az utolsó sorunk cellái nincsenek teljesen kitöltve, akkor nem biztos, hogy $r$ orientáció valóban kevesebb felesleggel fog járni.
+Ez a megoldás sajnos nem tökéletes. Ha az utolsó sorunk cellái nincsenek teljesen kitöltve, akkor abban a sorban nem biztos, hogy $r$ orientáció valóban kevesebb felesleggel fog járni. 
 
-TODO még magyarázat hogy ezt hogyan vagy hogy erre még visszatérek idk
+TODO huh
+
+TODO ábra
 
 \section{Különböző méretű képek elrendezése}
 
