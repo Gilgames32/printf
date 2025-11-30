@@ -4,18 +4,18 @@
 
 \section{Főbb tervezési szempontok}
 
-A tervezésnél a fő szempontok az egyszerű kezelés és a sebesség voltak. Elsősorban a Photoshop szkript működése és hibái kerültek figyelembe vételre, hogy akik már tisztában vannak annak használatával, azoknak ne jelentsen kihívást áttérni az új alternatívára, és hogy egy kellemesebb felhasználói élményt nyújtson. 
+A tervezésnél a fő szempontok az egyszerű kezelés és a sebesség voltak. Elsősorban a Photoshop szkript működését és hibáit szerettem volna figyelembe venni, hogy akik már tisztában vannak a használatával, azoknak ne jelentsen kihívást áttérni az új alternatívára, és hogy egy kellemesebb felhasználói élményt nyújtson. 
 
 A szkript egy nagy előnye volt, hogy egy terminál helyett egy felhasználói felülete volt, és hogy mentés előtt is lehetett látni, hogy mit fog eredményezni a generálás. Sajnos egy rosszul megadott paraméter is azt jelentette, hogy az egész folyamatot elölről kellett kezdeni, ami egy kellemetlen felhasnzáló élményt eredményezett. 
 
 Ugyan a szkript képes volt több különböző képet kezelni, az erre készült megoldás igencsak fapados volt: a mennyiséget a szkript egy szorzóként kezelte. Ez azt jelentette, hogy nem lehetett megadni egyesével, hogy adott képekből pontosan hány kerüljön elhelyezésre, a szorzó egységesen állította be a mennyiségeket.
 
-Szerencsére nem volt gyakori eset, de előfordult már, hogy a szkriptbe egy új előbállítást felvételére volt szükség. Ugyan voltak törekvések bővíthetőség egyszerűbbé tételére, de ez sajnos nem volt megoldható anélkül, hogy a szkript forráskódjához kellett volna nyúni.
+Szerencsére nem volt gyakori eset, de előfordult már, hogy a szkriptbe egy új előbállítást kellett felvennünk. Sajnos ehhez bele kellett nyúlni a szkript forráskódjába, ahold ugyan voltak törekvések a folyamat megkönnyítésére, de még mindig egy kényszermegoldásnak minősül.
 Egy ennél is primitívebb megoldás volt, ahogy bizonyos beállításcsoportok előbeállításának megválasztása kihatással volt más beállításcsoportokra, pl. egy matrica előbeállítás kiválasztása nem csak a matrica méretét határozta meg, hanem dokumentumszinten is megváltoztatta a képpontsűrűséget. Ezt a szkript úgy oldotta meg, hogy egy előbeállítás kiválasztásánál külön megvizsgálta a kiválasztott beállítást, és aszerint állította át a felhasználói felület többi területét. Ennek a konfigurálása a legkevésbé sem volt triviális, egy felhasználó nem tudná, hova kellene hozzáadni a feltételeket, és hogy azok milyen esetleges mellékhatásokkal járhatnak. 
 
 \section{Paraméterek és csoportosításuk}
 
-A feladathoz elengedhetetlen volt a mélyremenő és konfiguráció lehetősége, egy nyomtatásnál megannyi paramétert kell figyelembe vennünk. Ezeket a paramétereket célszerű volt valamilyen módon csoportosítani. A szkript eredetileg csak kétféle előbállításcsoportot kezelt: papírtekercs és cellaméret előbeállítások. Ezek reprezentációra itt is szükség volt, de a beállítások program bővíthetőségére való tekintettel több helyen tovább lettek bontva.
+A feladathoz elengedhetetlen volt a mélyremenő és konfiguráció lehetősége, egy nyomtatásnál megannyi paramétert kell figyelembe vennünk. Ezeket a paramétereket célszerű volt valamilyen módon csoportosítani. A szkript eredetileg csak kétféle előbállításcsoportot kezelt: papírtekercs és cellaméret előbeállítások. Ezek reprezentációra itt is szükség volt, de a beállítások program bővíthetőségére való tekintettel több helyen is tovább bontottam.
 
 \subsection{A dokumentum paraméterei}
 
@@ -39,13 +39,13 @@ Megoldható lett volna, hogy a segédvonalakat képenként lehessen állítani, 
 \subsubsection{A nyomtató paraméterei}
 
 Van pár paraméter, ami függ a nyomtató típusától, például a margók, a minimum illetve maximum dokumentummagasság.
-A \plotter plotter képes teljes tekercsszélességben is nyomtatni, de ez kevésbé hatékony és ez a funkció nem garantált minden nyomtató esetén. Az alapértelmezett margó hasonlóképpen eszköztípusonként eltérő paraméter. Ugyan algoritmuselméleti szemponból a tekercset végtelennek tekinthethő, ez a valóságban korlátokba ütközik. Egyfelől a nyomtató (az említett plotteren ez kb. 18 méter), másfelől a hátralevő papírtekercs hossza is limitáló tényező, ezért indokolt, hogy ezeket az értékeket a felhasználó konfigurálni tudja.
+A \plotter plotter képes teljes tekercsszélességben is nyomtatni, de ez kevésbé hatékony és ez a funkció nem garantált minden nyomtató esetén. Az alapértelmezett margó hasonlóképpen eszköztípusonként eltérő paraméter. Ugyan algoritmuselméleti szemponból a tekercset végtelennek tekinthetjük, a valóságban sajnos korlátokba ütközünk. Egyfelől a nyomtató maximális nyomtatási hossza (az említett plotteren ez kb. 18 méter), másfelől a hátralevő papírtekercs hossza is korlátoz minket, ezért indokolt, hogy ezeket az értékeket a felhasználó konfigurálni tudja.
 
-Ezeket a paramétereket külön előbeállításcsoportként vannak kezelve, és főként bővíthetőségi okokból lettek különvéve.
+Ezeket a paraméterek külön előbeállításcsoportként vannak kezelve, és főként bővíthetőségi okokból lettek különvéve.
 
 \subsection{A képek paraméterei}
 
-A szkripttel kapcsolatban egy gyakor panasz volt, hogy a képek paraméterei nem állíthatók egyesével, ennek orvoslására az alábbi paraméterek már képenként megadhatók:
+A szkripttel kapcsolatban egy gyakori panasz volt, hogy a képek paraméterei nem állíthatók egyesével. Ebből a hibából tanulva az alábbi paraméterek már képenként adhatók meg:
 
 \begin{itemize}
     \item a mennyiség,
@@ -59,31 +59,32 @@ Képszerkesztésben egy kép maszkja egy olyan speciális réteget jelent, mely 
 
 TODO kép
 
-A maszk és a maszkolni kívánt kép méretei megegyeznek. A szürkeárnyalatos pixelek $1$ és $0$ közötti értékeknek tekinthetők, ahol a fehér pixelek értéke a legmagasabb.
-Ezek alapján, ha $k$ képet $m$ maszk maszkolja, úgy az eredmény $k'$, ahol a kép minden $i, j$ pixelének alfa csatornájanak értéke:
+Feltételezzük, hogy a maszk és a maszkolni kívánt kép méretei megegyeznek. A szürkeárnyalatos pixelek $1$ és $0$ közötti értékeknek tekinthetők, ahol a fehér pixelek értéke a legmagasabb.
+Ezek alapján, ha $k$ képet $m$ maszkkal szeretnénk maszkolni, úgy az eredmény $k'$, ahol a kép minden $i, j$ pixelének alfa csatornájanak értéke:
 
 $$k'_\alpha(i, j) = k_\alpha(i, j) * m(i, j).$$
 
-Kitűzők és matricák nyomtatásánál általában valamilyen kör alakú végtermék készül, ezért a szkriptben lehetőség volt ezeket a képeket egy kör alakú mintával maszkolni, ami így egy kör alakú képet eredményezett.
+Kitűzők és matricák nyomtatásánál általában valamilyen kör alakú formára vágjuk fel a kinyomtatott képeket, ezért a szkriptben lehetőség volt ezeket a képeket egy kör alakú mintával maszkolni, ami így egy kör alakú képet eredményezett.
 
-Vitatható, hogy a maszkolás mennyire tartozik a program feladatkörébe. Egyfelől vannak erre specializálódó programok, melyek előnézetet nyújtanak a körbevágásnál. Másfelől ez egy olyan funkció volt, melynek elhagyása egy visszalépést jelentett volna a szkripttől, és általában nem álltak rendelkezésre az előre maszkolt képek. 
-A kör alak sokszor elősegíti a vágást, és gyakran kevesebb tintát használ fel, hiszen nem pazarol festéket a levágandó részekre.
-A feladat ugyan csak a papírfelesleg minimalizálását foglalja magában, de a kevesebb tinta használata kisebb nyomtatási költségekhez vezet, ami nem csak nekünk, hanem más nyomdáknak is egy előnyt jelenthet. Mindezek miatt ez a funckionalitás benne maradt a programban.
+Vitatható, hogy a maszkolás mennyire tartozik a program feladatkörébe. Egyfelől vannak erre specializálódó programok, ahol előre láthatjuk a maszkolás eredményét, és még helyben korrigálni tudjuk a képet. Másfelől ez egy olyan funkció volt, melynek elhagyása egy visszalépést jelentett volna a szkripttől, és általában nem álltak rendelkezésünkre az előre maszkolt képek. 
+A kör alak sokszor elősegíti a vágást, és gyakran kevesebb tintát használ fel, hiszen nem pazarlunk festéket a levágandó részekre.
+Ugyan a feladat csak a papírfelesleg minimalizálását foglalja magában, de a kevesebb tinta használata kisebb nyomtatási költségekhez vezet, ami nem csak nekünk, hanem más nyomdáknak is egy előnyt jelenthet. Mindezek miatt úgy döntöttem, hogy megtartom ezt a funckionalitást.
 
 A maszkhoz tartozó előbeállítás tartalmazza a maszk képének elérési útvonalát. Ez az előbeállítás is főként bővíthetőségi okok miatt lett különvéve.
 
 \section{Kaszkádos előbeállítások}
 
 A paraméterek nagyon gyakran valamilyen szabványnak vagy előre megadott értéknek felelnek meg. Ez különösen igaz a képek méretére (pl. A4-es szabvány) és a papírtekercsek szélességére. 
-Hogy a méreteket ne kelljen fejben tartani, a legtöbbet használt méretekhez és konfigurációkhoz a program előbállításokat nyújt. 
+
+Ezeknek a méreteknek nem szeretnénk mindig utánajárni, és fejben tartani sem egyszerű, ezért nagy segítség, hogyha a legtöbbet használt méretekhez és konfigurációkhoz a program előbállításokat nyújt. 
 Ezeket az előbeállítások fájlokból célszerű beolvasni, hogy azt egy felhasználó is szerkeszteni illetve bővíteni tudja a program újrafordítása nélkül. Ez a flexibilitás elősegíti, hogy más nyomdák is egyszerűen át tudjanak térni a program használatára, és hogy egy elkerülhetetlen jövőbeli plottercsere ne okozzon problémát és ne eredményezze a program elavulását.
 
 Mind a négy beállításcsoporthoz tartozhatnak előbeállítások, amiket valamilyen fájlból lehet betölteni, adott séma alapján. 
 Egy másik apró, de nagyon hasznosnak bizonyuló ötlet volt, hogy ne legyen kötelező minden paramétert megadni egy előbeállítás fájlban, és hogy ezekre az értékekre ne legyen hatással a beállítás betöltésének folyamata, ne vesszenek el az esetleg eddig beállított értékek, ha nem vonatkozik rá az előbeállítás. 
 Ezek alapján valamilyen félig strukturált módon érdemes tárolnunk az előbeállításokat, pl. kulcs-érték formában.
 
-Fontos funckionalitás volt, hogy egy előbeállítás a betöltésekor másik beállításcsoportokra is kihatással lehetett. 
-Az elképzelés az volt, hogy adott előbeállítás fájlok magukban tartalmazhatnak más csoportokhoz tarzotó paramétereket, mint alcsoportok vagy referenciák más fájlokra. A program az előbeállítások betöltéskor megvizsgálja, hogy a fájl tartalmaz-e alcsoportokat, és ha igen, az alcsoport tartalmát továbbadja a megfelelő beállításcsoportért felelős komponensnek, ahol az alcsoport betöltésre kerül. A cél az, hogy az alcsoportok sémája megegyezzen az adott beállításcsoport sámájával, így továbbadáskor a komponensnek nem kell tudatában lennie, hogy alcsoportot tölt éppen be, vagy sem.
+Egy hasznos funckionalitás volt, hogy egy előbeállítás a betöltésekor másik beállításcsoportokra is kihatással lehetett. A funkció szkriptbeli implementációja nem volt hatékony, vinszont meg szerettem volna tartani, így egy új megközelítéssel próbáltam megoldani.
+Az elképzelésem az volt, hogy adott előbeállítás fájlok magukban tartalmazhatnak más csoportokhoz tarzotó paramétereket, mint alcsoportok vagy referenciák más fájlokra. A program az előbeállítások betöltéskor megvizsgálja, hogy a fájl tartalmaz-e alcsoportokat, és ha igen, az alcsoport tartalmát továbbadja a megfelelő beállításcsoportért felelős komponensnek, ahol az alcsoport betöltésre kerül. A cél az, hogy az alcsoportok sémája megegyezzen az adott beállításcsoport sámájával, így továbbadáskor a komponensnek ne kelljen tudatában lennie, hogy alcsoportot tölt éppen be, vagy sem.
 
 \section{Osztályarchitekúra}
 
@@ -125,14 +126,13 @@ A projekt a \texttt{printf} nevet kapta.
 
 \section{Kép betöltés, konfigurálás}
 
-A bemeneti képeket tartalmazó és manipuláló osztályok tervezésénél különösen nagy hangsúlyt helyeztem a teljesítményre. Az \href{fig:ImageSource_uml}{ábrán} látszik, hogy a forrásfájlokat pixelenként tároljuk, és számon tartjuk a hozzájuk tartozó filtereket. A filterek tudják transzformálni és manipulálni a képet (pl. méret, forgatás, maszk, segédvonalak). Az eredeti képet mindig megőrizzük, hogy a filterek ne legyenek destruktívak. Annak érdekében, hogy a filtereket ne kelljen minden egyes elérésnél újra számolni vezettem be egy cachet. Ha változnak a filterek, a cache piszkos lesz, és a következő elérésnél újra számolódik.
+%A bemeneti képeket tartalmazó és manipuláló osztályok tervezésénél különösen nagy hangsúlyt helyeztem a teljesítményre. Az \href{fig:ImageSource_uml}{ábrán} látszik, hogy a forrásfájlokat pixelenként tároljuk, és számon tartjuk a hozzájuk tartozó filtereket. A filterek tudják transzformálni és manipulálni a képet (pl. méret, forgatás, maszk, segédvonalak). Az eredeti képet mindig megőrizzük, hogy a filterek ne legyenek destruktívak. Annak érdekében, hogy a filtereket ne kelljen minden egyes elérésnél újra számolni vezettem be egy cachet. Ha változnak a filterek, a cache piszkos lesz, és a következő elérésnél újra számolódik.
 
-Ennek fényében úgy döntöttünk, hogy támogatjuk mindkét megközelítést, és majd a felhasználó dönt a különböző algoritmusok között. Erre a célra szolgál egy Tiling interface, ami megkapja a képek listáját és a dokumentum tulajdonságait.
+%Ennek fényében úgy döntöttünk, hogy támogatjuk mindkét megközelítést, és majd a felhasználó dönt a különböző algoritmusok között. Erre a célra szolgál egy Tiling interface, ami megkapja a képek listáját és a dokumentum tulajdonságait.
 
 \section{A felhasználói felület}
 
-A legnagyobb szabadságunk a felhasználói felület kapcsán volt. Mindenképpen szerettem volna egy előnézetet, hogy még mentés előtt a felhasználó láthassa az eredményt, és azt esetleg javítani tudja a beállítások újra konfigurálásával. A kezelés lépéseinek sorrendje alapján igyekeztem kialakítani a felület többi részét. Vannak bemeneti képeink, azokat szeretnénk egyesíteni, majd kinyomtatni. Képek, egyben, nyomtatás. Ezeket balról jobbra elrendezve kapjuk meg a felület végleges tervét: balra a bemenetek és azok beállításai, középen egy előnézet, jobbra pedig a kimenet (generált dokumentum) beállításai, a generálás és az exportálás/nyomtatás gomb. A UI feladata lenne továbbá az előbeállítások betöltése és a filterek beállításainak kezelése is. A bemenetek alapján meghívódik a generálás, ami elkészíti nekünk a kívánt képet, ezt fogjuk látni az előnézeten.
+%A legnagyobb szabadságunk a felhasználói felület kapcsán volt. Mindenképpen szerettem volna egy előnézetet, hogy még mentés előtt a felhasználó láthassa az eredményt, és azt esetleg javítani tudja a beállítások újra konfigurálásával. A kezelés lépéseinek sorrendje alapján igyekeztem kialakítani a felület többi részét. Vannak bemeneti képeink, azokat szeretnénk egyesíteni, majd kinyomtatni. Képek, egyben, nyomtatás. Ezeket balról jobbra elrendezve kapjuk meg a felület végleges tervét: balra a bemenetek és azok beállításai, középen egy előnézet, jobbra pedig a kimenet (generált dokumentum) beállításai, a generálás és az exportálás/nyomtatás gomb. A UI feladata lenne továbbá az előbeállítások betöltése és a filterek beállításainak kezelése is. A bemenetek alapján meghívódik a generálás, ami elkészíti nekünk a kívánt képet, ezt fogjuk látni az előnézeten.
 
-Az említett előbeállítások valamilyen fájlból betölthető konfigurációk, melyek vonatkozhatnak a bemenő képekre, a kimenő dokumentumra, valamint esetlegesen a nyomtatóra. Ezzel megoldható, hogy ne kelljen fejben tartanunk a tekercsek és a papírok szabványainak méretét.
 
 
