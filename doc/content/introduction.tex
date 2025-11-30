@@ -2,15 +2,15 @@
 
 \section{Problémafelvetés}
 
-A Schönherz kollégiumban hetente megannyi plakát kerül kinyomtatásra. Ezt a feladatot a \vik lelkes hallgatói látják el, kisebb irodai nyomtatók mellett egy Canon imagePROGRAF PRO-4600 plotteren is. A plotteren különböző célokra különböző szélességű és anyagtulajdonságú papírtekercsekre nyomtatunk. Leggyakrabban egy adott, kisebb méretű képet kell nagy mennyiségben kinyomtatnunk. Ha ezeket próbálnánk meg egyesével kinyomtatni, a nyomtató egymás fölé helyezve nyomtatná ki a képeket, melyek méretei eltörpülnek a tekecs teljes szélessége mellett. Ez hatalmas papírfelesleget eredményezne.
+A Schönherz Kollégiumban hetente megannyi plakát kerül kinyomtatásra. Ezt a feladatot a \vik\, lelkes hallgatói látják el, kisebb irodai nyomtatók mellett egy Canon imagePROGRAF PRO-4600 plotteren is. A plotteren különböző célokra különböző szélességű és anyagtulajdonságú papírtekercsekre nyomtatunk. Leggyakrabban egy adott, kisebb méretű képet kell nagy mennyiségben kinyomtatnunk. Ha ezeket egyesével próbálnánk meg kinyomtatni, a nyomtató egymás alá helyezve nyomtatná ki a képeket, melyek méretei eltörpülnek a tekecs teljes szélessége mellett. Ez hatalmas papírfelesleget eredményezne.
 
 Ilyen esetekre szolgált egy \href{fig:old_ui}{Adobe Photoshop script}, mely négyzetrácsszerűen felosztotta a papírtekercset, és a rács celláiba helyezte el a képeket. A szkript emellet egyéb hasznos funkciókkal is rendelkezett, például a cellák mentén segédvonalakkal látta el az elkészült dokumentumot, ami lehetővé tette a precíz vágást a nyomdai vágóasztalokon.
-Ez a szkript több hallgató keze műve volt, hat különböző verziója egyszerre volt használva, mert egyik sem volt teljesen megfelelő minden felhasználási esetre. Csatlakozásomkor ezt a szkriptet saját magam is refaktoráltam, kijavítva az előző verziók hibáit, egyesítve funkcióikat illetve ellátva néhány új extra funkcióval. A projekt nyílt forráskódú és a \href{https://github.com/SCH-KB-PR/kbpr-ps}{https://github.com/SCH-KB-PR/kbpr-ps} oldalon érhető el.
+Ez a szkript több hallgató keze műve volt, hat különböző verzióját egyszerre használtuk, mert egyik sem volt teljesen megfelelő minden felhasználási esetre. Csatlakozásomkor ezt a szkriptet saját magam is refaktoráltam, kijavítva az előző verziók hibáit, egyesítve funkcióikat, illetve ellátva néhány új extra funkcióval. A projekt nyílt forráskódú és a \href{https://github.com/SCH-KB-PR/kbpr-ps}{https://github.com/SCH-KB-PR/kbpr-ps} oldalon érhető el.
 
 Többször felmerült erre specializálódott szoftver keresése.
-A régi plotter cseréje után erre sor is kerültl, az új plotter mellé különféle hivatalos szoftverek jártak, melyek hasonló célokra voltak tervezve. Sajnos ezek a szoftverek több sebből is véreztek, rengeteg számunkra fontos funkció hiányzott belőlük, a szkripthez hasonlóan egyik sem volt minden szempontból működőképes, nem beszélve arról, hogy nem voltak nyílt forráskódú projektek, ellehetetlenítve ezzel a sajátos felhasználásunkhoz elengedhetetlen extra funkciókat, és kizárólag Windows operációs rendszerek alatt futottak.
+A régi plotter cseréje után erre sor is került, az új plotter mellé különféle hivatalos szoftverek jártak, melyek hasonló célokra voltak tervezve. Sajnos ezek a szoftverek több sebből is véreztek, rengeteg számunkra fontos funkció hiányzott belőlük, a szkripthez hasonlóan egyik sem volt minden szempontból működőképes, nem beszélve arról, hogy nem voltak nyílt forráskódú projektek, ellehetetlenítve ezzel a sajátos felhasználásunkhoz elengedhetetlen extra funkciókat. Gondot jelentett az is, hogy kizárólag Windows operációs rendszerek alatt futottak.
 
-A refaktorált szkript már egy nagy erőlelépést jelentett, így jobb híján maradtunk a használatánál. Tudtuk, hogy nem tökéletes, főkét a Photoshop hatalmas overheadje miatt a dokumentumok generálása túl sokáig tartott, és volt, hogy a rendelkezésre álló 8 GB memória sem volt elég egy teljes dokumentumhoz. Sajnos az Adobe ExtendScript szkriptnyelv jellegéből adódóan felettébb limitáltak a lehetőségek bármi nemű optimalizálásra. Gyakorta előjöttek olyan esetek is, hogy különböző méretű dokumentumokat kellett volna nyomtatni, de a szkript csak egységes cellaméretekkel volt képes dolgozni, külön nyomtatni pedig némi extra papírfelesleggel járt.
+A refaktorált szkript már nagy erőlelépést jelentett, így jobb híján maradtunk a használatánál. Tudtuk, hogy nem tökéletes, főként a Photoshop hatalmas overheadje miatt a dokumentumok generálása túl sokáig tartott, és volt, hogy a rendelkezésre álló 8 GB memória sem volt elég egy teljes dokumentumhoz. Sajnos az Adobe ExtendScript szkriptnyelv jellegéből adódóan felettébb limitáltak a lehetőségek bármi nemű optimalizálásra. Gyakorta előjöttek olyan esetek is, hogy különböző méretű dokumentumokat kellett volna nyomtatni, de a szkript csak egységes cellaméretekkel volt képes dolgozni, külön nyomtatni pedig némi extra papírfelesleggel járt.
 
 \begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/script_showcase.png}
@@ -20,15 +20,17 @@ A refaktorált szkript már egy nagy erőlelépést jelentett, így jobb híján
 
 \section{Célkitűzés}
  
-A projekt célja, hogy a nyomtatást egyszerűbbé, gyorsabbá és hatékonyabbá tegye, törekedve a minimális keletkező papírfeleslegre, a szkriptek funkcióit megtartva illetve egyéb hasznos ötletekkel kibővítve. 
+TODO a régi szkriptet felváltani, annak működése alapján készül de kibővíti
+
+A projekt célja, hogy a nyomtatást egyszerűbbé, gyorsabbá és hatékonyabbá tegye, törekedve a minimális keletkező papírfeleslegre, a szkriptek funkcióit megtartva, illetve egyéb hasznos ötletekkel kibővítve. 
 
 \section{A feladat értelmezése}
 
 A feladat egy dokumentumok nyomtatását optimalizáló szoftver elkészítése, ami minimalizálja az elrendezésből adódó papírfelesleget, törekedve a program lefutásának gyorsaságára és annak könnyen használhatóságára.
 
-\section{A feladat indokoltásga}
+\section{A feladat indokoltsága}
 
-A plotterekhez kapott hivatalos szoftvereken kívül nem állt rendelkezésre más, a célra megfelelő eszközt az interneten. Ebből adódóan indokolt volt egy erre specializálódó programot készíteni, nyílt forráskódú keretek között, annak érdekében, hogy a használatára más nyomdák is egyszerűen át tudjanak térni.
+A plotterekhez kapott hivatalos szoftvereken kívül nem állt rendelkezésre más, a célra megfelelő eszköz az interneten. Ebből adódóan indokolt volt egy erre specializálódó programot készíteni, nyílt forráskódú keretek között, annak érdekében, hogy a használatára más nyomdák is egyszerűen át tudjanak térni.
 
 \section{A dolgozat felépítése}
 

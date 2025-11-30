@@ -27,13 +27,13 @@ Nem mindegy, hogy a cellákat fekvő vagy álló tájolással helyezzük el a do
     \label{fig:wastecalc}
 \end{figure}
 
-Az orientáció kiszámításához meg kell vizsgálni mindkét esetet egy teljesen kitöltött sorra. Legyen a tekercs szélessége $W$, a keletkező felesleg pedig $A$. Vegyünk egy képet, ahol a kép szélessége $w$, magassága $h$, orientációja $o$. Ekkor a keletkező felesleg
+Az orientáció (tájolás) kiszámításához egy teljesen kitöltött sorra mindkét esetet meg kell vizsgálni. Legyen a tekercs szélessége $W$, a keletkező felesleg pedig $A$. Vegyünk egy képet, ahol a kép szélessége $w$, magassága $h$, orientációja $o$. Ekkor a keletkező felesleg
 
-$$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 * w) * h,$$
+$$m_1 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor, \qquad A_1 = (W - m_1 \cdot w) \cdot h,$$
 
 \noindent illetve ellentétes orientáció esetén
 
-$$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 * h) * w.$$
+$$m_2 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor, \qquad A_2 = (W - m_2 \cdot h) \cdot w.$$
 
 
 A kevesebb felesleget eredényező eset határozza meg az orientációt. Az orientáció alapján kiszámolható a rács oszlopainak száma, $m$. Ez $n$ kinyomtatni kívánt kép esetén $k$ sort eredményez, ahol
@@ -47,46 +47,49 @@ $$ n \mod m \neq 0,$$
 \noindent úgy ez az eljárás üres cellákhoz, azaz papírfelesleghez fog vezetni. 
 Emiatt született meg az opció a mennyiség korrigálására, mely megnöveli $n$-t úgy, hogy a korrigálás előtti esetleges üres cellákba is kerüljenek képek:
 
-$$n' = k * m.$$
+$$n' = k \cdot m.$$
 
 \begin{figure}[!h]
     \centering
     \includegraphics{figures/correct_quantity.pdf}
-    \caption{A mennyiség korrigálás}
+    \caption{A mennyiség korrigálása.}
     \label{fig:correct_quantity}
 \end{figure}
 
-Ez a megoldás sajnos nem tökéletes. Ha az utolsó sor cellái nincsenek teljesen kitöltve, akkor abban a sorban nem biztos, hogy $o$ orientáció valóban kevesebb felesleggel fog járni (\ref{fig:lastrow}).
+Ez a megoldás sajnos nem tökéletes. Ha az utolsó sor cellái nincsenek teljesen kitöltve, akkor abban a sorban nem biztos, hogy az $o$ orientáció valóban kevesebb felesleggel fog járni (\ref{fig:lastrow}. ábra).
 
 \begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/lastrow.png}
-    \caption{Az utolsó sor különböző orientációkban és hatása.}
+    \caption{Az utolsó sor különböző orientációkkal és ezek hatása.}
     \label{fig:lastrow}
 \end{figure}
 
 Ilyen esetek miatt az utolsó sort a többitől külön kell kezelni, és figyelembe kell venni a fennmaradó elemek számát. Ekkor az utolsó sor oszlopainak száma
 
-$$m' = n - (k - 1) * m,$$
+$$m' = n - (k - 1) \cdot m,$$
 
-\noindent a keletkező feleslegek pedig
+\noindent a keletkező felesleg pedig
 
 
-$$A_1 = (W - m' * w) * h,$$
-$$A_2 = (W - m' * h) * w,$$
+$$A_1 = (W - m' \cdot w) \cdot h,$$
+$$A_2 = (W - m' \cdot h) \cdot w,$$
 
-\noindent melyekből a kisebbik határozza meg az orientációt. Ebben az esetben is releváns lehet az elemek számának korrigálása, ilyenkor
+\noindent melyekből a kisebbik határozza meg az utolsó sor orientációját. Például a \ref{fig:lastrow}. ábra esetében ez a jobb oldali változatot jelenti. Ebben az esetben is releváns lehet az elemek számának korrigálása, ilyenkor
 
-$$n' = (k - 1) * m + m'.$$
+$$\color{red} n' = (k - 1) \cdot m + m'.$$ 
 
+TODO bizonyítás? 
 
 \section{Különböző méretű képek elrendezése}
 
-A különböző méretű dobozok fix területre történő elhelyezése a ládapakolási problémára vezethető vissza. A mi problémánk egy speciális esete ennek. A tekercs szélessége fix, a magassága viszont tetszőleges, de minimalizálni szeretnénk. Az eredménynek vágóasztallal vághatónak kell lennie.
+A különböző méretű dobozok fix területre történő elhelyezése a ládapakolási problémára vezethető vissza. A mi problémánk ennek egy speciális esete. A tekercs szélessége fix, a magassága viszont tetszőleges, de minimalizálni szeretnénk. Emellett eredménynek vágóasztallal vághatónak is kell lennie.
 
 \subsection{Guillotine vágás}
 
 A guillotine vágás egy olyan folyamat, ahol egy nagyobb lemezt vágnak fel előre megadott, kisebb téglalapokra, guillotine vágásokkal. A guillotine vágások, más néven széltől-szélig vágások egyik oldaltól a másik oldalig tartó egyenes vágások, melyek a téglalapot két részre osztják fel. 
-Ezt az eljárást elsősorban üveg, acél, fa illetve kartonpapír lapok felvágásakor alkalmazzák. Több különböző szempont alapján is meg lehet próbálni optimalizálni a probléma megoldását, például maximalizálni a kapott elemek területét, értékét vagy számát, illetve minimalizálni a szükséges vágások számát vagy a keletkező felseleget (\cite{guillotine-cutting-wiki} alapján).
+Ezt az eljárást elsősorban üveg, acél, fa, illetve kartonpapír lapok felvágásakor alkalmazzák. Több különböző szempont alapján is meg lehet próbálni optimalizálni a probléma megoldását, például maximalizálni a kapott elemek területét, értékét vagy számát, illetve minimalizálni a szükséges vágások számát vagy a keletkező felseleget (\cite{guillotine-cutting-wiki} alapján). 
+
+TODO magyarázat érték, szám, stb.
 
 A guillotine vágás esetén a lemezek mérete előre meg van adva, és a kisebb téglalapok mennyisége nincsen megkötve. A problémánk nagyban hasonlít a guillotine vágásra, leszámítva, hogy a képek mennyisége fix, és csak a tekercs szélessége adott. 
 
@@ -98,19 +101,19 @@ A guillotine vágás esetén a lemezek mérete előre meg van adva, és a kisebb
 
 \subsection{Tekercsre pakolás probléma}
 
-A tekercsre pakolás probléma egy két dimenziós geometriai minimalizálási probléma. Adott egy tekercs fix szélességgel és tetszőleges magassággal, valamint a tekercsre helyezendő téglalapok. Meghatározandó egy elrendezés, mely átfedés nélkül helyezi el a téglalapokat a tekercsre, minimalizálva a felhasznált tekercsrész magasságát, azaz a felesleget. Legtöbbet a textil- és papírtekercsek feldolgozásával foglalkozó területeken találkozhatunk ilyen megoldásokkal.
+A tekercsre pakolás probléma egy kétdimenziós geometriai minimalizálási probléma. Adott egy tekercs fix szélességgel és tetszőleges magassággal, valamint a tekercsre helyezendő téglalapok. Meghatározandó egy elrendezés, mely átfedés nélkül helyezi el a téglalapokat a tekercsre, minimalizálva a felhasznált tekercsrész magasságát, azaz a felesleget. Legtöbbet a textil- és papírtekercsek feldolgozásával foglalkozó területeken találkozhatunk ilyen megoldásokkal.
 
-Sajnos a tekercsre pakolási probléma erősen NP-nehéz, mert magában tartalmazza a ládapakolási problémát fix magasságú elemekkel (\cite{strip-packing-wiki} alapján).
+Sajnos a tekercsre pakolási probléma erősen NP-nehéz, mert tartalmazza a ládapakolási problémát fix magasságú elemekkel (\cite{strip-packing-wiki} alapján).
 
-A feladat tehát visszavezethető a tekercsre pakolás és a guillotine vágás keveréke, egy tekercsre kell guillotine-nal vágható elrendezésben pakolni az elemeket. Szerencsére ez már egy ismert speciális esete a tekercsre pakolásnak, és több különféle algoritmus is létezik már rá.
+A feladat tehát visszavezethető a tekercsre pakolás és a guillotine vágás keverékére, egy tekercsre kell guillotine-nal vágható elrendezésben pakolni az elemeket. Szerencsére ez már a tekercsre pakolás egy ismert speciális esete, és több különféle közelítő algoritmus is létezik már rá.
 
 \section{A választott algoritmusok}
 
-Egyetlen méret nyomtatása esetén a régi szkript kapcsán ismertetett rácsra helyezés javított változata már egy optimális megoldás, és adott a lehetőség a mennyiséget korrigálni az esetleges ki nem töltött cellák alapján. 
+Egyetlen méret nyomtatása esetén a régi szkript kapcsán ismertetett, rácsra helyezés javított változata már optimális megoldás, és adott a lehetőség a mennyiséget korrigálni az esetleges ki nem töltött cellák alapján. 
 
-Különböző méretű képek esetén a probléma erősen NP-nehéz voltából adódóan nem kellett, hogy minden áron optimális megoldást találjunk, mert fontos szempont volt a program futásának ideje, és mert az egyszerre több különböző méretben való nyomtatás egy viszonylag ritka esetnek minősül. 
+Különböző méretű képek esetén a probléma erősen NP-nehéz voltából adódóan nem lehetett, hogy minden áron optimális megoldást találjunk, mert fontos szempont volt a program futásának ideje, tobábbá az egyszerre több különböző méretben való nyomtatás egy viszonylag ritka esetnek minősült. 
 
-A \cite{ph} cikkben pont egy számunkra kedvező heurisztikus megoldást mutatnak be. Az algoritmus heurisztikus voltából adódóan nem ad mindig optimális megolást, komplexitása azonban csupán $O(n^2)$. A megoldás egy rekurzív megközelítést alkalmaz, ami elősegíti, hogy az eredmény biztosan vágóasztallal vágható legyen. 
+A \cite{ph} cikkben pont egy számunkra kedvező heurisztikus megoldást mutatnak be. Az algoritmus heurisztikus voltából adódóan nem ad mindig optimális megolást, komplexitása azonban csupán $O(n^2)$. A megoldás rekurzív megközelítést alkalmaz, ami elősegíti, hogy az eredmény biztosan vágóasztallal vágható legyen. 
 A cikkben bemutatott koncepció egyszerű: egy téglalapra helyezzük az elemeket, minden lehelyezett elem további téglalapokat határoz meg. Egy elem elhelyezésénél öt esetet különböztethetünk meg.
 
 \begin{figure}[!h]
@@ -121,7 +124,7 @@ A cikkben bemutatott koncepció egyszerű: egy téglalapra helyezzük az elemeke
 
 Az \href{fig:placements}{(a)} eset a legkedvezőbb, ebben az esetben a rendelkezésre álló helyet az elem teljesen kitölti. A \href{fig:placements}{(b)} és \href{fig:placements}{(c)} esetek kedvezőbbek, mint \href{fig:placements}{(d)}, mert ekkor az üresen maradt hely egyetlen téglalapot eredményez. Az \href{fig:placements}{(e)} esetben egyetlen elemet sem tudunk a téglalapra helyezni, a terület ekkor felesleggé válik.
 
-Első lépésben minden elemet a rövidebbik élére állítunk, majd valamilyen heurisztika alapján sorba rendezzük őket (pl. magasság szerint csökkenő sorrendbe). Az ábra (\ref{fig:placements}) alapján \href{fig:placements}{(a)}-\href{fig:placements}{(e)} esetekhez rendre prioritásokat rednelünk, ahol az \href{fig:placements}{(a)} eset prioritása a legnagyobb.
+Első lépésben minden elemet a rövidebbik élére állítunk, majd valamilyen heurisztika alapján sorba rendezzük őket (pl. magasság szerint csökkenő sorrendbe). A \ref{fig:placements}. ábra alapján az \href{fig:placements}{(a)}-\href{fig:placements}{(e)} esetekhez rendre prioritásokat rednelünk, ahol az \href{fig:placements}{(a)} eset prioritása a legnagyobb.
 Meghatározzuk minden hátralevő elem prioritását, mind álló, mind fekvő helyzetben.
 Legyen a lehelyezendő elem a bármelyik orientációban vett legmagasabb prioritású elem, aszerint forgatva, hogy melyik orientációban magasabb a prioritása. 
 Ha két elemnek megegyezik a prioritása, a sorba rendezésbeli helyük alapján a sorban előrébb lévő elemet kell figyelembe venni, azon belül pedig a fekvő tájolású elemnek van magasabb prioritása.
@@ -130,17 +133,22 @@ Az így kapott elemet az adott orientációban a téglalapra helyezzük.
 A \href{fig:placements}{(d)} esetben nem mindegy, hogy hogyan osztjuk fel további részekre a téglalapot. 
 Ilyenkor a hátralevő elemek közül meghatározzuk a legrövidebb előforduló oldal hosszát, legyen ez $s_\text{min}$. 
 
+TODO: d0 nem kell vagy nyilak idk
+
 \begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/partitioning.pdf}
-    \caption{A téglalap lehetséges felosztása}
+    \caption{A téglalap lehetséges felosztása.}
     \label{fig:partitioning}
 \end{figure}
 
-Az ábra (\ref{fig:partitioning}) alapján amennyiben $w - s_1 < s_\text{min}$, úgy \href{fig:partitioning}{(d\textsubscript{1})} szerint érdemes csak felosztani a területet, mert ekkor T\textsubscript{2} téglalapra egyik esetben sem fér el semelyik elem sem, azaz ez a rész felesleggé válna.
+Az \ref{fig:partitioning}. ábra alapján amennyiben $w - s_1 < s_\text{min}$, úgy \href{fig:partitioning}{(d\textsubscript{1})} szerint érdemes csak felosztani a területet, mert ekkor T\textsubscript{2} téglalapra egyik esetben sem fér el semelyik elem sem, azaz ez a rész felesleggé válna.
 Hasonlóképpen ha $h - s_2 < s_\text{min}$, akkor \href{fig:partitioning}{(d\textsubscript{2})} szerint érdemes csak felosztani a területet, és T\textsubscript{1} válik felesleggé. 
-Amennyiben egyik feltétel sem teljesül, úgy a téglalap kétféleképpen is fel tudjuk osztani. A felosztást $s_1 < s_\text{min}$ feltétel határozza meg: ha teljesül, akkor \href{fig:partitioning}{(d\textsubscript{1})} esetet választjuk, mert ellenkező esetben T\textsubscript{1} felesleggé válna.
 
-A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek prioritásait és rekurzívan folytatjuk a pakolást, amíg minden el nem helyeztünk minden elemet, vagy elfogytak a téglalapok, amikre elemet tudnánk helyezni.
+TODO: clarify, otherwise d2
+Amennyiben egyik feltétel sem teljesül, úgy a téglalapot kétféleképpen is fel tudjuk osztani. 
+A felosztást az $s_1 < s_\text{min}$ feltétel határozza meg: ha teljesül, akkor \href{fig:partitioning}{(d\textsubscript{1})} esetet választjuk, mert ellenkező esetben T\textsubscript{1} felesleggé válna.
+
+A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek prioritásait és rekurzívan folytatjuk a pakolást, amíg el nem helyeztünk minden elemet, vagy elfogytak a téglalapok, amikre elemet tudnánk helyezni.
 
 Adott elemekre más-más sorba rendezési heurisztikák más-más elrendezéseket eredményeznek, ezért nem mindegy, hogy hogyan választjuk meg a sorrendet. Az elemhalmaztól nagyban függ, hogy éppen milyen szempont alapján érdemes az elemeket sorba rendezni, de ezt nehéz előre meghatározni. Érdemes az algoritmust több különböző sorba rendezés szerint futtatni, és az eredmények közül a legkedvezőbbet választani. Ilyen rendezések lehetnek például magasság, terület, kerület, átló szerinti csökkenő sorrendek.
 
