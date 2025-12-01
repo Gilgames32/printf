@@ -11,7 +11,7 @@ using json = nlohmann::json;
 
 ImageSourceView::ImageSourceView(): m_file_path(""), m_image(cv::Mat()), m_amount(1), m_width(0), m_height(0), mask_filter_view() {}
 
-void ImageSourceView::load(const std::string& path, int amount) {
+void ImageSourceView::load(const std::string& path, int amount, double ppi) {
     m_amount = amount;
     
     if (path.rfind("file://", 0) == 0) {
@@ -21,12 +21,26 @@ void ImageSourceView::load(const std::string& path, int amount) {
         m_file_path = path;
     }
 
+    load_image(ppi);
+
+    m_width = convert::pixel_to_mm(m_image.cols, ppi);
+    m_height = convert::pixel_to_mm(m_image.rows, ppi);
+}
+
+void ImageSourceView::load_image(double ppi) {
     if (!std::filesystem::exists(m_file_path)) {
         throw std::invalid_argument("File does not exist: " + m_file_path);
     }
+    
+    m_image = cv::imread(m_file_path, cv::IMREAD_UNCHANGED);
+    if (m_image.empty()) {
+        throw std::runtime_error("Failed to load image: " + m_file_path);
+    }
 
-    load_image();
+    convert_image();
+}
 
+void ImageSourceView::convert_image() {
     // blending to white if it has an alpha channel
     if ((m_image.type() == CV_8UC4) || (m_image.channels() == 4)) {
         // aplha blend to white
@@ -56,16 +70,6 @@ void ImageSourceView::load(const std::string& path, int amount) {
 
     if (m_image.type() != CV_8UC3) {
         m_image.convertTo(m_image, CV_8UC3);
-    }
-
-    m_width = convert::pixel_to_mm(m_image.cols, 96.0);
-    m_height = convert::pixel_to_mm(m_image.rows, 96.0);
-}
-
-void ImageSourceView::load_image() {
-    m_image = cv::imread(m_file_path, cv::IMREAD_UNCHANGED);
-    if (m_image.empty()) {
-        throw std::runtime_error("Failed to load image: " + m_file_path);
     }
 }
 
@@ -115,7 +119,7 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
     }
 }
 
-std::shared_ptr<ImageSource> ImageSourceView::get_image_source() const {
+std::shared_ptr<ImageSource> ImageSourceView::get_image_source(const DocumentPreset &preset) {
     auto img = std::make_shared<ImageSource>(m_image, m_amount, m_width, m_height);
     if (mask_filter_view.is_enabled()) img->add_filter(mask_filter_view.get_filter());
     return img;

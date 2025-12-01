@@ -35,6 +35,7 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<std::
 
     QImage image(result.data, result.cols, result.rows, result.step, QImage::Format_BGR888);
     PreviewProvider::instance()->setImage(image.copy());
+
 }
 
 QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources) {
@@ -46,7 +47,14 @@ QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, con
             const auto width = img.width();
             const auto height = img.height();
             const auto ppi = properties.get_ppi();
-            ErrorSignal::iinfo(QString("%1 x %2 px - %3 x %4 mm").arg(width).arg(height).arg(convert::pixel_to_mm(width, ppi)).arg(convert::pixel_to_mm(height, ppi)));
+                
+            // TODO: handle properly
+            if (height > properties.get_max_height_px()) 
+                ErrorSignal::ierror("Generated image exceeds maximum height");
+            else if (height < properties.get_min_height_px()) 
+                ErrorSignal::ierror("Generated image is below minimum height");
+            else 
+                ErrorSignal::iinfo(QString("%1 x %2 px - %3 x %4 mm").arg(width).arg(height).arg(convert::pixel_to_mm(width, ppi)).arg(convert::pixel_to_mm(height, ppi)));
         } catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
             PreviewProvider::instance()->setImage(QImage());

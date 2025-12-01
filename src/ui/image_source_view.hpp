@@ -9,6 +9,7 @@
 #include "image_source.hpp"
 #include "ifilter_view.hpp"
 #include "mask_filter_view.hpp"
+#include "document_preset.hpp"
 
 class ImageSourceView : public QObject {
     Q_OBJECT
@@ -28,12 +29,13 @@ class ImageSourceView : public QObject {
     double m_width;
     double m_height;
     MaskFilterView mask_filter_view;
-    virtual void load_image();
+    virtual void load_image(double ppi = 300);
+    void convert_image();
 
   public:
     ImageSourceView();
 
-    void load(const std::string& path, int amount = 1);
+    void load(const std::string& path, int amount = 1, double ppi = 300);
 
     QString get_file_name() const;
 
@@ -51,7 +53,7 @@ class ImageSourceView : public QObject {
 
     void load_from_preset(const std::string& preset_path);
 
-    std::shared_ptr<ImageSource> get_image_source() const;
+    virtual std::shared_ptr<ImageSource> get_image_source(const DocumentPreset &preset);
 
     MaskFilterView* get_mask_filter_view();
 

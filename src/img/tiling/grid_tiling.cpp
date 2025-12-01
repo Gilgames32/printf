@@ -9,10 +9,15 @@
 #include "convert.hpp"
 
 int GridTiling::calc_waste(int document_width, int tile_width, int tile_height, int amount) {
-    int columns = std::floor(document_width / tile_width);
+    int columns = std::floor(static_cast<double>(document_width) / tile_width);
+    int rows = std::ceil(static_cast<double>(amount) / columns);
 
-    // the amount can be less than the number of columns
-    return (document_width - tile_width * std::min(amount, columns)) * tile_height;
+    // the amount may not fill the last row completely
+    if (amount < columns && rows == 1) {
+        columns = amount;
+    }
+
+    return (document_width - tile_width * columns) * tile_height * rows;
 }
 
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) {
@@ -42,24 +47,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         throw std::invalid_argument("Invalid image size");
     }
 
-    auto quantity = std::accumulate(images.begin(), images.end(), 0,
-                                    [](int sum, const std::shared_ptr<ImageSource> img) { return sum + img->get_amount(); });
-    bool rotate = false;
-    // fits both ways
-    if (tile_width <= document_width && tile_height <= document_width) {
-        // check which way causes less waste
-        auto waste_portrait = calc_waste(document_width, tile_width, tile_height, quantity);
-        auto waste_landscape = calc_waste(document_width, tile_height, tile_width, quantity);
-        rotate = waste_landscape < waste_portrait;
-    } else if (tile_width <= document_width) {
-        rotate = false;
-    } else if (tile_height <= document_width) {
-        rotate = true;
-    } else {
-        // neither fits
-        throw std::invalid_argument("Image does not fit in document");
-    }
-
+    
     // instantiate tiles based on amounts
     std::vector<Tile> tiles = {};
     for (auto img : images) {
@@ -67,30 +55,63 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
             tiles.push_back(Tile(img));
         }
     }
-    // apply rotation
-    if (rotate) {
-        std::swap(tile_width, tile_height);
-        for (auto& tile : tiles) {
-            tile.rotate();
-        }
-    }
+    
 
-    // create document
-    int columns = std::floor((double)document_width / tile_width);
-    int rows = std::ceil((double)quantity / columns);
-    int document_height = rows * tile_height;
+    int quantity = static_cast<int>(tiles.size());
+    int document_height = 0;
+    std::cout << "\n\n";
+    for (int i = 0; i < quantity;) {
+        int x = 0;
+        bool rotate_row = false;
+        // fits both ways
+        if (tile_width <= document_width && tile_height <= document_width) {
+            // check which way causes less waste
+            std::cout << "quantity: " << quantity << ", i: " << i << std::endl;
+            auto waste_portrait = calc_waste(document_width, tile_width, tile_height, quantity - i);
+            std::cout << "Waste portrait:  " << waste_portrait << std::endl;
+            auto waste_landscape = calc_waste(document_width, tile_height, tile_width, quantity - i);
+            std::cout << "Waste landscape: " << waste_landscape << std::endl;
+            rotate_row = waste_landscape < waste_portrait;
+        } else if (tile_width <= document_width) {
+            rotate_row = false;
+        } else if (tile_height <= document_width) {
+            rotate_row = true;
+        } else {
+            // neither fits
+            throw std::invalid_argument("Image does not fit in document");
+        }
+
+        int columns = std::floor(document_width / (rotate_row ? tile_height : tile_width));
+        std::cout << "Columns: " << columns << std::endl;
+        if (quantity - i < columns && preset.get_correct_quantity()) {
+            int extra = columns - (quantity - i);
+            for (int j = 0; j < extra; j++) {
+                tiles.push_back(tiles[j]);
+            }
+            quantity += extra;
+        }
+        
+        columns = std::min(columns, quantity - i);
+
+        for (int j = 0; j < columns; j++) {
+            Tile& tile = tiles[i + j];
+            if (rotate_row != tile.is_rotated()) {
+                tile.rotate();
+            }
+            tile.corner = cv::Point(x, document_height);
+            x += tile.get_width();
+        }
+
+        document_height += rotate_row ? tile_width : tile_height;
+        i += columns;
+    }
+    
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 
-    // center tiles // TODO configurable
-    int horizontal_offset = (document_width - (columns * tile_width)) / 2;
-
     // copy tiles to document
-    auto corrected_quantity = preset.get_correct_quantity() ? rows * columns : quantity;
-    for (int i = 0; i < corrected_quantity; i++) {
-        Tile& tile = tiles[i % quantity];
-        cv::Rect target_rect = cv::Rect(horizontal_offset + (i % columns) * tile_width, (i / columns) * tile_height, tile_width, tile_height);
-
+    for (auto& tile : tiles) {
+        cv::Rect target_rect = cv::Rect(tile.corner.x, tile.corner.y, tile.get_width(), tile.get_height());
         tile.get_image().copyTo(document(target_rect));
     }
 

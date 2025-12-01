@@ -78,6 +78,36 @@ Item {
                         label.Layout.fillWidth: true
                     }
 
+                    UnitInput {
+                        num: docProperties.minHeight
+                        onValueChangedDelegate: (value) => {
+                            if (docProperties.minHeight != value)
+                                docProperties.minHeight = value;
+
+                        }
+                        from: 1
+                        label.text: "Min Height"
+                        unit.text: "mm"
+                        Layout.alignment: Qt.AlignRight
+                        Layout.fillWidth: true
+                        label.Layout.fillWidth: true
+                    }
+
+                    UnitInput {
+                        num: docProperties.maxHeight
+                        onValueChangedDelegate: (value) => {
+                            if (docProperties.maxHeight != value)
+                                docProperties.maxHeight = value;
+
+                        }
+                        from: 1
+                        label.text: "Max Height"
+                        unit.text: "mm"
+                        Layout.alignment: Qt.AlignRight
+                        Layout.fillWidth: true
+                        label.Layout.fillWidth: true
+                    }
+
                     UnitSpinBox {
                         num: docProperties.margin
                         onValueChangedDelegate: (value) => {
@@ -202,7 +232,7 @@ Item {
                     }
                     onClicked: {
                         generateButton.enabled = false;
-                        generator.asyncGenerate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources());
+                        generator.asyncGenerate(docProperties.getDocumentProperties(), sourceEntryView.getImageSources(docProperties.getDocumentProperties()));
                     }
                 }
 
