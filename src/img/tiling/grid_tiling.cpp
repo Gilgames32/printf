@@ -9,10 +9,15 @@
 #include "convert.hpp"
 
 int GridTiling::calc_waste(int document_width, int tile_width, int tile_height, int amount) {
-    int columns = std::floor(document_width / tile_width);
+    int columns = std::floor(static_cast<double>(document_width) / tile_width);
+    int rows = std::ceil(static_cast<double>(amount) / columns);
 
-    // the amount can be less than the number of columns
-    return (document_width - tile_width * std::min(amount, columns)) * tile_height;
+    // the amount may not fill the last row completely
+    if (amount < columns && rows == 1) {
+        columns = amount;
+    }
+
+    return (document_width - tile_width * columns) * tile_height * rows;
 }
 
 cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) {
@@ -54,14 +59,18 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
 
     int quantity = static_cast<int>(tiles.size());
     int document_height = 0;
+    std::cout << "\n\n";
     for (int i = 0; i < quantity;) {
         int x = 0;
         bool rotate_row = false;
         // fits both ways
         if (tile_width <= document_width && tile_height <= document_width) {
             // check which way causes less waste
+            std::cout << "quantity: " << quantity << ", i: " << i << std::endl;
             auto waste_portrait = calc_waste(document_width, tile_width, tile_height, quantity - i);
+            std::cout << "Waste portrait:  " << waste_portrait << std::endl;
             auto waste_landscape = calc_waste(document_width, tile_height, tile_width, quantity - i);
+            std::cout << "Waste landscape: " << waste_landscape << std::endl;
             rotate_row = waste_landscape < waste_portrait;
         } else if (tile_width <= document_width) {
             rotate_row = false;
@@ -73,6 +82,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         }
 
         int columns = std::floor(document_width / (rotate_row ? tile_height : tile_width));
+        std::cout << "Columns: " << columns << std::endl;
         if (quantity - i < columns && preset.get_correct_quantity()) {
             int extra = columns - (quantity - i);
             for (int j = 0; j < extra; j++) {
