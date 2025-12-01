@@ -133,10 +133,9 @@ Az így kapott elemet az adott orientációban a téglalapra helyezzük.
 A \href{fig:placements}{(d)} esetben nem mindegy, hogy hogyan osztjuk fel további részekre a téglalapot. 
 Ilyenkor a hátralevő elemek közül meghatározzuk a legrövidebb előforduló oldal hosszát, legyen ez $s_\text{min}$. 
 
-TODO: d0 nem kell vagy nyilak idk
-
 \begin{figure}[!h]
-    \includegraphics[width=\textwidth]{figures/partitioning.pdf}
+    \centering
+    \includegraphics[]{figures/partitioning.pdf}
     \caption{A téglalap lehetséges felosztása.}
     \label{fig:partitioning}
 \end{figure}
@@ -144,9 +143,8 @@ TODO: d0 nem kell vagy nyilak idk
 Az \ref{fig:partitioning}. ábra alapján amennyiben $w - s_1 < s_\text{min}$, úgy \href{fig:partitioning}{(d\textsubscript{1})} szerint érdemes csak felosztani a területet, mert ekkor T\textsubscript{2} téglalapra egyik esetben sem fér el semelyik elem sem, azaz ez a rész felesleggé válna.
 Hasonlóképpen ha $h - s_2 < s_\text{min}$, akkor \href{fig:partitioning}{(d\textsubscript{2})} szerint érdemes csak felosztani a területet, és T\textsubscript{1} válik felesleggé. 
 
-TODO: clarify, otherwise d2
 Amennyiben egyik feltétel sem teljesül, úgy a téglalapot kétféleképpen is fel tudjuk osztani. 
-A felosztást az $s_1 < s_\text{min}$ feltétel határozza meg: ha teljesül, akkor \href{fig:partitioning}{(d\textsubscript{1})} esetet választjuk, mert ellenkező esetben T\textsubscript{1} felesleggé válna.
+A felosztást ilyenkor az $s_1 < s_\text{min}$ feltétel határozza meg: ha teljesül, akkor \href{fig:partitioning}{(d\textsubscript{1})} esetet választjuk, mert különben T\textsubscript{1} biztosan felesleggé válna, ha nem teljesül, akkor pedig \href{fig:partitioning}{(d\textsubscript{2})} szerint osztjuk fel a téglalapot.
 
 A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek prioritásait és rekurzívan folytatjuk a pakolást, amíg el nem helyeztünk minden elemet, vagy elfogytak a téglalapok, amikre elemet tudnánk helyezni.
 
