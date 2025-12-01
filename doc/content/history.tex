@@ -64,12 +64,13 @@ Ez a megoldás sajnos nem tökéletes. Ha az utolsó sor cellái nincsenek telje
     \label{fig:lastrow}
 \end{figure}
 
-Ilyen esetek miatt az utolsó sort a többitől külön kell kezelni, és figyelembe kell venni a fennmaradó elemek számát. Ekkor az utolsó sor oszlopainak száma
+Ilyen esetek miatt, ha az utolsó sor nincs teljesen kitöltve, akkor azt a többitől külön kell kezelni. Legyen a hátralevő elemeink száma $r$, ahol 
 
-$$m' = n - (k - 1) \cdot m,$$
+$$r = n - (k - 1) \cdot m.$$
 
-\noindent a keletkező felesleg pedig
+Elképzelhető, hogy ilyenkor a többi sortól ellentétes orientáció több új sort eredményez. Vizsgáljuk meg, hogy mely orientáció eredményez kevesebb felesleget:
 
+TODO
 
 $$A_1 = (W - m' \cdot w) \cdot h,$$
 $$A_2 = (W - m' \cdot h) \cdot w,$$
