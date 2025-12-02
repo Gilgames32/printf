@@ -2,6 +2,8 @@
 
 \chapter{Tervezés}
 
+A projekt a \texttt{printf}\footnote{Támadtak problémák az elnevezés kapcsán. A \texttt{printf} egy Unix shell parancs is egyben. Ez a terminálból való futtatáskor néhány kellemetlen pillanathoz vezetett.} nevet kapta.
+
 \section{Főbb tervezési szempontok}
 
 A tervezésnél a fő szempontok az egyszerű kezelés és a sebesség voltak. Elsősorban a Photoshop szkript működését és hibáit szerettem volna figyelembe venni, hogy akik már tisztában vannak a használatával, azoknak ne jelentsen kihívást áttérni az új alternatívára, és hogy egy kellemesebb felhasználói élményt nyújtson. 
@@ -57,12 +59,14 @@ A szkripttel kapcsolatban gyakori panasz volt, hogy a képek mennyiségei nem á
 
 Képszerkesztésben egy kép maszkja egy olyan speciális réteget jelent, mely meghatározza, hogy a kép mely részei láthatók. A maszk egy szürkeárnyalatos kép, ahol a fekete pixelek kitakarják, a fehér pixelek átengedik, a szürke pixelek pedig részlegesen eresztik át a kép tartalmát az értéküktől függően. 
 
-TODO kép
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{figures/mask.pdf}
+    \caption{Egy maszk és egy kép kombinációjából készült üres hátterű kép. Az üres részeket a négyzetrácsos háttér jelöli.}
+    \label{fig:mask}
+\end{figure}
 
 Feltételezzük, hogy a maszk és a maszkolni kívánt kép méretei megegyeznek. A szürkeárnyalatos pixelek $1$ és $0$ közötti értékeknek tekinthetők, ahol a fehér pixelek értéke a legmagasabb.
-Ezek alapján, ha $k$ képet $m$ maszkkal szeretnénk maszkolni, úgy az eredmény $k'$, ahol a kép minden $i, j$ pixelének alfa csatornájanak értéke:
-
-TODO: magyarázat: k(i, j) mi? m(i, j) mi?
+Ezek alapján, ha $k(x, y)$ képet $m(x, y)$ maszkkal szeretnénk maszkolni, úgy az eredmény $k'(x, y)$, ahol a kép minden $i, j$ pixelének alfa csatornájanak értéke:
 
 $$k'_\alpha(i, j) = k_\alpha(i, j) \cdot m(i, j).$$
 
@@ -138,6 +142,13 @@ TODO folyamatábra?
 A két algoritmus, ahogy azt a \ref{fig:tiling_uml}. ábra is mutatja, egy közös interfészt valósítanak meg, mely egyetlen függvényből áll. Átadjuk a bemenő képeket és a dokumentumhoz tartozó konfigurációt, eredményül pedig megkapjuk a képet.
 Ez a megközelítés jól elkülöníti az algoritmusokat, így a jövőben egyszerűen hozzá tudunk adni pakolási algoritmusokat, ha a feladat úgy igényli.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=13cm]{figures/uml/tiling.pdf}
+    \caption{Az elrendezések generálására szolgáló interfész}
+    \label{fig:tiling_uml}
+\end{figure}
+
 \section{A felhasználói felület}
 
 A program funkcionalitás volt az elsődleges fókusz, azonban egy visszataszító és komplex felhasználó felület (UI) minden törekvésemet romba tudta volna dönteni. Szem előtt tartottam, hogy akik a szkriptet eddig is tudták használni, azoknak magától értetődő legyyen a program használata, ne legyen szükség ismételt betanításokra, és hogy ne kelljen egy útmutatót bújni minden egyes nyomtatásnál. Nem csak a saját nyomdánk, hanem más nyomdák lehetséges igényei is figyelembe lettek véve. Ugyan volt pár specifikus funkciónk, ügyeltem, hogy a programot más környezetekben is lehessen használni. Ezt a törekvést már nagyon jól megalapozta az elképzelésem a részletekbemenő konfigurációkat illetően, de ezeket a felhasználói felületen is meg kell jeleníteni valahogy. 
@@ -168,27 +179,12 @@ TODO kép hogy fogyjanak az oldalak xd
 \subsection{A felhasználói felület architektúrája}
 
 
+
 \subsection{A felhasználói élmény}
 
 \section{Bővítések és változtatások fejlesztés közben}
 
-yadda yadda sok feedbakc ez kéne az kéne
-
-mit akartam látni a uion, ui megfontolások
-TODO ui vázlat
-
-A tervezéshez UML diagramokat készítettem. 
-
-
-A projekt a \texttt{printf} nevet kapta.
-
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=12cm]{figures/uml/tiling.pdf}
-    \label{fig:tiling_uml}
-\end{figure}
+yadda yadda sok feedbakc ez kéne az kéne pdf meg dolgok
 
 \begin{figure}[h]
     \centering

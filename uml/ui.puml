@@ -20,7 +20,7 @@ class ImageSourceView {
 }
 SourceEntryView *-- "*" ImageSourceView
 
-abstract FilterView {
+interface FilterView {
     Filter get_filter()
     void load_from_json(json)
 }
@@ -60,7 +60,7 @@ class Preview{
 Preview --* Application
 
 
-abstract Tiling {
+interface Tiling {
     cv::Mat generate(...)
 }
 ControlView --> Tiling

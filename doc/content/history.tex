@@ -51,7 +51,7 @@ $$n' = k \cdot m.$$
 
 \begin{figure}[!h]
     \centering
-    \includegraphics{figures/correct_quantity.pdf}
+    \includegraphics[width=10cm]{figures/correct_quantity.pdf}
     \caption{A mennyiség korrigálása.}
     \label{fig:correct_quantity}
 \end{figure}
@@ -68,8 +68,14 @@ Ilyen esetek miatt, ha az utolsó sor nincs teljesen kitöltve, akkor azt a töb
 
 $$l = n - (k - 1) \cdot m.$$
 
-Elképzelhető, hogy ilyenkor a többi sortól ellentétes orientáció több új sort eredményez.
-TODO ehhez kép
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{figures/lastrows.pdf}
+    \caption{Egy lehetséges optimális elrendezés. Figyeljük meg, hogy az elemek két sorba fektetve is alacsonyabbak, mint állítva.}
+    \label{fig:lastrows}
+\end{figure}
+
+Elképzelhető, hogy ilyenkor a többi sortól ellentétes orientáció több új sort eredményez, ahogy azt a \ref{fig:lastrows} ábra is szemlélteti. 
 Vizsgáljuk meg, hogy mely orientáció eredményez kevesebb felesleget:
 
 $$
@@ -175,6 +181,6 @@ A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek pri
 Adott elemekre más-más sorba rendezési heurisztikák más-más elrendezéseket eredményeznek, ezért nem mindegy, hogy hogyan választjuk meg a sorrendet. Az elemhalmaztól nagyban függ, hogy éppen milyen szempont alapján érdemes az elemeket sorba rendezni, de ezt nehéz előre meghatározni. Érdemes az algoritmust több különböző sorba rendezés szerint futtatni, és az eredmények közül a legkedvezőbbet választani. Ilyen rendezések lehetnek például magasság, terület, kerület, átló szerinti csökkenő sorrendek.
 
 TODO kép különböző rendezésekre és hatásukra 
-% TODO egyéb heurisztikák
-% TODO még 4 oldal wtf
-% képek, png, exif, idk
+TODO egyéb heurisztikák
+TODO még 4 oldal wtf
+TODO képek, png, exif, idk
