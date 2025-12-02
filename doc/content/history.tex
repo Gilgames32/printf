@@ -64,22 +64,47 @@ Ez a megoldás sajnos nem tökéletes. Ha az utolsó sor cellái nincsenek telje
     \label{fig:lastrow}
 \end{figure}
 
-Ilyen esetek miatt, ha az utolsó sor nincs teljesen kitöltve, akkor azt a többitől külön kell kezelni. Legyen a hátralevő elemeink száma $r$, ahol 
+Ilyen esetek miatt, ha az utolsó sor nincs teljesen kitöltve, akkor azt a többitől külön kell kezelni. Legyen a hátralevő elemeink száma $l$, ahol 
 
-$$r = n - (k - 1) \cdot m.$$
+$$l = n - (k - 1) \cdot m.$$
 
-Elképzelhető, hogy ilyenkor a többi sortól ellentétes orientáció több új sort eredményez. Vizsgáljuk meg, hogy mely orientáció eredményez kevesebb felesleget:
+Elképzelhető, hogy ilyenkor a többi sortól ellentétes orientáció több új sort eredményez.
+TODO ehhez kép
+Vizsgáljuk meg, hogy mely orientáció eredményez kevesebb felesleget:
 
-TODO
+$$
+c_1 = \bigg\lfloor \cfrac{W}{h} \bigg\rfloor \qquad 
+r_1 = \bigg\lceil \cfrac{l}{c_1} \bigg\rceil \qquad
+A_1 = (W - c_1 \cdot h) \cdot r_1 \cdot w + (c_1 \cdot r_1 - l) \cdot w \cdot h
+$$
 
-$$A_1 = (W - m' \cdot w) \cdot h,$$
-$$A_2 = (W - m' \cdot h) \cdot w,$$
+$$
+\underbrace{
+    c_2 = \bigg\lfloor \cfrac{W}{w} \bigg\rfloor 
+}_{\text{oszlopok}}
+\qquad
+\underbrace{
+    r_2 = \bigg\lceil \cfrac{l}{c_2} \bigg\rceil
+}_{\text{sorok}}
+\qquad
+A_2 = 
+\underbrace{
+    (W - c_2 \cdot w) \cdot r_2 \cdot h 
+}_{\text{feleslegek a sorok szélein}}
++ 
+\underbrace{
+    (c \cdot r - l) \cdot w \cdot h
+}_{\text{üres cellák területe}}
+$$
 
 \noindent melyekből a kisebbik határozza meg az utolsó sor orientációját. Például a \ref{fig:lastrow}. ábra esetében ez a jobb oldali változatot jelenti. Ebben az esetben is releváns lehet az elemek számának korrigálása, ilyenkor
 
-$$\color{red} n' = (k - 1) \cdot m + m'.$$ 
+$$n' = (k - 1) \cdot m + r \cdot c$$ 
 
-TODO bizonyítás? 
+Ez az algoritmust csak azonos méretű elemek esetén működik, így az eredmény szemponjából mindegy, hogy milyen sorrendben helyezzük el az elemet, az egyetlen döntést az orientáció meghatározásánál kell hozni.
+
+Elemek elhelyezésénél két esetet különböztetünk meg. Az egyik esetben bármely orientációt választva maradnak még hátralevő elemek, tehát nem maradhat üres cella. Ellenkező esetben már az üresen mardó cellákat is figyelembe kell vennünk a sor tájolásának megválasztásához.
+Mindkét esetben a legkevesebb felesleggel járó orientációt választjuk, tehát beláthatjuk, hogy az így kapott elrendezés optimális.
 
 \section{Különböző méretű képek elrendezése}
 
@@ -88,9 +113,7 @@ A különböző méretű dobozok fix területre történő elhelyezése a ládap
 \subsection{Guillotine vágás}
 
 A guillotine vágás egy olyan folyamat, ahol egy nagyobb lemezt vágnak fel előre megadott, kisebb téglalapokra, guillotine vágásokkal. A guillotine vágások, más néven széltől-szélig vágások egyik oldaltól a másik oldalig tartó egyenes vágások, melyek a téglalapot két részre osztják fel. 
-Ezt az eljárást elsősorban üveg, acél, fa, illetve kartonpapír lapok felvágásakor alkalmazzák. Több különböző szempont alapján is meg lehet próbálni optimalizálni a probléma megoldását, például maximalizálni a kapott elemek területét, értékét vagy számát, illetve minimalizálni a szükséges vágások számát vagy a keletkező felseleget (\cite{guillotine-cutting-wiki} alapján). 
-
-TODO magyarázat érték, szám, stb.
+Ezt az eljárást elsősorban üveg, acél, fa, illetve kartonpapír lapok felvágásakor alkalmazzák. Több optimalizációs probléma is kapcsolódik a guillotine vágáshoz, ilyenek a kapott felesleg minimalizálása, a kivágott elemekhez rendelt értékek maximalálása vagy a lemez teljes felvágásához szükséges vágások számának minimalizálása (\cite{guillotine-cutting-wiki} alapján). 
 
 A guillotine vágás esetén a lemezek mérete előre meg van adva, és a kisebb téglalapok mennyisége nincsen megkötve. A problémánk nagyban hasonlít a guillotine vágásra, leszámítva, hogy a képek mennyisége fix, és csak a tekercs szélessége adott. 
 
@@ -151,5 +174,7 @@ A keletkező üres téglalapokra újból meghatározzuk a hátralevő elemek pri
 
 Adott elemekre más-más sorba rendezési heurisztikák más-más elrendezéseket eredményeznek, ezért nem mindegy, hogy hogyan választjuk meg a sorrendet. Az elemhalmaztól nagyban függ, hogy éppen milyen szempont alapján érdemes az elemeket sorba rendezni, de ezt nehéz előre meghatározni. Érdemes az algoritmust több különböző sorba rendezés szerint futtatni, és az eredmények közül a legkedvezőbbet választani. Ilyen rendezések lehetnek például magasság, terület, kerület, átló szerinti csökkenő sorrendek.
 
+TODO kép különböző rendezésekre és hatásukra 
 % TODO egyéb heurisztikák
 % TODO még 4 oldal wtf
+% képek, png, exif, idk

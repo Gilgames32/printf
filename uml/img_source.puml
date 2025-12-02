@@ -9,7 +9,8 @@ class ImageSource {
     Filter[] filters
     
     bool rotated
-    size_t width, height
+    double width
+    double height
     
     void add_filter(Filter filter)
     void clear_filters()
@@ -17,7 +18,7 @@ class ImageSource {
     Mat get_img()
 }
 
-abstract Filter {
+interface Filter {
     Mat apply(Mat img)
 }
 ImageSource *-- Filter
@@ -51,7 +52,11 @@ Filter <|-- Rotate
 class Tile {
     ImageSource image
     Point corner
+    int width
+    int height
     bool rotated
+
+    void rotate()
 }
 ImageSource -* Tile
 
@@ -59,8 +64,9 @@ class CachedImage {
     ICachableImage source
     Mat cache
     bool dirty
+    void regenerate()
 }
-CachedImage *- ImageSource
+CachedImage -* ImageSource
 
 
 interface ICache {

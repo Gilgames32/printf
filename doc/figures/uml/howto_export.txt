@@ -1,0 +1,2 @@
+plantuml -tsvg <path>
+inkscape <in>.svg -o <out>.pdf

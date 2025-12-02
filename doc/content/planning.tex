@@ -6,7 +6,7 @@
 
 A tervezésnél a fő szempontok az egyszerű kezelés és a sebesség voltak. Elsősorban a Photoshop szkript működését és hibáit szerettem volna figyelembe venni, hogy akik már tisztában vannak a használatával, azoknak ne jelentsen kihívást áttérni az új alternatívára, és hogy egy kellemesebb felhasználói élményt nyújtson. 
 
-A szkript egyik nagy előnye volt, hogy egy terminál helyett egy felhasználói felülete volt, és hogy mentés előtt is lehetett látni, hogy mit fog eredményezni a generálás. Sajnos egy rosszul megadott paraméter is azt jelentette, hogy az egész folyamatot elölről kellett kezdeni, ami kellemetlen felhasználói élményt eredményezett. 
+A szkript egyik nagy előnye volt, hogy egy terminál helyett egy felhasználói felülete volt (\ref{fig:old_ui}. ábra), és hogy mentés előtt is lehetett látni, hogy mit fog eredményezni a generálás. Sajnos egy rosszul megadott paraméter is azt jelentette, hogy az egész folyamatot elölről kellett kezdeni, ami kellemetlen felhasználói élményt eredményezett. 
 
 Ugyan a szkript képes volt több különböző képet kezelni, az erre készült megoldás igencsak fapados volt: a mennyiséget a szkript egy szorzóként kezelte. Ez azt jelentette, hogy nem lehetett megadni egyesével, hogy adott képekből pontosan hány kerüljön elhelyezésre, a szorzó egységesen állította be a mennyiségeket.
 
@@ -45,7 +45,7 @@ Ezek a paraméterek külön előbeállításcsoportként vannak kezelve, és fő
 
 \subsection{A képek paraméterei}
 
-A szkripttel kapcsolatban gyakori panasz volt, hogy a képek paraméterei nem állíthatók egyesével. Ebből a hibából tanulva az alábbi paraméterek már képenként adhatók meg:
+A szkripttel kapcsolatban gyakori panasz volt, hogy a képek mennyiségei nem állíthatók egyesével. Ebből a hibából tanulva a képek paramétereit egyesével lehet megadni, amik az alábbiak:
 
 \begin{itemize}
     \item a mennyiség,
@@ -64,7 +64,7 @@ Ezek alapján, ha $k$ képet $m$ maszkkal szeretnénk maszkolni, úgy az eredmé
 
 TODO: magyarázat: k(i, j) mi? m(i, j) mi?
 
-$$k'_\alpha(i, j) = k_\alpha(i, j) * m(i, j).$$
+$$k'_\alpha(i, j) = k_\alpha(i, j) \cdot m(i, j).$$
 
 Kitűzők és matricák nyomtatásánál általában valamilyen kör alakú formára vágjuk fel a kinyomtatott képeket, ezért a szkriptben lehetőség volt ezeket a képeket egy kör alakú mintával maszkolni, ami így egy kör alakú képet eredményezett.
 
@@ -88,16 +88,91 @@ Ezek alapján valamilyen félig strukturált módon érdemes tárolnunk az előb
 Egy hasznos funckionalitás volt, hogy egy előbeállítás a betöltésekor másik beállításcsoportokra is kihatással lehetett. A funkció szkriptbeli implementációja nem volt hatékony, vinszont meg szerettem volna tartani, így egy új megközelítéssel próbáltam megoldani.
 Az elképzelésem az volt, hogy adott előbeállítás fájlok magukban tartalmazhatnak más csoportokhoz tarzotó paramétereket, mint alcsoportok vagy referenciák más fájlokra. A program az előbeállítások betöltéskor megvizsgálja, hogy a fájl tartalmaz-e alcsoportokat, és ha igen, az alcsoport tartalmát továbbadja a megfelelő beállításcsoportért felelős komponensnek, ahol az alcsoport betöltésre kerül. A cél az, hogy az alcsoportok sémája megegyezzen az adott beállításcsoport sémájával, így továbbadáskor a komponensnek ne kelljen tudatában lennie, hogy alcsoportot tölt éppen be, vagy sem.
 
-\section{Osztályarchitekúra}
+\section{Főbb tervezési szempontok}
 
-A program architektúrájának tervezésekor nagy hangsúlyt kapott a teljesítmény. 
+A program architektúrájának tervezésekor a legnagyobb hangsúlyt a teljesítmény kapta.
+Képekkel való dolgozáskor a számítógépek a képeket pixelenként tárolják a memóriában, pixelenként általában 3-4 csatorában, csatornánként egy bájtban. Nyomtatáskor nagy felbontású képekkel dolgozunk a magas minőség érdekében. Esetünkben az áttetszőség, azaz az alfa csatorna elhagyható, mert nem foglalkozunk átlapoló elemekkel. Egy $w$ mm széles és $h$ mm magas képnél $d$ dpi mellett ez $M$ bájtnak felel meg, ahol:
 
-mindent csak egyszer tárolunk, mindent csak egyszer szűrünk stb.
+$$ w_p = w \cdot \cfrac{d}{25,4}, \qquad h_p = h \cdot \cfrac{d}{25,4}$$
 
-optimalizációs megfontolások
-ügyelés a bővíthetőségre
+$$ M = w_p \cdot w_h \cdot 3.$$
+
+Ez egy A4 szabványú papír esetén 300 dpi\footnote{dpi: dot per inch, avagy egy inch hány képpontnak felel meg} felbontás mellett ez nagyjából 8700632 bájt, ami kb. 8,3 megabájt memória. Ez modern viszonylatban már nem számít soknak, de ha pazarlóan bánunk vele, akkor nagyon hamar ki fogunk futni a memóriából, tekintve, hogy ez csak egyetlen A4-es lap, és ezek sokaságait szeretnénk egy dokumentumra egyesíteni.
+
+A megközelítésem az volt, hogy lehetőleg minden kép csak egyszer szerepeljen a memórióban. A képek tárolása mellett a képeken végzett műveletek is nagyon költségesek. A képeket a legtöbb esetben át kell méretezni, elforgatni, ellátni segédvonalakkal stb. Ezek a transzformációk költséges műveletek, amiket nem szerettem volna, hogy a kelleténél többször ki kelljen számolni.
+
+Ennek elkerülését segíti, ha a képek már csak egyszer szerepelnek a memóriában, de a többszöri transzformálás veszélye még így is fennáll. 
+
+Egy jó megközelítés lehet az, hogy a transzformációkat helyben végezzük el, és felülírjuk a régi képet. Erre lehetőségünk van, mert minden azonos képre ugyan azokat a transzformációkat kellene elvégeznünk, hiszen minden azonos képnek megegyezik a mérete, maszkja stb.
+A felülírás művelete viszont destruktív, azaz eredeti kép elvesztéséhez vezet, mert nem minden képi transzformálásnak létezik inverze, amivel vissza tudnánk állítani a kezdőállapotba.
+Ez gondot jelent, amikor generálás után megváltoztatunk egy paramétert, majd ismét ki szeretnénk generálni az eredményt. Ekkor az eredeti kép hiányában kénytelenek vagyunk újra betölteni a képet, de a fájl létezését ekkor már semmi sem garantálja.
+
+Ezzel szemben, ha az eredményeket egy gyorsítótárban (cache) tároljuk, mely a transzformációk alkalmazásakor eltárolja az eredményt, akkor nem kell ismét a fájlrendszerhez fordulnunk, és a transzformációkat is elég csupán egyszer alkalmaznunk. Egyetlen hátránya, hogy több memórát használ, mert számon kell tartanunk az eredeti képet is.
+
+Tovább fokozható a teljesítmény, ha a transzformációk kiszámításához lusta kiértékelést alkalmazunk, azaz csak akkor számítjuk ki őket, ha a program egy adott része el szeretné érni. Ez a megoldás kéz a kézben jár a gyorsítótáras megoldással, az eredményül kapott képeket egyből a gyorsítótárba töltjük, amit csak akkor kell újraszámolnunk, ha megváltozott egy paraméter, és egy komponens újból el szeretné érni.
+
+Az említett transzformációk (avagy szűrők) bármilyen képből képet képző függvény lehetnek. A programban ilyen transzformációk például az átméretezés, a forgatás, a maszkolás, de a segédvonalak és a térköz hozzáadása is megoldható szűrőkkel. 
+Nagy előnye ennek a megközelítésnek a bővíthetőség. A szűrők szignatúrája megegyezik, így lehetőségünk valamilyen heterogén kollekcióban tárolnunk őket, egy új szűrő felvétele ekkor csak a transzformációs függvény implementálását jelenti, a program úgy tekinthet rá, mint bármely másik szűrőre.
+
+\section{Osztályarchitektúra}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/uml/img_source.pdf}
+    \caption{A kép források és a kapcsolódó osztályok diagramja.}
+    \label{fig:imagesource_uml}
+\end{figure}
+
+A tervezési szempontok alapján elkészítettem a \ref{fig:image_source_uml}. UML diagramot. Az ábra magába foglalja a forrásfájlok, azaz a képek alapvető kezelésével kapcsolatos komponenseket. 
+
+A csempék (tile) a képek fizikai reprenzentációi a dokumentumon, tudjuk a helyüket, orientációjukat és a méretüket pixelben. Az elrendezést generáló algoritmusok szempontjából éppen ezek a releváns információk, a kép megjelenése ebben a stádiumban még nem számít, ezért ezt célszerű volt elkülöníteni.
+
+A kép forrás (image source) maga a kép. Egy kétdimenziós mátrixban tartalmazza a kép pixeleit, tartalmazza a szűrőket (filter), a kép beállított fizikai méretét, a kért mennyiséget és a gyorsítótárazott képet. A szűrők egy közös interfészt valósítanak meg, mely lehetővé teszi, hogy egy konténerben tároljuk őket, és hogy a képnek ne kelljen tudnia a működésükről.
+
+A gyorsítótár egy egyszerű interfészt valósít meg, melyben a cache-t piszkosra tudjuk állítani, ezzel jelölve, hogy a következő eléréskor a tartalmát ismét ki kell számítani.
+
+TODO folyamatábra?
+
+\subsection{A különböző algoritmusok}
+
+A két algoritmus, ahogy azt a \ref{fig:tiling_uml}. ábra is mutatja, egy közös interfészt valósítanak meg, mely egyetlen függvényből áll. Átadjuk a bemenő képeket és a dokumentumhoz tartozó konfigurációt, eredményül pedig megkapjuk a képet.
+Ez a megközelítés jól elkülöníti az algoritmusokat, így a jövőben egyszerűen hozzá tudunk adni pakolási algoritmusokat, ha a feladat úgy igényli.
 
 \section{A felhasználói felület}
+
+A program funkcionalitás volt az elsődleges fókusz, azonban egy visszataszító és komplex felhasználó felület (UI) minden törekvésemet romba tudta volna dönteni. Szem előtt tartottam, hogy akik a szkriptet eddig is tudták használni, azoknak magától értetődő legyyen a program használata, ne legyen szükség ismételt betanításokra, és hogy ne kelljen egy útmutatót bújni minden egyes nyomtatásnál. Nem csak a saját nyomdánk, hanem más nyomdák lehetséges igényei is figyelembe lettek véve. Ugyan volt pár specifikus funkciónk, ügyeltem, hogy a programot más környezetekben is lehessen használni. Ezt a törekvést már nagyon jól megalapozta az elképzelésem a részletekbemenő konfigurációkat illetően, de ezeket a felhasználói felületen is meg kell jeleníteni valahogy. 
+
+A projekt a kezdetektől fogva angol nyelven folyt, remélve, hogy ez majd javítja az életképességét, és hogy így nagyobb valószínűséggel térnek át a használatára akár külföldi nyomdák is, ezért a felhasználói felület nyelve is angol.
+
+\subsection{A felhasználói felület komponensei}
+
+A konfigurációs paraméterek nagyjából lefedik, hogy minek kell szerepelnie a felhasználói felületen. Mivel most már volt elképzelés, több különböző méretű elem kezelésére, és mert gyakori panasz volt, hogy nem lehetett egyesével megadni több kép esetén, hogy miből mennyit szeretnénk, ezért egyértelmű volt, hogy a képeknek egyesével konfigurálhatónak kell lennie. Ez azt jelentette, hogy a felhasználói felületen is egyesével kellett megjelenniük, ehhez pedig valamilyen dinamikus elrendezésre volt szükség. 
+
+A bemenetek megadásán és a dokumentum konfigurálásán kívül szükség volt kimenetre is. Itt elsősorban egy előnézetre gondoltam, amit a felhasználó nagyítani, kicsinyíteni, illetve pásztázni tudna az egér és a görgő használatával bármely más képnézegető szoftverhez hasonló módon.
+
+Ez sajnos nem bizonyult elégnek. Ha hibát kapunk egy generálás közben, a hiba okát nehéz képként megjeleníteni. Erre egy jó megoldás lenne az előnézethez kapcsolódó szövegdoboz, melyben extra információt kaphatunk a generálás eredményéről. Hiba esetén ebbe a szövegdobozba kerül a fellépett hibához tartozó hibaüzenet, sikeres generálás után pedig megjelenik a dokumentum mérete pixelben, illetve milliméterben. 
+
+\subsection{A felhasználói felület elrendezése}
+
+A megjelenítendő komponensek tudatában elkezdtem megtervezi az elrendezést. 
+Mivel a komponensek már jóval eltértek a szkript felületének komponenseitől, ezért nem volt szempont, hogy a program felhasználói felülete különösebben hasonlítson a szkript megjelenésére. 
+
+A komponensek és a paraméterek jól behatárolták a logikus elrendezést. A kép források egységes elrendezést követnek, és mert az elemek száma tetszőleges, ezért célszerű az elemeket egy dinamikus listában megjeleníteni. Erre egy görgethető nézet a legkézenfekvőbb, és hogy maximalizáljuk az egyszerre látható elemek számát, úgy a listának célszerű kitöltenije az ablak teljes magasságát.
+
+A dokumentum és a nyomtató beállításai már nem szükséges, hogy dinamikusak legyenek, de éredemes számítani arra, hogy egyéb új funckiók új konfigurációs beállításokat fognak megigényelni. Ezek miatt a dokumentum és a nyomtató beállításait egy oszlopba szerveztem. Ha később még beállításokra lenne szükség, az oszlopot meg lehet csinálni görgethetőre vagy több gategóriára bontani, és oldalakkal/lapokkal (tab) megoldani.
+
+A megannyi komponensünket így három nagy csoportra tudtuk felosztani: a bemenetek beállításai, az előnézet és a kimenet beállításai. A generálás folyamata is nagyjából ezt a lépéssorrendet követi: megadjuk a bemeneteket, elkészül az előnézet, elmentjük a kimenetet. Éppen ezért dönöttem úgy, hogy az elrendezés is ezt a sorrendet fogja követni, balról jobbra. Ennek fényében elkészítettem a felhasználói felület vizuális tervét.
+
+TODO kép hogy fogyjanak az oldalak xd
+
+\subsection{A felhasználói felület architektúrája}
+
+
+\subsection{A felhasználói élmény}
+
+\section{Bővítések és változtatások fejlesztés közben}
+
+yadda yadda sok feedbakc ez kéne az kéne
 
 mit akartam látni a uion, ui megfontolások
 TODO ui vázlat
@@ -107,34 +182,23 @@ A tervezéshez UML diagramokat készítettem.
 
 A projekt a \texttt{printf} nevet kapta.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=15cm]{figures/uml/img_source.pdf}
-    \label{fig:ImageSource_uml}
-\end{figure}
+
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=12cm]{figures/uml/tiling.pdf}
-    \label{fig:Tiling_uml}
+    \label{fig:tiling_uml}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=14cm]{figures/uml/ui.pdf}
-    \label{fig:UI_uml}
+    \label{fig:ui_uml}
 \end{figure}
 
 
-\section{Kép betöltés, konfigurálás}
 
-%A bemeneti képeket tartalmazó és manipuláló osztályok tervezésénél különösen nagy hangsúlyt helyeztem a teljesítményre. Az \href{fig:ImageSource_uml}{ábrán} látszik, hogy a forrásfájlokat pixelenként tároljuk, és számon tartjuk a hozzájuk tartozó filtereket. A filterek tudják transzformálni és manipulálni a képet (pl. méret, forgatás, maszk, segédvonalak). Az eredeti képet mindig megőrizzük, hogy a filterek ne legyenek destruktívak. Annak érdekében, hogy a filtereket ne kelljen minden egyes elérésnél újra számolni vezettem be egy cachet. Ha változnak a filterek, a cache piszkos lesz, és a következő elérésnél újra számolódik.
-
-%Ennek fényében úgy döntöttünk, hogy támogatjuk mindkét megközelítést, és majd a felhasználó dönt a különböző algoritmusok között. Erre a célra szolgál egy Tiling interface, ami megkapja a képek listáját és a dokumentum tulajdonságait.
-
-\section{A felhasználói felület}
-
-%A legnagyobb szabadságunk a felhasználói felület kapcsán volt. Mindenképpen szerettem volna egy előnézetet, hogy még mentés előtt a felhasználó láthassa az eredményt, és azt esetleg javítani tudja a beállítások újra konfigurálásával. A kezelés lépéseinek sorrendje alapján igyekeztem kialakítani a felület többi részét. Vannak bemeneti képeink, azokat szeretnénk egyesíteni, majd kinyomtatni. Képek, egyben, nyomtatás. Ezeket balról jobbra elrendezve kapjuk meg a felület végleges tervét: balra a bemenetek és azok beállításai, középen egy előnézet, jobbra pedig a kimenet (generált dokumentum) beállításai, a generálás és az exportálás/nyomtatás gomb. A UI feladata lenne továbbá az előbeállítások betöltése és a filterek beállításainak kezelése is. A bemenetek alapján meghívódik a generálás, ami elkészíti nekünk a kívánt képet, ezt fogjuk látni az előnézeten.
+% A kezelés lépéseinek sorrendje alapján igyekeztem kialakítani a felület többi részét. Vannak bemeneti képeink, azokat szeretnénk egyesíteni, majd kinyomtatni. Képek, egyben, nyomtatás. Ezeket balról jobbra elrendezve kapjuk meg a felület végleges tervét: balra a bemenetek és azok beállításai, középen egy előnézet, jobbra pedig a kimenet (generált dokumentum) beállításai, a generálás és az exportálás/nyomtatás gomb. A UI feladata lenne továbbá az előbeállítások betöltése és a filterek beállításainak kezelése is. A bemenetek alapján meghívódik a generálás, ami elkészíti nekünk a kívánt képet, ezt fogjuk látni az előnézeten.
 
 
 
