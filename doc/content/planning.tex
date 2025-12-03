@@ -57,7 +57,7 @@ A szkripttel kapcsolatban gyakori panasz volt, hogy a képek mennyiségei nem á
 
 \subsubsection{A kép maszkja}
 
-Képszerkesztésben egy kép maszkja egy olyan speciális réteget jelent, mely meghatározza, hogy a kép mely részei láthatók. A maszk egy szürkeárnyalatos kép, ahol a fekete pixelek kitakarják, a fehér pixelek átengedik, a szürke pixelek pedig részlegesen eresztik át a kép tartalmát az értéküktől függően. 
+Képszerkesztésben egy kép maszkja egy olyan speciális réteget jelent, mely meghatározza, hogy a kép mely részei láthatók. A maszk egy szürkeárnyalatos kép, ahol a fekete pixelek kitakarják, a fehér pixelek átengedik, a szürke pixelek pedig részlegesen eresztik át a kép tartalmát az értéküktől függően. Erre mutat egy példát a \ref{fig:mask}. ábra.
 
 \begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/mask.pdf}
@@ -70,7 +70,7 @@ Ezek alapján, ha $k(x, y)$ képet $m(x, y)$ maszkkal szeretnénk maszkolni, úg
 
 $$k'_\alpha(i, j) = k_\alpha(i, j) \cdot m(i, j).$$
 
-Kitűzők és matricák nyomtatásánál általában valamilyen kör alakú formára vágjuk fel a kinyomtatott képeket, ezért a szkriptben lehetőség volt ezeket a képeket egy kör alakú mintával maszkolni, ami így egy kör alakú képet eredményezett.
+Kitűzők és matricák nyomtatásánál általában valamilyen kör alakú formára vágjuk fel a kinyomtatott képeket, ezért a szkriptben lehetőség volt a képeket egy kör mintájú maszkkal maszkolni, ami így egy kör alakú képet eredményezett.
 
 Vitatható, hogy a maszkolás mennyire tartozik a program feladatkörébe. Egyfelől vannak erre specializálódó programok, ahol előre láthatjuk a maszkolás eredményét, és még helyben korrigálni tudjuk a képet. Másfelől ez egy olyan funkció volt, melynek elhagyása visszalépést jelentett volna a szkripttől, és általában nem álltak rendelkezésünkre az előre maszkolt képek. 
 A kör alak sokszor elősegíti a vágást, és gyakran kevesebb tintát használ fel, hiszen nem pazarlunk festéket a levágandó részekre.
@@ -95,28 +95,28 @@ Az elképzelésem az volt, hogy adott előbeállítás fájlok magukban tartalma
 \section{Főbb tervezési szempontok}
 
 A program architektúrájának tervezésekor a legnagyobb hangsúlyt a teljesítmény kapta.
-Képekkel való dolgozáskor a számítógépek a képeket pixelenként tárolják a memóriában, pixelenként általában 3-4 csatorában, csatornánként egy bájtban. Nyomtatáskor nagy felbontású képekkel dolgozunk a magas minőség érdekében. Esetünkben az áttetszőség, azaz az alfa csatorna elhagyható, mert nem foglalkozunk átlapoló elemekkel. Egy $w$ mm széles és $h$ mm magas képnél $d$ dpi mellett ez $M$ bájtnak felel meg, ahol:
+A legtöbb képmanipulációs munkafolyamatban a számítógépek a képeket képpontonként tárolják a memóriában, pixelenként általában 3-4 csatorában, csatornánként egy bájtban. Nyomtatáskor a magas minőség érdekében nagy felbontású képekkel dolgozunk. Esetünkben az áttetszőség, azaz az alfa csatorna elhagyható, mert nem foglalkozunk átlapoló elemekkel. Egy $w$ mm széles és $h$ mm magas képnél $d$ dpi mellett ez $M$ bájtnak felel meg, ahol:
 
 $$ w_p = w \cdot \cfrac{d}{25,4}, \qquad h_p = h \cdot \cfrac{d}{25,4}$$
 
 $$ M = w_p \cdot w_h \cdot 3.$$
 
-Ez egy A4 szabványú papír esetén 300 dpi\footnote{dpi: dot per inch, avagy egy inch hány képpontnak felel meg} felbontás mellett ez nagyjából 8700632 bájt, ami kb. 8,3 megabájt memória. Ez modern viszonylatban már nem számít soknak, de ha pazarlóan bánunk vele, akkor nagyon hamar ki fogunk futni a memóriából, tekintve, hogy ez csak egyetlen A4-es lap, és ezek sokaságait szeretnénk egy dokumentumra egyesíteni.
+Ez egy A4 szabványú papír esetén 300 dpi\footnote{dpi: dot per inch, avagy egy inch hány képpontnak felel meg} felbontás mellett ez nagyjából 8700632 bájt, ami kb. 8,3 megabájt memória. Ez modern viszonylatban már nem számít soknak, de ha pazarlóan bánunk vele, akkor nagyon hamar ki fogunk futni a memóriából, tekintve, hogy ez csak egyetlen A4-es lap, és ezek sokaságát szeretnénk egy dokumentumon egyesíteni.
 
-A megközelítésem az volt, hogy lehetőleg minden kép csak egyszer szerepeljen a memórióban. A képek tárolása mellett a képeken végzett műveletek is nagyon költségesek. A képeket a legtöbb esetben át kell méretezni, elforgatni, ellátni segédvonalakkal stb. Ezek a transzformációk költséges műveletek, amiket nem szerettem volna, hogy a kelleténél többször ki kelljen számolni.
+A megközelítésem az volt, hogy minden kép lehetőleg csak egyszer szerepeljen a memórióban. A képek tárolása mellett a képeken végzett műveletek is nagyon költségesek. A képeket a legtöbb esetben át kell méretezni, el kell forgatni, el kell látni segédvonalakkal stb. Ezek a transzformációk költséges műveletek, amiket nem szerettem volna, hogy a kelleténél többször ki kelljen számolni.
 
 Ennek elkerülését segíti, ha a képek már csak egyszer szerepelnek a memóriában, de a többszöri transzformálás veszélye még így is fennáll. 
+Egy jó megközelítés lehet, hogy a program a transzformációkat helyben hajtja végre, és a régi képet felülírja az eredménnyel. Minden azonos képre ugyan azokat a transzformációkat kell elvégezni, hiszen minden azonos képnek megegyezik a mérete, maszkja stb., ezért ez egy működőképes megoldás.
 
-Egy jó megközelítés lehet az, hogy a transzformációkat helyben végezzük el, és felülírjuk a régi képet. Erre lehetőségünk van, mert minden azonos képre ugyan azokat a transzformációkat kellene elvégeznünk, hiszen minden azonos képnek megegyezik a mérete, maszkja stb.
-A felülírás művelete viszont destruktív, azaz eredeti kép elvesztéséhez vezet, mert nem minden képi transzformálásnak létezik inverze, amivel vissza tudnánk állítani a kezdőállapotba.
-Ez gondot jelent, amikor generálás után megváltoztatunk egy paramétert, majd ismét ki szeretnénk generálni az eredményt. Ekkor az eredeti kép hiányában kénytelenek vagyunk újra betölteni a képet, de a fájl létezését ekkor már semmi sem garantálja.
+A felülírás művelete viszont destruktív lehet, azaz eredeti kép elvesztéséhez vezethet, mert nem minden képi transzformálásnak létezik inverze, amivel vissza tudnánk állítani a képet a kiindulási állapotába.
+Ez gondot jelent, amikor generálás után megváltoztatunk egy paramétert, majd ismét le szeretnénk generálni az eredményt. Ekkor az eredeti kép hiányában kénytelenek vagyunk újra betölteni a képet, de a fájl létezését ekkor már semmi sem garantálja.
 
 Ezzel szemben, ha az eredményeket egy gyorsítótárban (cache) tároljuk, mely a transzformációk alkalmazásakor eltárolja az eredményt, akkor nem kell ismét a fájlrendszerhez fordulnunk, és a transzformációkat is elég csupán egyszer alkalmaznunk. Egyetlen hátránya, hogy több memórát használ, mert számon kell tartanunk az eredeti képet is.
 
-Tovább fokozható a teljesítmény, ha a transzformációk kiszámításához lusta kiértékelést alkalmazunk, azaz csak akkor számítjuk ki őket, ha a program egy adott része el szeretné érni. Ez a megoldás kéz a kézben jár a gyorsítótáras megoldással, az eredményül kapott képeket egyből a gyorsítótárba töltjük, amit csak akkor kell újraszámolnunk, ha megváltozott egy paraméter, és egy komponens újból el szeretné érni.
+Tovább fokozható a teljesítmény, ha a transzformációk kiszámításához lusta kiértékelést alkalmazunk, azaz a program csak akkor számítja ki őket, ha egy másik része el szeretné érni. Ez a megoldás kéz a kézben jár a gyorsítótáras megoldással, a program az eredményül kapott képeket egyből a gyorsítótárba tölti, amit csak akkor kell ismét kiszámítania, ha megváltozott egy paraméter, és egy komponens újból el szeretné érni.
 
-Az említett transzformációk (avagy szűrők) bármilyen képből képet képző függvény lehetnek. A programban ilyen transzformációk például az átméretezés, a forgatás, a maszkolás, de a segédvonalak és a térköz hozzáadása is megoldható szűrőkkel. 
-Nagy előnye ennek a megközelítésnek a bővíthetőség. A szűrők szignatúrája megegyezik, így lehetőségünk valamilyen heterogén kollekcióban tárolnunk őket, egy új szűrő felvétele ekkor csak a transzformációs függvény implementálását jelenti, a program úgy tekinthet rá, mint bármely másik szűrőre.
+Az említett transzformációk (avagy szűrők) bármilyen képből képet képző függvények lehetnek. A programban ilyen transzformációk például az átméretezés, a forgatás, a maszkolás, de a segédvonalak és a térköz hozzáadása is megoldható szűrőkkel. 
+Nagy előnye ennek a megközelítésnek a bővíthetőség. A szűrők szignatúrája megegyezik, így lehetőség van ezeket egy közös heterogén kollekcióban tárolni. Egy új szűrő hozzáadása a programhoz csak a szűrőhöz tartozó transzformációs függvény implementálását jelenti, a program úgy tekinthet rá, mint bármely másik szűrőre.
 
 \section{Osztályarchitektúra}
 
@@ -124,14 +124,14 @@ Nagy előnye ennek a megközelítésnek a bővíthetőség. A szűrők szignatú
     \centering
     \includegraphics[width=\textwidth]{figures/uml/img_source.pdf}
     \caption{A kép források és a kapcsolódó osztályok diagramja.}
-    \label{fig:imagesource_uml}
+    \label{fig:image_source_uml}
 \end{figure}
 
-A tervezési szempontok alapján elkészítettem a \ref{fig:image_source_uml}. UML diagramot. Az ábra magába foglalja a forrásfájlok, azaz a képek alapvető kezelésével kapcsolatos komponenseket. 
+A tervezési szempontok alapján elkészítettem a \ref{fig:image_source_uml}. UML diagramot. Az ábra magában foglalja a forrásfájlok, azaz a képek alapvető kezelésével kapcsolatos komponenseket. 
 
-A csempék (\texttt{Tile}) a képek fizikai reprenzentációi a dokumentumon, tudjuk a helyüket, orientációjukat és a méretüket pixelben. Az elrendezést generáló algoritmusok szempontjából éppen ezek a releváns információk, a kép megjelenése ebben a stádiumban még nem számít, ezért ezt célszerű volt elkülöníteni.
+A csempék (\texttt{Tile}) a képek fizikai reprenzentációi a dokumentumon. Tudjuk a helyüket, orientációjukat és a méretüket pixelben. Az elrendezést generáló algoritmusok szempontjából éppen ezek a releváns információk, a kép megjelenése ebben a stádiumban még nem számít, ezért ezt célszerű volt elkülöníteni.
 
-A kép forrás (\texttt{ImageSource}) maga a kép. Egy kétdimenziós mátrixban tartalmazza a kép pixeleit, tartalmazza a szűrőket (\texttt{Filter}), a kép beállított fizikai méretét, a kért mennyiséget és a gyorsítótárazott képet. A szűrők egy közös interfészt valósítanak meg, mely lehetővé teszi, hogy egy konténerben tároljuk őket, és hogy a képnek ne kelljen tudnia a működésükről.
+A kép forrás (\texttt{ImageSource}) maga a kép. Egy kétdimenziós mátrixban tartalmazza a kép pixeleit, tartalmazza a szűrőket (\texttt{Filter}), a kép beállított fizikai méretét, a kért mennyiséget és a gyorsítótárazott képet. A szűrők egy közös interfészt valósítanak meg, mely lehetővé teszi, hogy egy konténerben tároljuk őket, és hogy a képeknek ne kelljen tudniuk a belső működésükről.
 
 A gyorsítótár egy egyszerű interfészt valósít meg, melyben a cache-t piszkosra tudjuk állítani, ezzel jelölve, hogy a következő eléréskor a tartalmát ismét ki kell számítani.
 
@@ -145,71 +145,75 @@ A gyorsítótár egy egyszerű interfészt valósít meg, melyben a cache-t pisz
 \subsection{A különböző algoritmusok}
 
 A két algoritmus, ahogy azt a \ref{fig:tiling_uml}. ábra is mutatja, egy közös interfészt valósítanak meg, mely egyetlen függvényből áll. Átadjuk a bemenő képeket és a dokumentumhoz tartozó konfigurációt, eredményül pedig megkapjuk a képet.
-Ez a megközelítés jól elkülöníti az algoritmusokat, így a jövőben egyszerűen hozzá tudunk adni pakolási algoritmusokat, ha a feladat úgy igényli.
+Ez a megközelítés jól elkülöníti az algoritmusokat, így a jövőben egyszerűen hozzá tudunk adni újabb pakolási algoritmusokat, ha a feladat úgy igényli.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=13cm]{figures/uml/tiling.pdf}
-    \caption{Az elrendezések generálására szolgáló interfész}
+    \caption{Az elrendezések generálására szolgáló interfész.}
     \label{fig:tiling_uml}
 \end{figure}
 
 \section{A felhasználói felület}
 
-A program funkcionalitás volt az elsődleges fókusz, azonban egy visszataszító és komplex felhasználó felület (UI) minden törekvésemet romba tudta volna dönteni. Szem előtt tartottam, hogy akik a szkriptet eddig is tudták használni, azoknak magától értetődő legyyen a program használata, ne legyen szükség ismételt betanításokra, és hogy ne kelljen egy útmutatót bújni minden egyes nyomtatásnál. Nem csak a saját nyomdánk, hanem más nyomdák lehetséges igényei is figyelembe lettek véve. Ugyan volt pár specifikus funkciónk, ügyeltem, hogy a programot más környezetekben is lehessen használni. Ezt a törekvést már nagyon jól megalapozta az elképzelésem a részletekbemenő konfigurációkat illetően, de ezeket a felhasználói felületen is meg kell jeleníteni valahogy. 
+Az elsődleges fókusz a program funkcionalitása volt, azonban egy visszataszító és komplex felhasználó felület (UI) minden törekvésemet romba tudta volna dönteni. Szem előtt tartottam, hogy akik a szkriptet eddig is tudták használni, azoknak magától értetődő legyen a program használata, ne legyen szükség ismételt betanításokra, és hogy ne kelljen egy útmutatót bújni minden egyes nyomtatásnál. 
+A saját nyomdánk mellett más nyomdák lehetséges igényeit is figyelembe vettem. 
+Ugyan volt pár specifikus funkciónk, ügyeltem, hogy a programot más környezetekben is lehessen használni.
+Ezt már nagyon jól megalapozta az a részletes konfigurációkról született elképzelésem, de ezeket meg is kell jeleníteni valahogy a felhasználói felületen.
 
-A projekt a kezdetektől fogva angol nyelven folyt, remélve, hogy ez majd javítja az életképességét, és hogy így nagyobb valószínűséggel térnek át a használatára akár külföldi nyomdák is, ezért a felhasználói felület nyelve is angol.
+A projekt a kezdetektől fogva angol nyelven készült, remélve, hogy ez majd javítja az életképességét, és mert így van esély arra is, hogy külföldi nyomdák is áttérjenek a használatára. Éppen ezért a felhasználói felület nyelve is angol lett.
 
 \subsection{A felhasználói felület komponensei}
 
-A konfigurációs paraméterek nagyjából lefedik, hogy minek kell szerepelnie a felhasználói felületen. Mivel most már volt elképzelés, több különböző méretű elem kezelésére, és mert gyakori panasz volt, hogy nem lehetett egyesével megadni több kép esetén, hogy miből mennyit szeretnénk, ezért egyértelmű volt, hogy a képeknek egyesével konfigurálhatónak kell lennie. Ez azt jelentette, hogy a felhasználói felületen is egyesével kellett megjelenniük, ehhez pedig valamilyen dinamikus elrendezésre volt szükség. 
+A konfigurációs paraméterek nagyjából lefedik, hogy minek kell szerepelnie a felhasználói felületen. 
+Mivel most már volt elképzelés több különböző méretű elem kezelésére, és mert gyakori panasz volt, hogy több kép esetén nem lehetett megadni egyesével, hogy miből mennyit szeretnénk, ezért egyértelmű volt, hogy a képeknek egyenként konfigurálhatónak kell lennie. Ez azt jelentette, hogy a felhasználói felületen is egyesével kellett megjelenniük, ehhez pedig valamilyen dinamikus elrendezésre volt szükség. 
 
 A bemenetek megadásán és a dokumentum konfigurálásán kívül szükség volt kimenetre is. Itt elsősorban egy előnézetre gondoltam, amit a felhasználó nagyítani, kicsinyíteni, illetve pásztázni tudna az egér és a görgő használatával bármely más képnézegető szoftverhez hasonló módon.
 
-Ez sajnos nem bizonyult elégnek. Ha hibát kapunk egy generálás közben, a hiba okát nehéz képként megjeleníteni. Erre egy jó megoldás lenne az előnézethez kapcsolódó szövegdoboz, melyben extra információt kaphatunk a generálás eredményéről. Hiba esetén ebbe a szövegdobozba kerül a fellépett hibához tartozó hibaüzenet, sikeres generálás után pedig megjelenik a dokumentum mérete pixelben, illetve milliméterben. 
+Ez sajnos nem bizonyult elégnek. Ha hiba lép fel egy generálás közben, arról nehéz képként információt megjeleníteni, a hiba okát közölni. Erre egy jó megoldás lenne az előnézethez mellett egy szövegdoboz, melyben extra információt kaphatunk a generálás eredményéről. Hiba esetén ebbe a szövegdobozba kerül a fellépett hibához tartozó hibaüzenet, sikeres generálás után pedig megjeleníti a dokumentum méreteit pixelben, illetve milliméterben. 
 
 \subsection{A felhasználói felület elrendezése}
 
 A megjelenítendő komponensek tudatában elkezdtem megtervezi az elrendezést. 
 Mivel a komponensek már jóval eltértek a szkript felületének komponenseitől, ezért nem volt szempont, hogy a program felhasználói felülete különösebben hasonlítson a szkript megjelenésére. 
 
-A komponensek és a paraméterek jól behatárolták a logikus elrendezést. A kép források egységes elrendezést követnek, és mert az elemek száma tetszőleges, ezért célszerű az elemeket egy dinamikus listában megjeleníteni. Erre egy görgethető nézet a legkézenfekvőbb, és hogy maximalizáljuk az egyszerre látható elemek számát, úgy a listának célszerű kitöltenije az ablak teljes magasságát.
+A komponensek és a paraméterek jól behatárolták a logikus elrendezést. A kép források egységes megjelenést követnek, és mert az elemek száma tetszőleges, ezért célszerű az elemeket egy dinamikus listában megjeleníteni. Erre egy görgethető nézet a legkézenfekvőbb, és hogy maximalizáljuk az egyszerre látható elemek számát, úgy a listának célszerű kitöltenije az ablak teljes magasságát.
 
-A dokumentum és a nyomtató beállításai már nem szükséges, hogy dinamikusak legyenek, de éredemes számítani arra, hogy egyéb új funckiók új konfigurációs beállításokat fognak megigényelni. Ezek miatt a dokumentum és a nyomtató beállításait egy oszlopba szerveztem. Ha később még beállításokra lenne szükség, az oszlopot meg lehet csinálni görgethetőre vagy több gategóriára bontani, és oldalakkal/lapokkal (tab) megoldani.
+A dokumentum és a nyomtató beállításai már nem szükséges, hogy dinamikusak legyenek, de éredemes számítani arra, hogy esetleges új funckiók miatt új konfigurációs beállításokra lesz szükség. Ennél fogva a dokumentum és a nyomtató beállításait egy oszlopba szerveztem. Ha később még beállításokra lenne szükség, az oszlopot meg lehet csinálni görgethetőre vagy több kategóriára bontani, és oldalakként/lapokként (tab) megjeleníteni.
 
-A megannyi komponensünket így három nagy csoportra tudtuk felosztani: a bemenetek beállításai, az előnézet és a kimenet beállításai. A generálás folyamata is nagyjából ezt a lépéssorrendet követi: megadjuk a bemeneteket, elkészül az előnézet, elmentjük a kimenetet. Éppen ezért dönöttem úgy, hogy az elrendezés is ezt a sorrendet fogja követni, balról jobbra. Ennek fényében elkészítettem a felhasználói felület vizuális tervét, ez a \ref{fig:ui_draft}. ábrán látható. 
+A megannyi komponensünket így három nagy csoportra tudtuk felosztani: a bemenetek (képek)beállításai, az előnézet és a kimenet (dokumentum) beállításai. A generálás folyamata is nagyjából ezt a lépéssorrendet követi: megadjuk a bemeneteket, elkészül az előnézet, elmentjük a kimenetet. Éppen ezért dönöttem úgy, hogy az elrendezés is ezt a sorrendet fogja követni, balról jobbra. Ennek fényében elkészítettem a felhasználói felület vizuális tervét, ez a \ref{fig:ui_draft}. ábrán látható. 
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{figures/ui_draft.pdf}
-    \caption{A felhasználói felület kinézetének terve}
+    \caption{A felhasználói felület kinézetének terve.}
     \label{fig:ui_draft}
 \end{figure}
 
 \subsection{A felhasználói felület architektúrája}
 
-A felhasználói felület logikájának elkülönítése a program többi részétől elengedhetetlen a szoftverfejlesztésben, így ebben a programban is jól elszigetelődik. Az egyetlen csatlakozási pont az elrendezéseket generáló algoritmusok interfészével van. 
+A felhasználói felület logikájának elkülönítése a program többi részétől elengedhetetlen a szoftverfejlesztésben, így ebben a programban is jól elszigetelődik. Az egyetlen csatlakozási pont a modell és a felhasználói felület között az elrendezéseket generáló algoritmusok interfészével van. 
 
-A felhasználói felület architektúrájához kialakításához egy eseményvezérelt rendszert terveztem. 
-Minden nagyobb komponenshez egy nézet (view) tartozik, ami egy köztes rétegként viselkedig a felület és a modell között. A felületen kiváltott események a nézetek függvényeit hívják meg, a nézetek állapotait változtatják meg. A tervezéshez a \ref{fig:ui_uml}. diagramot készítettem. A diagramon jól láthatók az alkalmazáshoz (\texttt{Application}) tartozó nézetek.
+A felhasználói felület architektúrájának kialakításához egy eseményvezérelt rendszert terveztem. 
+Minden nagyobb komponenshez egy nézet (view) tartozik, ami egy köztes rétegként viselkedig a felület és a modell között. A felületen kiváltott események a nézetek függvényeit hívják meg, a nézetek állapotait változtatják meg. A felület megtervezéshez a \ref{fig:ui_uml}. diagramot készítettem. A diagramon jól láthatók az alkalmazáshoz (\texttt{Application}) tartozó nézetek.
 
 A \texttt{DocumentPropertiesView} nézet felel a dokumentumszintű beállítások kezeléséért és betöltéséért. Egy jobb felhasználói élményt nyújthat, ha az előbeállításokat nem egy fájlkezelő ablakból kell előkeresnünk és megnyitnunk, hanem előre megadott opciók közül, például egy legördülő menüből választhatjuk meg. Ehhez viszont arra van szükség, hogy a program előre felmérje az előbeállítsok mappájának tartalmát, hogy tudjuk, milyen opciók állnak a felhasználó rendelkezésére.
 
 A \texttt{SourceEntryView} nézet teszi lehetővé, hogy több képet is meg lehessen adni bemenetnek. Ez egy dinamikus lista, mely új kép betöltésekor kibővíti az elemeit az új képhez tartozó \texttt{ImageSourceView} nézettel. 
 
-Az \texttt{ImageSourceView} nézet megfeleltethető modellhez tartozó \texttt{ImageSource}-nak. Feladata a bemeneti képek kezelése. A dokumentumszintű beállításokhzo hasonlóan itt is meg kell oldani az előbeállítás fájlok felmérését és betöltését. 
-Minden \texttt{ImageSourceView} nézethez tartoznak \texttt{FilterView} nézetek, melyek a szűrők konfigurálásáért felelnek, az eddigiekhez hasonló módon ezekhez is tartoznak az előbállítások beöltéséért felelős funckiók.
+Az \texttt{ImageSourceView} nézet megfeleltethető modellhez tartozó \texttt{ImageSource}-nak. Feladata a bemeneti képek kezelése. A dokumentumszintű beállításokhoz hasonlóan itt is meg kell oldani az előbeállításokhoz tartozó fájlok felmérését és betöltését. 
+Minden \texttt{ImageSourceView} nézethez tartoznak \texttt{FilterView} nézetek, melyek a szűrők felkonfigurálásáért felelnek, az eddigiekhez hasonló módon ezekhez is tartoznak az előbállítások beöltéséért felelős funckiók.
 
-A \ref{fig:ui_uml}. ábrán nagyon jól látszik, hogy a kaszkádos előbeállítások alcsoportjai hogyan csordogálnak tovább más komponensekre. Egy kép forráshoz tartozó előbeállítás betöltésekor az alcsoportok tartalma egyszerűen továbbadódik a hozzá tartozó szűrőknek, aminek nem kell tudatában lennie a beállítások forrásával, hiszen a formátum megegyezik.
+A \ref{fig:ui_uml}. ábrán nagyon jól látszik, hogy a kaszkádos előbeállítások alcsoportjai hogyan csordogálnak tovább más komponensekre. Egy kép forráshoz tartozó előbeállítás betöltésekor az alcsoportok tartalma egyszerűen továbbadódik a hozzá tartozó szűrőknek, amiknek nem kell tudatában lenniük a beállítások forrásával, hiszen a formátum megegyezik.
 
-A generáláshoz viszont nem használhatjuk fel a nézeteket, mert akkor a modell függne a felhasználói felülettől, és éppen ezt szeretnénk elkerülni. Emiatt minden nézettől lekérhető a modellben reprezentált változata, amiből az algoritmusok is dolgoznak. Ezek a nézetek az architektúra eseményvezéreltségéből adódóan csak akkor készülnek el, amikor szükség van rájuk, azaz le kell generálnunk a dokumentumot.
+A generáláshoz viszont nem használhatjuk fel a nézeteket, mert akkor a modell függne a felhasználói felülettől, és éppen ezt szeretnénk elkerülni. Emiatt minden nézettől lekérhető a modellben reprezentált változata, amiből az elrendezést generáló algoritmusok is dolgoznak. Ezek a nézetek az architektúra eseményvezéreltségéből adódóan csak akkor készülnek el, amikor szükség van rájuk, azaz amikor le kell generálni a dokumentumot.
 
 A megfelelő modellbeli adatstruktúrák birtokában végrehajtható a dokumentum legenerálása, ami a \texttt{ControlView} felelősségi köre. A generálás befejeztével a program beállítja a megjelenő előnézetet a \texttt{Preview} komponensben. 
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{figures/uml/ui.pdf}
-    \caption{A felhasználói felület architektúrájának terve}
+    \caption{A felhasználói felület architektúrájának terve.}
     \label{fig:ui_uml}
 \end{figure}
 
@@ -220,15 +224,15 @@ Kevésbé volt hangsúlyos, de a felhasználói élmény (UX) is figyelmet kapot
 
 Ennek kapcsán több ötletem is volt. Ide tartozik a már említett legördülő menü, amiből kiválaszthatunk előbeállításokat a fájlkezelő használata nélkül. A felugró fájlkezelővel így már csak két helyen találkozunk, képek kiválasztásánál és a dokumentum elmentésénél. Az előbbit el lehet kerülni, ha a képeket egy másik ablakból megfogjuk és ráhúzzuk az üres listára (drag and drop).
 
-Az előnézet általában egy hatalmas kép, ezért nyilvánvaló, hogy ezt a felhasználó nagyítani, illetve pásztázni szeretné. Erre is van lehetőség, a görgővel lehet nagyítani és kicsinyíteni, az egeret nyomvatartva és húzva pedig mozgatni a képet. Arra is ügyeltem, hogy a kép csak a képernyő határain tudjon mozogni, nehogy a felhasználó véletlenül túl messze pásztázzon, és ne lássa a képet. A nagyítás és a kicsinyítés középpontjának az egérrel mutatott pontot vettem a képernyő közepe helyett, mert így sokkal természetesebbnek érződött.
+Az előnézet általában egy hatalmas kép, ezért nyilvánvaló, hogy ezt a felhasználó nagyítani, illetve pásztázni szeretné. Erre is van lehetőség, a görgővel lehet nagyítani és kicsinyíteni, az egeret nyomvatartva és húzva pedig mozgatni a képet. Arra is ügyeltem, hogy a kép csak a képernyő határain belül tudjon mozogni, nehogy a felhasználó véletlenül túl messze pásztázzon, és elveszítse a képet. A nagyítás és a kicsinyítés középpontjának az egérrel mutatott pontot vettem a képernyő közepe helyett, mert így sokkal természetesebbnek érződött.
 
 \section{Bővítések és változtatások fejlesztés közben}
 
 Igyekeztem a legtöbb dolgot előre megtervezni, de egy szoftver fejlesztésénél elkerülhetetlen, hogy újabb funkciókra merüljön fel igény, ezért tervezéskor végig szem előtt tartottam a bővíthetőséget.
 
-Ez már rövid távon is kifizetődő volt. A program félkész változatát pár lelkes kollégámmal folyamatában teszteltettem, és megannyi értékes visszajelzéssel fordultak hozzám. Ilyen igény volt, hogy lehessen PDF formátumú fájlokat is nyomtatni, anélkül, hogy azokat előtte egy külső programmal át kelljen alakítani. Az architektúra teljesen nyitott volt ennek befogadására, csupán egy újabb nézetet kellet, hogy felvegyek. Ahogy azt a \ref{fig:pdf_uml}. ábra is mutatja, az új nézet a már létező \texttt{ImageSourceView} nézetből örököl, ahol elég csak a \texttt{get\_imagesource} eljárást felüldefiniáli.
+Ez már rövid távon is kifizetődő volt. A program félkész változatát folyamatában teszteltettem pár lelkes kollégámmal, és megannyi értékes visszajelzéssel fordultak hozzám. Ilyen igény volt, hogy lehessen PDF formátumú fájlokat is nyomtatni, anélkül, hogy azokat előtte egy másik szofverrel át kelljen konvertálni. Az architektúra teljesen nyitott volt ennek befogadására, csupán egy újabb nézetet kellet, hogy felvegyek. Ahogy azt a \ref{fig:pdf_uml}. ábra is mutatja, az új nézet a már létező \texttt{ImageSourceView} nézetből örököl, ahol elég volt csak a \texttt{get\_imagesource} eljárást felüldefiniáli.
 
-A PDF egy jóval komplexebb formátum, mint a PNG, a JPEG és egyéb raszteres\footnote{Raszteres képek esetén a képet egy képpontrácson tároljuk, ún. pixelek formájában.} képfomátumok, mert tartalmazhat vektorgrafikus és raszteres elemeket is\footnote{Raszteres és vektoros elemek mellett a \cite{adobe-pdf} PDF szabvány egyéb multimédia objektumokat is megenged, ezek ismertetése viszont túlmutat a dolgozat keretein.}. Hogy generáláskor egy közös dokumentumra kerülhessenek a képek, a PDF fájlokat raszterizálni kell, azaz a vektoros elemeket pixelekké kell alakítani.
+A PDF egy jóval komplexebb formátum, mint a PNG, a JPEG és egyéb raszteres\footnote{Raszteres képek esetén a képet egy képpontrácson tároljuk, ún. pixelek formájában.} képfomátumok, mert tartalmazhat vektorgrafikus és raszteres elemeket is\footnote{Raszteres és vektoros elemek mellett a \cite{adobe-pdf} PDF szabvány egyéb multimédia objektumokat is megenged, ezek ismertetése viszont túlmutat a dolgozat keretein.}. Hogy generáláskor egy közös dokumentumra kerülhessenek a képek, a PDF fájlokat raszterizálni kell, azaz a vektoros elemeket pixelekké kell alakítani. Ezt a feladatot látja el a \texttt{PDFSourceView} osztály.
 
 \begin{figure}[!h]
     \centering
