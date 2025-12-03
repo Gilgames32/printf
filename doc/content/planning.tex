@@ -135,7 +135,12 @@ A kép forrás (\texttt{ImageSource}) maga a kép. Egy kétdimenziós mátrixban
 
 A gyorsítótár egy egyszerű interfészt valósít meg, melyben a cache-t piszkosra tudjuk állítani, ezzel jelölve, hogy a következő eléréskor a tartalmát ismét ki kell számítani.
 
-TODO folyamatábra?
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=12cm]{figures/uml/cache.pdf}
+    \caption{Szekvenciadiagram a gyorsítótár működéséről.}
+    \label{fig:cache_uml}
+\end{figure}
 
 \subsection{A különböző algoritmusok}
 
@@ -172,9 +177,14 @@ A komponensek és a paraméterek jól behatárolták a logikus elrendezést. A k
 
 A dokumentum és a nyomtató beállításai már nem szükséges, hogy dinamikusak legyenek, de éredemes számítani arra, hogy egyéb új funckiók új konfigurációs beállításokat fognak megigényelni. Ezek miatt a dokumentum és a nyomtató beállításait egy oszlopba szerveztem. Ha később még beállításokra lenne szükség, az oszlopot meg lehet csinálni görgethetőre vagy több gategóriára bontani, és oldalakkal/lapokkal (tab) megoldani.
 
-A megannyi komponensünket így három nagy csoportra tudtuk felosztani: a bemenetek beállításai, az előnézet és a kimenet beállításai. A generálás folyamata is nagyjából ezt a lépéssorrendet követi: megadjuk a bemeneteket, elkészül az előnézet, elmentjük a kimenetet. Éppen ezért dönöttem úgy, hogy az elrendezés is ezt a sorrendet fogja követni, balról jobbra. Ennek fényében elkészítettem a felhasználói felület vizuális tervét.
+A megannyi komponensünket így három nagy csoportra tudtuk felosztani: a bemenetek beállításai, az előnézet és a kimenet beállításai. A generálás folyamata is nagyjából ezt a lépéssorrendet követi: megadjuk a bemeneteket, elkészül az előnézet, elmentjük a kimenetet. Éppen ezért dönöttem úgy, hogy az elrendezés is ezt a sorrendet fogja követni, balról jobbra. Ennek fényében elkészítettem a felhasználói felület vizuális tervét, ez a \ref{fig:ui_draft}. ábrán látható. 
 
-TODO kép hogy fogyjanak az oldalak xd
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/ui_draft.pdf}
+    \caption{A felhasználói felület kinézetének terve}
+    \label{fig:ui_draft}
+\end{figure}
 
 \subsection{A felhasználói felület architektúrája}
 
@@ -192,7 +202,7 @@ Minden \texttt{ImageSourceView} nézethez tartoznak \texttt{FilterView} nézetek
 
 A \ref{fig:ui_uml}. ábrán nagyon jól látszik, hogy a kaszkádos előbeállítások alcsoportjai hogyan csordogálnak tovább más komponensekre. Egy kép forráshoz tartozó előbeállítás betöltésekor az alcsoportok tartalma egyszerűen továbbadódik a hozzá tartozó szűrőknek, aminek nem kell tudatában lennie a beállítások forrásával, hiszen a formátum megegyezik.
 
-A generáláshoz viszont nem használhatjuk fel a nézeteket, mert akkor a modell függne a felhasználói felülettől, és éppen ezt szeretnénk elkerülni. Emiatt minden nézettől lekérhető a modellben reprezentált változata, amiből az algoritmusok is dolgoznak. Ezek a nézetek az architektúra eseményvezéreltségéből adódóan csak akkor készítjük el, amikor szükség van rájuk, azaz le kell generálnunk a dokumentumot.
+A generáláshoz viszont nem használhatjuk fel a nézeteket, mert akkor a modell függne a felhasználói felülettől, és éppen ezt szeretnénk elkerülni. Emiatt minden nézettől lekérhető a modellben reprezentált változata, amiből az algoritmusok is dolgoznak. Ezek a nézetek az architektúra eseményvezéreltségéből adódóan csak akkor készülnek el, amikor szükség van rájuk, azaz le kell generálnunk a dokumentumot.
 
 A megfelelő modellbeli adatstruktúrák birtokában végrehajtható a dokumentum legenerálása, ami a \texttt{ControlView} felelősségi köre. A generálás befejeztével a program beállítja a megjelenő előnézetet a \texttt{Preview} komponensben. 
 
@@ -206,14 +216,26 @@ A megfelelő modellbeli adatstruktúrák birtokában végrehajtható a dokumentu
 
 \subsection{A felhasználói élmény}
 
+Kevésbé volt hangsúlyos, de a felhasználói élmény (UX) is figyelmet kapott a tervezés során, hogy a kezelése minél intuitívabb legyen, és ne okozzon frusztrációt. 
+
+Ennek kapcsán több ötletem is volt. Ide tartozik a már említett legördülő menü, amiből kiválaszthatunk előbeállításokat a fájlkezelő használata nélkül. A felugró fájlkezelővel így már csak két helyen találkozunk, képek kiválasztásánál és a dokumentum elmentésénél. Az előbbit el lehet kerülni, ha a képeket egy másik ablakból megfogjuk és ráhúzzuk az üres listára (drag and drop).
+
+Az előnézet általában egy hatalmas kép, ezért nyilvánvaló, hogy ezt a felhasználó nagyítani, illetve pásztázni szeretné. Erre is van lehetőség, a görgővel lehet nagyítani és kicsinyíteni, az egeret nyomvatartva és húzva pedig mozgatni a képet. Arra is ügyeltem, hogy a kép csak a képernyő határain tudjon mozogni, nehogy a felhasználó véletlenül túl messze pásztázzon, és ne lássa a képet. A nagyítás és a kicsinyítés középpontjának az egérrel mutatott pontot vettem a képernyő közepe helyett, mert így sokkal természetesebbnek érződött.
+
 \section{Bővítések és változtatások fejlesztés közben}
 
-yadda yadda sok feedbakc ez kéne az kéne pdf meg dolgok
+Igyekeztem a legtöbb dolgot előre megtervezni, de egy szoftver fejlesztésénél elkerülhetetlen, hogy újabb funkciókra merüljön fel igény, ezért tervezéskor végig szem előtt tartottam a bővíthetőséget.
 
+Ez már rövid távon is kifizetődő volt. A program félkész változatát pár lelkes kollégámmal folyamatában teszteltettem, és megannyi értékes visszajelzéssel fordultak hozzám. Ilyen igény volt, hogy lehessen PDF formátumú fájlokat is nyomtatni, anélkül, hogy azokat előtte egy külső programmal át kelljen alakítani. Az architektúra teljesen nyitott volt ennek befogadására, csupán egy újabb nézetet kellet, hogy felvegyek. Ahogy azt a \ref{fig:pdf_uml}. ábra is mutatja, az új nézet a már létező \texttt{ImageSourceView} nézetből örököl, ahol elég csak a \texttt{get\_imagesource} eljárást felüldefiniáli.
 
+A PDF egy jóval komplexebb formátum, mint a PNG, a JPEG és egyéb raszteres\footnote{Raszteres képek esetén a képet egy képpontrácson tároljuk, ún. pixelek formájában.} képfomátumok, mert tartalmazhat vektorgrafikus és raszteres elemeket is\footnote{Raszteres és vektoros elemek mellett a \cite{adobe-pdf} PDF szabvány egyéb multimédia objektumokat is megenged, ezek ismertetése viszont túlmutat a dolgozat keretein.}. Hogy generáláskor egy közös dokumentumra kerülhessenek a képek, a PDF fájlokat raszterizálni kell, azaz a vektoros elemeket pixelekké kell alakítani.
 
-
-% A kezelés lépéseinek sorrendje alapján igyekeztem kialakítani a felület többi részét. Vannak bemeneti képeink, azokat szeretnénk egyesíteni, majd kinyomtatni. Képek, egyben, nyomtatás. Ezeket balról jobbra elrendezve kapjuk meg a felület végleges tervét: balra a bemenetek és azok beállításai, középen egy előnézet, jobbra pedig a kimenet (generált dokumentum) beállításai, a generálás és az exportálás/nyomtatás gomb. A UI feladata lenne továbbá az előbeállítások betöltése és a filterek beállításainak kezelése is. A bemenetek alapján meghívódik a generálás, ami elkészíti nekünk a kívánt képet, ezt fogjuk látni az előnézeten.
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=7cm]{figures/uml/pdf_source_view.pdf}
+    \caption{A kép forrás nézet és a PDF forrás nézet kapcsolata.}
+    \label{fig:pdf_uml}
+\end{figure}
 
 
 

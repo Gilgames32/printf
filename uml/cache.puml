@@ -1,0 +1,29 @@
+@startuml cache
+
+skinparam Monochrome true
+
+title Gyorsítótárazott képek lekérése
+
+participant Caller
+participant ImageSource
+participant CachedImage
+
+Caller -> ImageSource: get image
+activate ImageSource
+
+ImageSource -> CachedImage: get cached image
+
+activate CachedImage
+opt dirty
+    CachedImage -> ImageSource: get image with filters applied
+    ImageSource --> CachedImage: return image with filters applied
+    CachedImage -> CachedImage: update cache
+end
+
+CachedImage --> ImageSource: return cached image
+deactivate CachedImage
+
+ImageSource --> Caller: return image
+deactivate ImageSource
+
+@enduml
