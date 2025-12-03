@@ -23,6 +23,7 @@ SourceEntryView *-- "*" ImageSourceView
 interface FilterView {
     Filter get_filter()
     void load_from_json(json)
+    map<string, string> propbe_presets()
 }
 ImageSourceView *-- "*" FilterView
 
@@ -50,18 +51,17 @@ DocumentPropertiesView --* Application
 class ControlView {
     void generate()
     void save()
-    void print()
 }
 ControlView -* Application
 
 class Preview{
-    void set_image(cv::Mat)
+    void set_image(Mat)
 }
 Preview --* Application
 
 
 interface Tiling {
-    cv::Mat generate(...)
+    Mat generate(...)
 }
 ControlView --> Tiling
 

@@ -129,9 +129,9 @@ Nagy előnye ennek a megközelítésnek a bővíthetőség. A szűrők szignatú
 
 A tervezési szempontok alapján elkészítettem a \ref{fig:image_source_uml}. UML diagramot. Az ábra magába foglalja a forrásfájlok, azaz a képek alapvető kezelésével kapcsolatos komponenseket. 
 
-A csempék (tile) a képek fizikai reprenzentációi a dokumentumon, tudjuk a helyüket, orientációjukat és a méretüket pixelben. Az elrendezést generáló algoritmusok szempontjából éppen ezek a releváns információk, a kép megjelenése ebben a stádiumban még nem számít, ezért ezt célszerű volt elkülöníteni.
+A csempék (\texttt{Tile}) a képek fizikai reprenzentációi a dokumentumon, tudjuk a helyüket, orientációjukat és a méretüket pixelben. Az elrendezést generáló algoritmusok szempontjából éppen ezek a releváns információk, a kép megjelenése ebben a stádiumban még nem számít, ezért ezt célszerű volt elkülöníteni.
 
-A kép forrás (image source) maga a kép. Egy kétdimenziós mátrixban tartalmazza a kép pixeleit, tartalmazza a szűrőket (filter), a kép beállított fizikai méretét, a kért mennyiséget és a gyorsítótárazott képet. A szűrők egy közös interfészt valósítanak meg, mely lehetővé teszi, hogy egy konténerben tároljuk őket, és hogy a képnek ne kelljen tudnia a működésükről.
+A kép forrás (\texttt{ImageSource}) maga a kép. Egy kétdimenziós mátrixban tartalmazza a kép pixeleit, tartalmazza a szűrőket (\texttt{Filter}), a kép beállított fizikai méretét, a kért mennyiséget és a gyorsítótárazott képet. A szűrők egy közös interfészt valósítanak meg, mely lehetővé teszi, hogy egy konténerben tároljuk őket, és hogy a képnek ne kelljen tudnia a működésükről.
 
 A gyorsítótár egy egyszerű interfészt valósít meg, melyben a cache-t piszkosra tudjuk állítani, ezzel jelölve, hogy a következő eléréskor a tartalmát ismét ki kell számítani.
 
@@ -178,6 +178,30 @@ TODO kép hogy fogyjanak az oldalak xd
 
 \subsection{A felhasználói felület architektúrája}
 
+A felhasználói felület logikájának elkülönítése a program többi részétől elengedhetetlen a szoftverfejlesztésben, így ebben a programban is jól elszigetelődik. Az egyetlen csatlakozási pont az elrendezéseket generáló algoritmusok interfészével van. 
+
+A felhasználói felület architektúrájához kialakításához egy eseményvezérelt rendszert terveztem. 
+Minden nagyobb komponenshez egy nézet (view) tartozik, ami egy köztes rétegként viselkedig a felület és a modell között. A felületen kiváltott események a nézetek függvényeit hívják meg, a nézetek állapotait változtatják meg. A tervezéshez a \ref{fig:ui_uml}. diagramot készítettem. A diagramon jól láthatók az alkalmazáshoz (\texttt{Application}) tartozó nézetek.
+
+A \texttt{DocumentPropertiesView} nézet felel a dokumentumszintű beállítások kezeléséért és betöltéséért. Egy jobb felhasználói élményt nyújthat, ha az előbeállításokat nem egy fájlkezelő ablakból kell előkeresnünk és megnyitnunk, hanem előre megadott opciók közül, például egy legördülő menüből választhatjuk meg. Ehhez viszont arra van szükség, hogy a program előre felmérje az előbeállítsok mappájának tartalmát, hogy tudjuk, milyen opciók állnak a felhasználó rendelkezésére.
+
+A \texttt{SourceEntryView} nézet teszi lehetővé, hogy több képet is meg lehessen adni bemenetnek. Ez egy dinamikus lista, mely új kép betöltésekor kibővíti az elemeit az új képhez tartozó \texttt{ImageSourceView} nézettel. 
+
+Az \texttt{ImageSourceView} nézet megfeleltethető modellhez tartozó \texttt{ImageSource}-nak. Feladata a bemeneti képek kezelése. A dokumentumszintű beállításokhzo hasonlóan itt is meg kell oldani az előbeállítás fájlok felmérését és betöltését. 
+Minden \texttt{ImageSourceView} nézethez tartoznak \texttt{FilterView} nézetek, melyek a szűrők konfigurálásáért felelnek, az eddigiekhez hasonló módon ezekhez is tartoznak az előbállítások beöltéséért felelős funckiók.
+
+A \ref{fig:ui_uml}. ábrán nagyon jól látszik, hogy a kaszkádos előbeállítások alcsoportjai hogyan csordogálnak tovább más komponensekre. Egy kép forráshoz tartozó előbeállítás betöltésekor az alcsoportok tartalma egyszerűen továbbadódik a hozzá tartozó szűrőknek, aminek nem kell tudatában lennie a beállítások forrásával, hiszen a formátum megegyezik.
+
+A generáláshoz viszont nem használhatjuk fel a nézeteket, mert akkor a modell függne a felhasználói felülettől, és éppen ezt szeretnénk elkerülni. Emiatt minden nézettől lekérhető a modellben reprezentált változata, amiből az algoritmusok is dolgoznak. Ezek a nézetek az architektúra eseményvezéreltségéből adódóan csak akkor készítjük el, amikor szükség van rájuk, azaz le kell generálnunk a dokumentumot.
+
+A megfelelő modellbeli adatstruktúrák birtokában végrehajtható a dokumentum legenerálása, ami a \texttt{ControlView} felelősségi köre. A generálás befejeztével a program beállítja a megjelenő előnézetet a \texttt{Preview} komponensben. 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/uml/ui.pdf}
+    \caption{A felhasználói felület architektúrájának terve}
+    \label{fig:ui_uml}
+\end{figure}
 
 
 \subsection{A felhasználói élmény}
@@ -186,11 +210,6 @@ TODO kép hogy fogyjanak az oldalak xd
 
 yadda yadda sok feedbakc ez kéne az kéne pdf meg dolgok
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=14cm]{figures/uml/ui.pdf}
-    \label{fig:ui_uml}
-\end{figure}
 
 
 
