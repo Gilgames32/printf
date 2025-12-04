@@ -3,16 +3,16 @@
 title Csempézés
 
 interface Tiling {
-    cv::Mat generate(DocumentPreset preset, std::vector<ImgSource> images)
+    generate(preset: DocumentPreset, images: [ImageSource]): Mat
 }
 
 class GridTiling {
-    cv::Mat generate(...)
+    generate(...): Mat
 }
 Tiling <|-- GridTiling
 
 class StripTiling {
-    cv::Mat generate(...)
+    generate(...): Mat
 }
 Tiling <|-- StripTiling
 

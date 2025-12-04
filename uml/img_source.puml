@@ -3,78 +3,78 @@
 title Kép forrás
 
 class ImageSource {
-    Mat original
-    CachedImage cached
-    int amount
-    Filter[] filters
+    original: Mat
+    cached: CachedImage
+    amount: int
+    filters: [Filter]
     
-    bool rotated
-    double width
-    double height
+    rotated: bool
+    width: double
+    height: double
     
-    void add_filter(Filter filter)
-    void clear_filters()
-    void apply_filters()
-    Mat get_img()
+    add_filter(filter: Filter)
+    clear_filters()
+    apply_filters()
+    get_img(): Mat
 }
 
 interface Filter {
-    Mat apply(Mat img)
+    apply(img: Mat): Mat
 }
 ImageSource *-- Filter
 
 
 class Mask {
-    Mat mask
-    Mat apply(Mat img)
+    mask: Mat
+    apply(img: Mat): Mat 
 }
 Filter <|-- Mask
 
 class Size {
-    int width
-    int height
-    Mat apply(Mat img)
+    width: int
+    height: int
+    apply(img: Mat): Mat
 }
 Filter <|-- Size
 
 class Padding {
-    int padding
-    Mat apply(Mat img)
+    padding: int
+    apply(img: Mat): Mat
 }
 Filter <|-- Padding
 
 class Rotate {
-    bool rotate
-    Mat apply(Mat img)
+    rotate: bool
+    apply(Mat img): Mat
 }
 Filter <|-- Rotate
 
 class Tile {
-    ImageSource image
-    Point corner
-    int width
-    int height
-    bool rotated
+    image: ImageSource
+    corner: Point
+    width: int
+    height: int
+    rotated: bool
 
-    void rotate()
+    rotate()
 }
 ImageSource -* Tile
 
 class CachedImage {
-    ICachableImage source
-    Mat cache
-    bool dirty
-    void regenerate()
+    source: ICachableImage
+    cache: Mat
+    dirty: bool
+    regenerate()
 }
 CachedImage -* ImageSource
 
 
 interface ICache {
-    void set_dirty()
+    set_dirty()
 }
 
 interface ICachableImage {
-    Mat get_cachable()
+    get_cachable(): Mat
 }
 
 ICache <|-- CachedImage

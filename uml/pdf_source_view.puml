@@ -4,13 +4,13 @@ title PDF forrás nézet
 
 
 class ImageSourceView {
-    virtual ImageSource get_imagesource()
-    void load_from_json(json)
-    map<string, string> propbe_presets()
+    get_imagesource(): ImageSource
+    load_from_json(json)
+    propbe_presets(): map<string, string>
 }
 
 class PDFSourceView {
-    override ImageSource get_imagesource()
+    get_imagesource(): ImageSource
 }
 ImageSourceView <|-- PDFSourceView
 

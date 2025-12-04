@@ -7,23 +7,23 @@ entity Application {
 
 
 class SourceEntryView {
-    void remove(index)
-    void addFiles(files)
-    void clear()
+    remove(index)
+    addFiles(files)
+    clear()
 }
 Application *- SourceEntryView
 
 class ImageSourceView {
-    ImageSource get_imagesource()
-    void load_from_json(json)
-    map<string, string> propbe_presets()
+    get_imagesource(): ImageSource
+    load_from_json(json)
+    propbe_presets(): map<string, string>
 }
 SourceEntryView *-- "*" ImageSourceView
 
 interface FilterView {
-    Filter get_filter()
-    void load_from_json(json)
-    map<string, string> propbe_presets()
+    get_filter(): Filter
+    load_from_json(json)
+    propbe_presets(): map<string, string>
 }
 ImageSourceView *-- "*" FilterView
 
@@ -41,27 +41,27 @@ FilterView <|-- SizeView
 
 
 class DocumentPropertiesView {
-    DocumentProperties get_properties()
-    void load_from_json(json)
-    map<string, string> propbe_presets()
+    get_properties(): DocumentProperties
+    load_from_json(json)
+    propbe_presets(): map<string, string>
 }
 DocumentPropertiesView --* Application
 
 
 class ControlView {
-    void generate()
-    void save()
+    generate()
+    save()
 }
 ControlView -* Application
 
 class Preview{
-    void set_image(Mat)
+    set_image(Mat)
 }
 Preview --* Application
 
 
 interface Tiling {
-    Mat generate(...)
+    generate(...): Mat
 }
 ControlView --> Tiling
 
