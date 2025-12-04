@@ -3,50 +3,112 @@
 % nem triviális buildelés
 % kernel panic
 
-\section{Technológiák}
+\section{A válaszott technológiák}
 
-A felhasznált technológiákat a projekt fókuszai alapján választottuk ki. 
-A választásunk a C++-ra esett, annak példátlan sebességéből, és a memória kezelését illető sajátosságaiból. Beépített könyvtára képmanipulációra viszont nincsen, ehhez az \href{https://en.wikipedia.org/wiki/OpenCV}{OpenCV} könyvtárat választottuk, annak nyílt forráskódja és optimalizáltsága miatt.
-A felhasználói felülethez egy szintén platformfüggetlen megoldást szerettünk volna, ezért a \href{https://en.wikipedia.org/wiki/Qt_(software)}{Qt} mellett döntöttünk. 
+A felhasznált technológiákat a projekt célkitűzései alapján válaszottam meg. A legnagyob kérdést a program nyelve és a hozzá tartozó fordítási környezet jelentette. A választás a C++-ra esett, több okból is. 
+
+A szkript egyik legnagyobb baja volt, hogy nagyon kevés dologhoz volt hozzáférés fejlesztés közben. Az Adobe ExtendScript utasításkészlete felettéb limitált, leginkább a JavaScript-hez hasonlítható, interpretált nyelv. Ezek a tulajdonságai lehetetlenné tették a megfelelő szintű optimalizációt.
+A C++ ezzel szemben lehetővé teszi, hogy ahol szükséges, ott alacsony szinten is bele lehessen nyúlni a program működésébe. A memória kezelése is a fejlesztő feladata, ami egy két élű kard, de ebben a projektben a hasznos lehet, mert a nagyobb képeket utasításra fel tudjuk szabadítani a memóriából. 
+A C++ egy fordítandó nyelv, és a fordító már a fordítás közben is igyekszik optimalizálni a program kódját.
+
+\subsection{A felhasznált könyvtárak}
+
+A nyelv korából és népszerűségéből adódóan megannyi kiváló könyvtár áll rendelkezésre. A két legfontosabb segédkönyvtár a felhasználó felülethez és a képek szerkesztéséhez kellett.
+
+A képek manipulálásához az OpenCV könyvtárra esett a választás. Az OpenCV egy nyílt forráskódú, platformfüggetlen gépi látással foglalkozó könyvtár. Egyszerű képszerkesztésnél sokkal többre képes, de a teljesítménye és támogatottsága miatt erre esett a választás. A könyvtár robosztussága sem jelent problémát, fordításkor csak a releváns komponensek kerülnek bele a program kódjába.
+
+A felhasználói felülethez szintén egy nyílt forráskódú és platformfüggetlen könyvtárat kerestem, és a Qt mellett döntöttem. A Qt platformfüggetlensége ellenére egy natív megjelenést nyújt, és követi a rendszer témáját. Támogatja a magas pixelsűrűségű képernyőkön való megjelenést, és jól skálázódik minden rendszeren. Eddigi tapasztalataim alapján a teljesítménnyel is meg voltam elégedve, azezt használó programok szinte azonnal elindultak. A felhasználói élmény mellett a fejlesztői élmény is szempont volt. Szerencsére a Qt korából és elterjedségéből adódóan könnyen integrálható C++-os projektekbe, és több lehetőséget is kínál a felületek elkészítésére. 
+
+Különböző Qt felületek készítésére specializálódó grafikus tervezőszoftver létezik, de megvan a lehetőség egy deklaratív leírónyelvben is felületeket készíteni, ezt a nyelvet Qt Meta-object Language-nek (QML) hívják. A QML szintaktikája hasonlít a JSON szintaktikájára, de rövid JavaScript szerű függvényeket is támogat az egyszerűbb felületi logikák megvalósításához, valamint a kommunikációhoz a program többi részével. A nyelv mellé egy beépített könyvtár is tartozik (QtQuick), mely megannyi hasznos előre elkészített kisebb komponenst tratalmaz, így nem kell mindent a semmiből felépíteni. Ilyen komponensek például a minden más UI könyvtár részét képező komponensek (gomb, szövegdoboz, legörülő lista) mellett specifikusabb komponensek is, mint a \texttt{Flickable}, ami egy tökéletes kiindulópont a pásztázható előnézethez.
+Mivel a felület nem túl komplex, ezért nem lett volna kifizetődő a grafikus tervezőprogramok használata, így a QML használtata mellett döntöttem.
+
+\subsubsection{Egyéb felhasznált könyvtárak}
+
+% nlohmann json
+% libspng
+% exiv2
+% poppler qt6
+
+\section{A program fordítása}
+
+A C++ forráskódok fordítása közel sem triviális feladat nagyobb projektek esetén, vagy ha külső könyvtárak is szerepelnek a projektben. A nyelv népszerűségéből adódóan erre is több megoldás létezik. A két lehetséges opció a CMake és a Meson voltak. A választás a Mesonra esett, mert a CMake-hez képest modernebb, a szintaktikája egyszerűbb és jobban dokumentált. Nagy előnye a Meson-nak, hogy beépített támogatás van a CMake-kel való együttműködésre, és a Qt-tal készült felületek előfeldolgozására is létezik beépített importálható modul.
+
+A felhasznált könyvtárak elég gyakran előforduló könyvtárak, és esélyes, hogy már a rendszer részét képezik. Továbbá a Qt és az OpenCV könyvtárak feletébb robosztusak, ezért az ilyen nagyobb könyvtárakat a fordító dinamikusan linkeli.
+
+\subsection{A felhasználói felület fordítása}
+
+A program többi részéhez hasonlóan a QML-ben írt felületet is le kell fordítani, hogy az elkészült bináris fájl részét képezhesse, és ne futás időben kelljen betölteni a felületet. Ezt még a program többi részének fordítása előtt kell megtenni. A felhasználó felületet leíró QML fájlokat és a felülettel kommunikáló osztályokat, azaz a nézeteket, előre fel kell dolgoznunk, ez az ún. preprocesszálás. 
+
+Ahhoz, hogy a nézet osztályokat preprocesszálni lehessen, a megfelelő Qt osztályokból való öröklésen túl különféle makrókkal kell ellátni az osztályokat. 
+
+TODO
+
+\begin{listing}[!h]
+    \caption{TODO}
+    \label{lst:TODO}
+    \begin{minted}[linenos,breaklines]{cpp}
+#include ...
+
+class DocumentPropertiesView : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(double resolution MEMBER m_resolution NOTIFY resolutionChanged)
+    ...
+
+  private:
+    double m_resolution;
+    ...
+
+  public:
+    DocumentPropertiesView();
+    
+    ...
+
+    Q_INVOKABLE void setPreset(...);
+    Q_INVOKABLE DocumentPreset getDocumentProperties() const;
+
+  signals:
+    void resolutionChanged();
+    ...
+};
+    \end{minted}
+\end{listing}
+
 
 \section{Fejlesztést segítő eszközök}
 
-A kooperációt a GitHubon terveztük lebonyolítani, és tervben voltak GitHub actionök az automatikus ellenőrzésekhez is. A program buildeléséhez több másik próbálkozás után a \href{https://en.wikipedia.org/wiki/Meson_(software)}{Meson}t választottuk. A tervezéshez szükséges diagramokhoz \href{https://en.wikipedia.org/wiki/PlantUML}{PlantUML}-t használtam, fejlesztői környezetnek pedig a \href{https://en.wikipedia.org/wiki/Visual_Studio_Code}{Visual Studio Code}-ot
+% A kooperációt a GitHubon terveztük lebonyolítani, és tervben voltak GitHub actionök az automatikus ellenőrzésekhez is. A program buildeléséhez több másik próbálkozás után a \href{https://en.wikipedia.org/wiki/Meson_(software)}{Meson}t választottuk. A tervezéshez szükséges diagramokhoz \href{https://en.wikipedia.org/wiki/PlantUML}{PlantUML}-t használtam, fejlesztői környezetnek pedig a \href{https://en.wikipedia.org/wiki/Visual_Studio_Code}{Visual Studio Code}-ot
 
-\section{Fejlesztés és nehézségek}
+% \section{Fejlesztés és nehézségek}
 
-\subsection{Buildelés}
+% \subsection{Buildelés}
 
-A legelső nehézség már fejlesztés legelején szembe jött velünk: a buildelés. Egyikünknek sem volt sok tapasztalata a build rendszerekkel, ezért erre sok időnk elment. Külön kihívás volt, külső könyvtárakat is linkelnünk kellett, amiknek a további konfigurációja messze nem volt triviális. Eleinte a \href{https://en.wikipedia.org/wiki/CMake}{CMake}-kel és a \href{https://en.wikipedia.org/wiki/Vcpkg}{vcpkg}-vel próbálkoztunk, de nem sikerült működésre bírnunk. Egy barátom, Bánáti Benedek javaslatára kezdtük el használni a Mesont, ami sokkal barátságosabbnak bizonyult. A Meson használata során is ütköztem további problémákba, mert a Qt header fájlokat a fordítás előtt még fel kell dolgozni, és erre csak CMake-es példákat találtam.
+% \subsection{Modell és generálás}
 
-Indokalatlanul sok időnk ment el rá, és Windowson azóta sem tudunk buildelni\footnote{nem lehetetlen, csak Windowson egy nagyságrenddel macerásabb előkészíteni a buildelési környezetet}, de ez sajnos a C++ velejárója.
+% A modell implementálása a tervek alapján gördülékenyen ment, és a régi módszerrel történő generálás prototípusa is hamar elkészült. A prototípus sebességével elégedett voltam, nagyságrendekkel gyorsabb volt, mint ugyanez Photoshopban. A strip tiling algoritmust megegyezés szerint Levi készítette volna, ennek az implementálására viszont nem került még sor, kollégám sűrű negyedik félévéből adódóan.
 
-\subsection{Modell és generálás}
+% \subsection{A Qt és a felhasználói felület}
 
-A modell implementálása a tervek alapján gördülékenyen ment, és a régi módszerrel történő generálás prototípusa is hamar elkészült. A prototípus sebességével elégedett voltam, nagyságrendekkel gyorsabb volt, mint ugyanez Photoshopban. A strip tiling algoritmust megegyezés szerint Levi készítette volna, ennek az implementálására viszont nem került még sor, kollégám sűrű negyedik félévéből adódóan.
+% Ehhez a projekthez használtam először Qt-ot, ezért eleinte nagyon lassan haladt a felület fejlesztése. A Qt Quick használata mellett döntöttem, melynek segítségével egy deklaratív UI leíró nyelven (\href{https://en.wikipedia.org/wiki/QML}{QML}) lehet elkészíteni a felhasználó felületet. Néhány dologban hasonlít más UI leíró nyelvekre, nem kellett nulláról kezdenem, de azért még így is akadtak nehézségek bőven. Legfőképp a nézet és a modell összeköttetése volt az, amiben hamar elakadtam. Hogy egy osztályt elérjünk QML-ből, ahhoz az osztályunknak nem elég a Qt osztályokból származnia, hanem még különféle makrókkal is el kell látnunk a tagváltozóinkat, a függvényeinket, és még az osztályaink is. 
 
-\subsection{A Qt és a felhasználói felület}
 
-Ehhez a projekthez használtam először Qt-ot, ezért eleinte nagyon lassan haladt a felület fejlesztése. A Qt Quick használata mellett döntöttem, melynek segítségével egy deklaratív UI leíró nyelven (\href{https://en.wikipedia.org/wiki/QML}{QML}) lehet elkészíteni a felhasználó felületet. Néhány dologban hasonlít más UI leíró nyelvekre, nem kellett nulláról kezdenem, de azért még így is akadtak nehézségek bőven. Legfőképp a nézet és a modell összeköttetése volt az, amiben hamar elakadtam. Hogy egy osztályt elérjünk QML-ből, ahhoz az osztályunknak nem elég a Qt osztályokból származnia, hanem még különféle makrókkal is el kell látnunk a tagváltozóinkat, a függvényeinket, és még az osztályaink is. Ezen osztályok header fájljait fordítás előtt fel kell dolgoznunk a Qt MOC\footnote{Meta-Object Compiler}-ével, hogy az osztályaink elérhetőek legyenek QML-ből, és hogy ezekről futás idejű típusinformációink is legyenek. 
+% Túlságosan nem mennék részletekbe a UI implementációját illetően, csupán pár érdekesebb részét emelném ki. A lista, amin a bemenetek láthatóak lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Ezt az implementáció során figyelembe is vettem, és egy indirekcióval oldottam meg, arra viszont nem figyeltem, hogy a filterek modelljével való összeköttetés UI szinten valósult meg, és ez az összeköttetés csak addig van jelen, amíg az elem látható. Erre sajnos csak az éles tesztnél találtam rá, mert itt teszteltem először háromnál több képpel a programot. A hiba azóta javítva lett.
 
-Túlságosan nem mennék részletekbe a UI implementációját illetően, csupán pár érdekesebb részét emelném ki. A lista, amin a bemenetek láthatóak lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Ezt az implementáció során figyelembe is vettem, és egy indirekcióval oldottam meg, arra viszont nem figyeltem, hogy a filterek modelljével való összeköttetés UI szinten valósult meg, és ez az összeköttetés csak addig van jelen, amíg az elem látható. Erre sajnos csak az éles tesztnél találtam rá, mert itt teszteltem először háromnál több képpel a programot. A hiba azóta javítva lett.
+% Egy másik érdekesség talán az előbeállítások betöltésének folyamata. A program JSON fájlokból olvas be, ezek létezését először az adott mappában felderíti, majd rögzíti a név-elérési út párokat. Betöltéskor a JSON-ben jelenlévő értékek felülírják az eddigi beállításainkat, a hiányzó kulcsokhoz tartozó értékekre pedig nem lesznek hatással. A beállítások a már említett módon elkülönülnek (papír, dokumentum, maszk), de tovább tudnak propagálni más részekre. Így lehetséges például az, hogy a nagyplakát papírbeállítás hatással van a tekercs szélességére, vagy a matrica beállítás a képpontsűrűségre. 
 
-Egy másik érdekesség talán az előbeállítások betöltésének folyamata. A program JSON fájlokból olvas be, ezek létezését először az adott mappában felderíti, majd rögzíti a név-elérési út párokat. Betöltéskor a JSON-ben jelenlévő értékek felülírják az eddigi beállításainkat, a hiányzó kulcsokhoz tartozó értékekre pedig nem lesznek hatással. A beállítások a már említett módon elkülönülnek (papír, dokumentum, maszk), de tovább tudnak propagálni más részekre. Így lehetséges például az, hogy a nagyplakát papírbeállítás hatással van a tekercs szélességére, vagy a matrica beállítás a képpontsűrűségre. 
+% \subsection{Több szálon futás}
 
-\subsection{Több szálon futás}
+% Ugyan ügyeltem, hogy minél gyorsabb legyen a kép generálása, ez a folyamat így is tud időigényes lenni. Itt ugyan csak pár másodpercről beszélünk, de ez elég arra, hogy a Qt felület azt higgye, hogy az alkalmazásunk lefagyott. Ez egy elég gyakori eset a szoftverfejlesztésben, már jól ismert megoldással: szervezzük át külön szálra, hogy ne a fő szálon történjen a generálás. Az implementáció itt sem volt zökkenőmentes, hiszen valahogy jeleznünk is kell a UI felé, hogy frissült az eredmény, de vannak erre ún. signalok a Qt-ban. Hasonló problémába ütköztem a kép elmentésénél, ami még tovább tart, de ezt is ugyan úgy javítani tudtam. 
 
-Ugyan ügyeltem, hogy minél gyorsabb legyen a kép generálása, ez a folyamat így is tud időigényes lenni. Itt ugyan csak pár másodpercről beszélünk, de ez elég arra, hogy a Qt felület azt higgye, hogy az alkalmazásunk lefagyott. Ez egy elég gyakori eset a szoftverfejlesztésben, már jól ismert megoldással: szervezzük át külön szálra, hogy ne a fő szálon történjen a generálás. Az implementáció itt sem volt zökkenőmentes, hiszen valahogy jeleznünk is kell a UI felé, hogy frissült az eredmény, de vannak erre ún. signalok a Qt-ban. Hasonló problémába ütköztem a kép elmentésénél, ami még tovább tart, de ezt is ugyan úgy javítani tudtam. 
+% \subsection{Exportálás}
 
-\subsection{Exportálás}
+% Miután már a többszálúságot megoldottam a kép elmentése elsőre nem kimondottan volt kihívás, mert volt rá beépített függvény. Teszteléskor viszont sajnos kibukott, hogy a nyomtatáshoz használt szoftverünk miatt szükség lenne bizonyos metaadatokra, elsősorban a képpontsűrűségre (dpi), erre viszont a beépített megoldások nem voltak képesek. Ezt először \href{https://en.wikipedia.org/wiki/Exif}{EXIF} metaadatokkal próbáltam megoldani, amit a legtöbb képnézegető meg is jelenít. Windowson viszont kicsit más a helyzet, az ottani fájl tulajdonságoknál és így a nyomtató szoftverében sem jelent meg az EXIF-ban beállított dpi. Megpróbáltam valami hasonlót \href{https://en.wikipedia.org/wiki/Extensible_Metadata_Platform}{XMP}-mal is, de hiába. Az egyetlen lehetőségem, ami maradt, az az, hogy a fájl formátum fejlécben tároljam el. Ez persze formátumonként eltér és más-más implementációk tartoznak hozzá, nem úgy, mint az EXIF-nál. A veszteségmentességéből adódóan a PNG formátum mellett döntöttem. Bármennyire is élveztem elmerülni a képformátumok kodekjeinek működésében, nem hiszem, hogy ennek a projektnek a kereteiben szeretnék saját PNG tömörítőt írni (nem is beszélve arról, hogy a megoldásom messze nem lenne optimális), ezért különböző könyvtárakkal próbáltam ezt megoldani. A végső megoldás a \href{https://libspng.org/}{libspng} C könyvtárat használja. Igyekeztem elkerülni, hogy másolat készüljön a képekről a lemezen vagy a memóriában, ezt sajnos nem sikerült teljes mértékben megoldani. 
 
-Miután már a többszálúságot megoldottam a kép elmentése elsőre nem kimondottan volt kihívás, mert volt rá beépített függvény. Teszteléskor viszont sajnos kibukott, hogy a nyomtatáshoz használt szoftverünk miatt szükség lenne bizonyos metaadatokra, elsősorban a képpontsűrűségre (dpi), erre viszont a beépített megoldások nem voltak képesek. Ezt először \href{https://en.wikipedia.org/wiki/Exif}{EXIF} metaadatokkal próbáltam megoldani, amit a legtöbb képnézegető meg is jelenít. Windowson viszont kicsit más a helyzet, az ottani fájl tulajdonságoknál és így a nyomtató szoftverében sem jelent meg az EXIF-ban beállított dpi. Megpróbáltam valami hasonlót \href{https://en.wikipedia.org/wiki/Extensible_Metadata_Platform}{XMP}-mal is, de hiába. Az egyetlen lehetőségem, ami maradt, az az, hogy a fájl formátum fejlécben tároljam el. Ez persze formátumonként eltér és más-más implementációk tartoznak hozzá, nem úgy, mint az EXIF-nál. A veszteségmentességéből adódóan a PNG formátum mellett döntöttem. Bármennyire is élveztem elmerülni a képformátumok kodekjeinek működésében, nem hiszem, hogy ennek a projektnek a kereteiben szeretnék saját PNG tömörítőt írni (nem is beszélve arról, hogy a megoldásom messze nem lenne optimális), ezért különböző könyvtárakkal próbáltam ezt megoldani. A végső megoldás a \href{https://libspng.org/}{libspng} C könyvtárat használja. Igyekeztem elkerülni, hogy másolat készüljön a képekről a lemezen vagy a memóriában, ezt sajnos nem sikerült teljes mértékben megoldani. 
+% \subsection{Refaktorálás}
 
-\subsection{Refaktorálás}
+% A félév vége felé haladva elkezdtem refaktorálni a forráskódot. Elkezdtem használni a shared és unique pointereket, megelőzve ezzel a legvalószínűbb memóriaszivárgásokat. A kód nincs dokumentálva, de követi a clean code elveit. 
 
-A félév vége felé haladva elkezdtem refaktorálni a forráskódot. Elkezdtem használni a shared és unique pointereket, megelőzve ezzel a legvalószínűbb memóriaszivárgásokat. A kód nincs dokumentálva, de követi a clean code elveit. 
-
-\begin{figure}[h]
-    \includegraphics[width=\textwidth]{figures/ui_showcase.png}
-    \caption{A felhasználói felület}
-    \label{fig:ui_screenshot}
-\end{figure}
+% \begin{figure}[h]
+%     \includegraphics[width=\textwidth]{figures/ui_showcase.png}
+%     \caption{A felhasználói felület}
+%     \label{fig:ui_screenshot}
+% \end{figure}

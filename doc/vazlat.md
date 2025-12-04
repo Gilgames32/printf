@@ -10,8 +10,8 @@
     - [x] a feladat indokoltsága, 
     - [ ] a diplomaterv felépítésének rövid összefoglalása
 - [x] A feladatkiírás pontosítása és részletes elemzése 
-- [ ] Előzmények (irodalomkutatás, hasonló alkotások), az ezekből levonható következtetések
-- [ ] A tervezés részletes leírása, a döntési lehetőségek értékelése és a választott megoldások indoklása
+- [x] Előzmények (irodalomkutatás, hasonló alkotások), az ezekből levonható következtetések
+- [x] A tervezés részletes leírása, a döntési lehetőségek értékelése és a választott megoldások indoklása
 - [ ] A megtervezett műszaki alkotás értékelése, kritikai elemzése, továbbfejlesztési lehetőségek
 - [ ] Esetleges köszönetnyilvánítások
 - [ ] Részletes és pontos irodalomjegyzék
