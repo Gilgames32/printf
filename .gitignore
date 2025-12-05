@@ -56,3 +56,4 @@ output/
 *.fls
 thesis.pdf
 *.minted
+*.lol
