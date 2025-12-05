@@ -37,15 +37,14 @@ A felhasznált könyvtárak elég gyakran előforduló könyvtárak, és esélye
 
 \subsection{A felhasználói felület fordítása}
 
-A program többi részéhez hasonlóan a QML-ben írt felületet is le kell fordítani, hogy az elkészült bináris fájl részét képezhesse, és ne futás időben kelljen betölteni a felületet. Ezt még a program többi részének fordítása előtt kell megtenni. A felhasználó felületet leíró QML fájlokat és a felülettel kommunikáló osztályokat, azaz a nézeteket, előre fel kell dolgoznunk, ez az ún. preprocesszálás. 
+A program többi részéhez hasonlóan a QML-ben írt felületet is le kell fordítani, hogy az elkészült bináris fájl részét képezhesse, és ne futás időben kelljen betölteni a felületet. Ezt még a program többi részének fordítása előtt kell megtenni. A felhasználó felületet leíró QML fájlokat és a felülettel kommunikáló osztályokat, azaz a nézeteket, előre fel kell dolgoznunk, ez az ún. preprocesszálás.
+A preprocesszálást a Qt Meta-object Compiler-e végzi (MOC).
 
-Ahhoz, hogy a nézet osztályokat preprocesszálni lehessen, a megfelelő Qt osztályokból való öröklésen túl különféle makrókkal kell ellátni az osztályokat. 
-
-TODO
+Ahhoz, hogy a nézet osztályokat preprocesszálni lehessen, a megfelelő Qt osztályokból való öröklésen túl különféle makrókkal is el kell látni az osztályokat. Szemléltetésképpen erre a \ref{lst:qt-macro}. kódrészlet szolgál. A kódrészletben a \texttt{DocumentPropertiesView} osztály szerepel, mely a dokumentumszintű beállításokhoz tartozó nézet. Az osztály feladata a felülettel való kommunikáció, és a modellhez szükséges adatstruktúra elkészítése. A 3. sorban az osztály leszármazik a \texttt{QObject} osztályból, mint azt az összes Qt objektum teszi. Ezután egyből a \texttt{Q\_OBJECT} makró következik. Ez a makró teszi lehetővé a MOC-nek az előfeldolgozást, és ez felel az események kezeléséért, futásidejű típusinformációkért és egyéb Qt nyújtotta beépített funkciókért. 
 
 \begin{listing}[!h]
-    \caption{TODO}
-    \label{lst:TODO}
+    \caption{Példa egy saját \texttt{QObject} osztály deklarálására (részlet).}
+    \label{lst:qt-macro}
     \begin{minted}[linenos,breaklines]{cpp}
 #include ...
 
@@ -70,6 +69,48 @@ class DocumentPropertiesView : public QObject {
     void resolutionChanged();
     ...
 };
+    \end{minted}
+\end{listing}
+
+
+Az 5. sorban szereplő \texttt{Q\_PROPERTY} makró teszi lehetővé tulajdonságok (property) felvételét, amiket a felhasználó felületet leíró QML kódból is el lehet érni. 
+Meg kell adni a mező típusát, nevét, láthatóságát, a hozzá tartozó osztálybeli mezőt, valamint az érték megváltozásakor meghívott eseményjelet (signal).
+A tulajdonságok önmagukban nem tárolnak adatot, az osztály egyik belső változójára hivatkoznak. A \texttt{resolution} tulajdonsághoz a 9. sorban deklarált \texttt{m\_resolution} mező tartozik, és a 21. sorban deklarált \texttt{resolutionChanged} esemény fog jelezni, amikor az érték megváltozik.
+
+Az eseményjelek kezelése kritikus az eseményvezérelt rendszereknél, a felületen csak akkor fog megváltozni az érték, ha az adott tulajdonsághoz tartozó értékváltozásről egy jel (signal) érkezik. Ennek köszönhető, hogy nem kell egy végtelen ciklusban folyamatosan lekérni az értéket, ami rossz hatással lenne a teljesítményre. 
+Mivel a C++ kódnak nincsen fogalma a Qt makrók működéséről, így a nézetek kódjában csak a mezők értékét tudjuk változtatni, a tulajdonságok elérhetetlenek. Ha a nézetben a mező értéke a belső működés miatt megváltozik, akkor a fejlesztő felelőssége meghívni a hozzá tartozó eseményjelet, hogy az érték a felületen is frissüljön.
+
+Hogy a felülethez tartozó QML kódból is lehessen az osztály függvényeit hívni, a függvényeket a \texttt{Q\_INVOKABLE} makróval kell ellátni. Ezeket a függvényeket egyaránt használhatjuk a nézetből és QML-ből is.
+
+Sajnos még ez sem elég ahhoz, hogy az így elkészített nézet QML-ből elérhető legyen.
+A programkód elején be kell jegyezni a saját típusokat és objektumosztályokat, amiket a felhasználói felület kódja is felhasznál, hogy a kód felismerje a típusának nevét, és hogy futásidejű típusinformációk is rendelkezésre álljanak, utóbbira a QML-ben írt szkriptek miatt van szükség. 
+
+Ennek a menetét a \ref{lst:qt-meta}. kódrészlet mutatja be. Hogy a \texttt{DocumentPropertiesView} osztály QML-ből is elérhető legyen, a 6. sorban a kód beregisztálja a típust. Meg kell adni a modul nevét (printf) és verziószámát (1.0), valamint a QML-ben használt nevét, ami itt megyezik a C++-os típusával.
+
+Mivel a \ref{lst:qt-macro}. kódrészlet 18. sorában egy \texttt{DocumentPreset} osztállyal tér vissza a fügvény, amit QML-ből is meg lehet hívni, így ezt a típust is be kell jegyezni, mint metatípus, hogy a felhasználói felület kódja is kezelni tudja. Ez a \ref{lst:qt-meta}. kódrészlet 9. sorában történik meg.
+
+
+\begin{listing}[!h]
+    \caption{Metatípusok bejegyzése a program \texttt{main} függvényében (részlet).}
+    \label{lst:qt-meta}
+    \begin{minted}[linenos,breaklines]{cpp}
+#include ...
+
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    qmlRegisterType<DocumentPropertiesView>("printf", 1, 0, "DocumentPropertiesView");
+    ...
+    
+    qRegisterMetaType<DocumentPreset>("DocumentPreset");
+    ...
+
+    QQmlApplicationEngine engine;
+    ...
+    engine.load(QUrl(QStringLiteral("qrc:/qml/Application.qml")));
+
+    return app.exec();
+}
     \end{minted}
 \end{listing}
 
