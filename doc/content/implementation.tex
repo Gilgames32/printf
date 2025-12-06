@@ -24,10 +24,7 @@ Mivel a felület nem túl komplex, ezért nem lett volna kifizetődő a grafikus
 
 \subsubsection{Egyéb felhasznált könyvtárak}
 
-% nlohmann json
-% libspng
-% exiv2
-% poppler qt6
+A Qt és az OpenCV könyvtárak mellett egyéb kisebb segédkönyvtárakra is szükség volt a program elkészítéséhez, ezek későbbi egy fejezetben lesznek bemutatva. Ezek a könyvtárak az nlohmann-json, a libspng, az Exiv2 és a Poppler Qt6.
 
 \section{A program fordítása}
 
@@ -35,7 +32,7 @@ A C++ forráskódok fordítása közel sem triviális feladat nagyobb projektek 
 
 A felhasznált könyvtárak elég gyakran előforduló könyvtárak, és esélyes, hogy már a rendszer részét képezik. Továbbá a Qt és az OpenCV könyvtárak feletébb robosztusak, ezért az ilyen nagyobb könyvtárakat a fordító dinamikusan linkeli.
 
-\subsection{A felhasználói felület fordítása}
+\subsection{A felhasználói felület előkészítése fordításra}
 
 A program többi részéhez hasonlóan a QML-ben írt felületet is le kell fordítani, hogy az elkészült bináris fájl részét képezhesse, és ne futás időben kelljen betölteni a felületet. Ezt még a program többi részének fordítása előtt kell megtenni. A felhasználó felületet leíró QML fájlokat és a felülettel kommunikáló osztályokat, azaz a nézeteket, előre fel kell dolgoznunk, ez az ún. preprocesszálás.
 A preprocesszálást a Qt Meta-object Compiler-e végzi (MOC).
@@ -114,22 +111,151 @@ int main(int argc, char *argv[]) {
     \end{minted}
 \end{listing}
 
+A preprocesszálás előtti egyetlen hátralevő feladat a felhasználói felület forrsáfájljainak összegyűjtése egy közös, XML-hez hasonló \texttt{resources.qrc} fájlba. Ebbe a fájlba kerül minden QML fájl és egyéb erőforrás (pl. ikonok) elérési útvonala.
+
+\subsection{A fordítás menete}
+
+A megfelelő előkészületek után megkezdődhet a fordítás. A Mesonnal való fordításhoz egy \texttt{meson.build} fájlra van szükség, a szintaktikája felettéb egyszerű, és a fordítást leíró kód sokkal barátságosabb, mintha ugyan ezt CMake-kel készülne. A Meson szerencsére tartalmaz a Qt-ot használó programok fordítására is beépített modult, így a preprocesszáláshoz nem kell külön szoftvert használni. 
+
+
+\begin{listing}
+    \caption{A fordítást leíró \texttt{meson.build} fájl (részlet).}
+    \label{lst:meson-build}
+    \begin{minted}[linenos,breaklines]{meson}
+project('printf', 'cpp', ...)
+
+qt6_dep = dependency('qt6', modules: [...])
+...
+
+qt6 = import('qt6')
+
+moc_headers = files(
+  'src/ui/source_entry_view.hpp',
+  ...
+)
+
+qresources = files('src/qml/resources.qrc')
+
+prep = qt6.preprocess(
+  moc_headers : moc_headers,
+  qresources : qresources,
+)
+
+inc = include_directories(
+  'src',
+  ...
+)
+
+srcs = files(
+  'src/main.cpp',
+  ...
+)
+
+executable('printf', [srcs, prep],
+  include_directories: inc,
+  dependencies: [qt6_dep, ...],
+)
+    \end{minted}
+\end{listing}
+
+A \ref{lst:meson-build}. kódrészlet a \texttt{meson.build} fájl egy rövidített változatát tartalmazza, és jól szemlélteti a Meson egyszerűségét. Elsőnek definiálni kell egy projektet és a projekt nyelvét. Ezek után célszerű minél hamarabb ellenőrizni a szükséges könyvtárak (dependencies) meglétét, ahogy az a példa 3. sorában is szerepel. A 15. sorban történik a felület preprocesszálása, ehhez importálni kell a megfelelő Qt modult (6. sor), feltűntetni a preprocesszálandó fejléc (header) fájlokat (8. sor) és a Qt erőforrásfájlokat (13. sor), amik \texttt{resources.qrc} fájlban vannak felsorolva. A preprocesszálást követően elkészíthető a futtatható fájl (30. sor), amihez fel kell sorolni a felhasznált fejléc (header) fájlokat tartalmazó mappákat (20. sor) és a forráskód fájljainak elérési útját (25. sor), valamint a preprocesszált fájlokat is. Az eredmény egyetlen futtatható bináris fájl.
 
 \section{Fejlesztést segítő eszközök}
 
-% A kooperációt a GitHubon terveztük lebonyolítani, és tervben voltak GitHub actionök az automatikus ellenőrzésekhez is. A program buildeléséhez több másik próbálkozás után a \href{https://en.wikipedia.org/wiki/Meson_(software)}{Meson}t választottuk. A tervezéshez szükséges diagramokhoz \href{https://en.wikipedia.org/wiki/PlantUML}{PlantUML}-t használtam, fejlesztői környezetnek pedig a \href{https://en.wikipedia.org/wiki/Visual_Studio_Code}{Visual Studio Code}-ot
+A projekt verziókezeléséhez a kezdetektől fogva volt használva a Git verziókezelő szoftver, és egyből meg is volt osztva GitHub-on egy nyilvános repozitóriumként, a GNU GPLv3\footnote{GNU General Public License, Version 3} licenc alatt. A fejlesztéshez Visual Studio Code-ot (VSC) használtam, így a projekt tartalmaz pár hasznos  VSC specifikus beállítást a program futtatásának és fejlesztésének megkönnyítésére. A tervezéshez szükséges diagramok a PlantUML segítségével készültek.
 
-% \section{Fejlesztés és nehézségek}
 
-% \subsection{Buildelés}
+\section{Fejlesztés és kihívások}
+
+A programot a tervek alapján fejlesztettem le, néhány apróbb eltéréssel és extra segédfüggvénnyel. Törekedtem a C++ beépített modern nyelvi elemeinek használtára, például a \texttt{std::shared\_ptr} és \texttt{std::unique\_ptr} típusok és a lambda függvények használatára. A forráskód követi a Clean Code elveit.
+
+\subsection{Képek betöltése}
+
+Az első kihívást a képek betöltése jelentette, mivel több különböző formátumot is helyesen kell tudni kezelni. Mivel a specifikáció szerint nem megengedett a képek átlapolódása, ezért nincsen szükség az áttetszőségi információkra egy kép esetén, azaz az afla csatorna elhagyható, ezzel is további memóriát spórolva. Ez három (R, G és B), egyenként nyolc bites csatornát eredményez. Ha szükséges, betöltéskor a bemeneteket át kell konvertálni, hogy ennek a formátumnak megfeleljenek. 
+
+A legegyszerűbb ilyen szempontból a JPEG formátumú képek betöltése volt, hiszen ezen képek nem tartalmaznak áttetszőségi információkat, nem kell kezelni az alfa csatornát. 
+
+A PNG formátumú képek betöltése már kicsit bonyolultabb, mert tartalmazhatnak áttetszőségi információt, amit külün kezelni kell. El kell tűnteni az alfa csatornát, de nem lehet csak egyszerűen elhagyni ezt az értéket, mert félig áttetsző pixeleknél ez azt jelentené, hogy a pixel a háttér és önmaga keveréke helyett csak a saját színében jelenik meg. 
+
+TODO kép
+
+A kívánt eredményhez pixel alfa csatornája szerint kell kevernünk a pixel és a háttér színét. Ennek folyamatát a \ref{lst:alpha-blend} kódrészlet mutatja be. A folyamat az alfa keverésnek (\cite{alpha-blending-wiki}) egy egyszerű változata. A kép pixeleit beszorozzuk az alfa csatornával, a hátteret pedig az alfa csatorna negatívjával. A szorzások eredményéül kapott két kép pixelenként vett összege az eredmény. 
+
+A program a képet először négy csatornára bontja, majd összeilleszti a B, G és R\footnote{Az OpenCV a képet BGRA formátumban tölti be, és mivel ebben a formátumban történik az exportálás} csatornákat, így két azonos méretű de különböző mátrixban van a kép és az alfa csatornája (4-9. sorok). A csatornák értékei betöltés után előjel nélküli 8 bites számként vannak reprezentálva, a szorzás műveletéhez viszont célszerűbb egy 0 és 1 közötti számmal számolni, ezért a pixeleket érdemes átkonvertálni 32 bites lebegőpontos számokká (float), majd leosztani 255-tel. Azért 255, mert ez a legnagyobb szám, amit egy előjel nélküli 8 bites számként tárolni lehet, tehát a leosztás után után ez fog megfelelni 1-nek. A konvertálást és a leosztást\footnote{Valójában 1/255-del való szorzás történik, ami a 255-tel való osztásnak felel meg.} szerencsére egy műveletként végre lehet hajtani (11. és 12. sor). Az alfa csatornából 3 másolat készül (15. sor), majd 1 darab 3 dimenziós mátrixszá fésülődnek össze (16. sor). Ennek a mátrixnak már megegyezik a dimenziója a színeket tároló mátrixéval, tehát össze lehet szorozni őket pixelenként. Éppen ez történik a 23. és 24. sorban. Az utóbbi esetben a csatorna invertáltjára van szükség, ezt egy ugyan ekkora dimenziójú, 1-esekkel feltöltött mátrixból való kivonással kaphatjuk meg. A két mátrix összegét (25. sor) ezután még vissza kell konvertálni 8 bites előjel nélküli számokká, amihez a pixeleket vissza kell szorozni 255-tel.
+
+\begin{listing}
+    \caption{Az alfa keverés implementációja egy teljesen fehér háttér esetén.}
+    \label{lst:alpha-blend}
+    \begin{minted}[linenos,breaklines]{cpp}
+cv::Mat bgr, alpha;
+std::vector<cv::Mat> channels;
+
+cv::split(m_image, channels);
+cv::merge(
+    std::vector<cv::Mat>{channels[0], channels[1], channels[2]}, 
+    bgr
+);
+alpha = channels[3];
+
+bgr.convertTo(bgr, CV_32FC3, 1.0 / 255.0);
+alpha.convertTo(alpha, CV_32FC1, 1.0 / 255.0);
+
+cv::Mat alpha3c;
+cv::Mat alpha_array[] = {alpha, alpha, alpha};
+cv::merge(alpha_array, 3, alpha3c);
+
+cv::Mat white = cv::Mat(bgr.size(), CV_32FC3, 
+    cv::Scalar(1.0, 1.0, 1.0)
+);
+
+cv::Mat blended;
+cv::multiply(alpha3c, bgr, bgr);
+cv::multiply(cv::Scalar(1.0, 1.0, 1.0) - alpha3c, white, white);
+cv::add(bgr, white, blended);
+
+blended.convertTo(m_image, CV_8UC3, 255.0);
+    \end{minted}
+\end{listing}
+
+\subsection{PDF fájlok betöltése}
+
+Mint az már korábban említve volt, a PDF fájlok egyaránt tartalmazhatnak raszeteres és vektoros elemeket. Hogy a program kezelni tudja őket, úgy ezeket a fájlokat betöltéskor a megfelelő pixelsűrűség mellett raszerizálni kell. 
+
+Erre a feladatra is egy külső könyvtárt használtam. A választás a Poppler PDF renderelő könyvtárra esett, annak sebességéből, egyszerűségéből, valamint C++ és Qt támogatottságából fakadóan.
+
+Az egyszerűség kedvéért a program a PDF fájloknak csak az első oldalát használja fel. Ezen fájlok esetén is lehet szó áttetszőségről, ezért a többi képhez hasonlóan a raszerizált tartalom is alfa keverve lesz. 
+
+\subsection{Előbeállítások kezelése}
+
+Az előbeállításokat valamilyen kulcs-érték formában volt érdemes tárolni, hogy adott értékeket el lehessen hagyni, és hogy felhasználóként egyszerű legyen olvasni. A választás a JSON formátumra esett. Ez a formátum felettébb elterjedt, emberek számára is könnyen olvasható, szöveg alapú formátum, amihez egy nagyon népszerű C++ könyvtár is tartozik: a Niels Lohmann által készített egy fejléces (single header) JSON könyvár (nlohmann-json). 
+
+A könyvtár a leggyorsabb és legelterjedtebb JSON kezelő könyvtár C++-hoz, a használata rendkívül egyszerű. A beolvasás után a kulcsok értékeit az index operátorral (\text{[] operátor}) lehet elérni, amiket akár egymás után is lehet fűzni.
+
+\subsection{Exportálás}
+
+A képek exportálására mind az OpenCV, mind a Qt tartalmaz beépített függvényeket. Ezek a függvények viszont viszonylag primitívek, nincsen lehetőség a megfelelő metaadatokat a fájlba írni. 
+
+A kép megfelelő metaadatokkal való ellátása nem volt egy kimondottan kritikus funckió, de mivel a plotterhez kapott hivatalos program ez alapján számolta ki a kép méretét, és mert a Photoshop szkripttel készült képek tartalmazták ezeket az adatokat, így ezt nem szerettem volna kihagyni a programból.
+
+A metaadatok hozzáadására több megoldás is létezik. Vannak ún. metaadat-formátumok, melyek sok gyakori képformátumhoz nyújtanak egységes metaadat-sémát. Egy ilyen formátum például az Exchangeable Image File Format (EXIF) is, melyet rengeteg fényképezőgép és telefon használ. Néhány képformátumnak van viszont erre specifikus fejléce, ahol pár alapvető információt lehet a képről tárolni, többek között a pixelsűrűséget is, amire a legnagyobb szükség volt.
+
+Megfelelő dokumetáció és forráskód hiányában sajnos nehéz volt előre megmondani, hogy a két megközelítés közül a nyomtatóhoz kapott szoftver melyik alapján állapítja meg a kép méretét, ezért ki kellett próbálnom mindkét lehetséges megoldást.
+
+Mivel az EXIF egy képformátumokon átívelő metaadat-formátum, ezért először az Exiv2 könyvtár segítségével próbáltam meg hozzáadni a megfelelő metaadatokat. Ez nem bizonyosult sikeresnek, ami azt jelentette, hogy a PNG fájl fejlécét exportálás közben kellett ellátni a megfelelő adatokkal. Erre a feladatra a libspng C könyvtárt használtam.
+
+Egy PNG formátum egy veszteségmentes, de tömörített formátum. A megfelelő kódoláshoz létre kell hozni egy SPNG kontextust, valamint egy fájlt, amibe a kép íródik. A kontextus végzi az adat tömörítését, majd fájlba írását. Ezek után hozzá lehet adni a megfelelő értékeket a fejléchez: a méreteket és a pixelsűrűségeket.
+Ez a megoldás már sikeresnek bizonyult.
+
+
+% - ui bug
+% - generálás? idk
+% - több szálon futás
+% - json példa
+% - refactor?
+% - ui result
+% - preview?
 
 % \subsection{Modell és generálás}
-
-% A modell implementálása a tervek alapján gördülékenyen ment, és a régi módszerrel történő generálás prototípusa is hamar elkészült. A prototípus sebességével elégedett voltam, nagyságrendekkel gyorsabb volt, mint ugyanez Photoshopban. A strip tiling algoritmust megegyezés szerint Levi készítette volna, ennek az implementálására viszont nem került még sor, kollégám sűrű negyedik félévéből adódóan.
-
-% \subsection{A Qt és a felhasználói felület}
-
-% Ehhez a projekthez használtam először Qt-ot, ezért eleinte nagyon lassan haladt a felület fejlesztése. A Qt Quick használata mellett döntöttem, melynek segítségével egy deklaratív UI leíró nyelven (\href{https://en.wikipedia.org/wiki/QML}{QML}) lehet elkészíteni a felhasználó felületet. Néhány dologban hasonlít más UI leíró nyelvekre, nem kellett nulláról kezdenem, de azért még így is akadtak nehézségek bőven. Legfőképp a nézet és a modell összeköttetése volt az, amiben hamar elakadtam. Hogy egy osztályt elérjünk QML-ből, ahhoz az osztályunknak nem elég a Qt osztályokból származnia, hanem még különféle makrókkal is el kell látnunk a tagváltozóinkat, a függvényeinket, és még az osztályaink is. 
 
 
 % Túlságosan nem mennék részletekbe a UI implementációját illetően, csupán pár érdekesebb részét emelném ki. A lista, amin a bemenetek láthatóak lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Ezt az implementáció során figyelembe is vettem, és egy indirekcióval oldottam meg, arra viszont nem figyeltem, hogy a filterek modelljével való összeköttetés UI szinten valósult meg, és ez az összeköttetés csak addig van jelen, amíg az elem látható. Erre sajnos csak az éles tesztnél találtam rá, mert itt teszteltem először háromnál több képpel a programot. A hiba azóta javítva lett.
@@ -142,7 +268,6 @@ int main(int argc, char *argv[]) {
 
 % \subsection{Exportálás}
 
-% Miután már a többszálúságot megoldottam a kép elmentése elsőre nem kimondottan volt kihívás, mert volt rá beépített függvény. Teszteléskor viszont sajnos kibukott, hogy a nyomtatáshoz használt szoftverünk miatt szükség lenne bizonyos metaadatokra, elsősorban a képpontsűrűségre (dpi), erre viszont a beépített megoldások nem voltak képesek. Ezt először \href{https://en.wikipedia.org/wiki/Exif}{EXIF} metaadatokkal próbáltam megoldani, amit a legtöbb képnézegető meg is jelenít. Windowson viszont kicsit más a helyzet, az ottani fájl tulajdonságoknál és így a nyomtató szoftverében sem jelent meg az EXIF-ban beállított dpi. Megpróbáltam valami hasonlót \href{https://en.wikipedia.org/wiki/Extensible_Metadata_Platform}{XMP}-mal is, de hiába. Az egyetlen lehetőségem, ami maradt, az az, hogy a fájl formátum fejlécben tároljam el. Ez persze formátumonként eltér és más-más implementációk tartoznak hozzá, nem úgy, mint az EXIF-nál. A veszteségmentességéből adódóan a PNG formátum mellett döntöttem. Bármennyire is élveztem elmerülni a képformátumok kodekjeinek működésében, nem hiszem, hogy ennek a projektnek a kereteiben szeretnék saját PNG tömörítőt írni (nem is beszélve arról, hogy a megoldásom messze nem lenne optimális), ezért különböző könyvtárakkal próbáltam ezt megoldani. A végső megoldás a \href{https://libspng.org/}{libspng} C könyvtárat használja. Igyekeztem elkerülni, hogy másolat készüljön a képekről a lemezen vagy a memóriában, ezt sajnos nem sikerült teljes mértékben megoldani. 
 
 % \subsection{Refaktorálás}
 
