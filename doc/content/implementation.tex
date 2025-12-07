@@ -40,7 +40,7 @@ A preprocesszálást a Qt Meta-object Compiler-e végzi (MOC).
 Ahhoz, hogy a nézet osztályokat preprocesszálni lehessen, a megfelelő Qt osztályokból való öröklésen túl különféle makrókkal is el kell látni az osztályokat. Szemléltetésképpen erre a \ref{lst:qt-macro}. kódrészlet szolgál. A kódrészletben a \texttt{DocumentPropertiesView} osztály szerepel, mely a dokumentumszintű beállításokhoz tartozó nézet. Az osztály feladata a felülettel való kommunikáció, és a modellhez szükséges adatstruktúra elkészítése. A 3. sorban az osztály leszármazik a \texttt{QObject} osztályból, mint azt az összes Qt objektum teszi. Ezután egyből a \texttt{Q\_OBJECT} makró következik. Ez a makró teszi lehetővé a MOC-nek az előfeldolgozást, és ez felel az események kezeléséért, futásidejű típusinformációkért és egyéb Qt nyújtotta beépített funkciókért. 
 
 \begin{listing}[!h]
-    \caption{Példa egy saját \texttt{QObject} osztály deklarálására (részlet).}
+    \caption{Példa egy saját \texttt{QObject} osztály deklarálására.}
     \label{lst:qt-macro}
     \begin{minted}[linenos,breaklines]{cpp}
 #include ...
@@ -88,7 +88,7 @@ Mivel a \ref{lst:qt-macro}. kódrészlet 18. sorában egy \texttt{DocumentPreset
 
 
 \begin{listing}[!h]
-    \caption{Metatípusok bejegyzése a program \texttt{main} függvényében (részlet).}
+    \caption{Metatípusok bejegyzése a program \texttt{main} függvényében.}
     \label{lst:qt-meta}
     \begin{minted}[linenos,breaklines]{cpp}
 #include ...
@@ -119,7 +119,7 @@ A megfelelő előkészületek után megkezdődhet a fordítás. A Mesonnal való
 
 
 \begin{listing}[!h]
-    \caption{A fordítást leíró \texttt{meson.build} fájl (részlet).}
+    \caption{A fordítást leíró \texttt{meson.build} fájl.}
     \label{lst:meson-build}
     \begin{minted}[linenos,breaklines]{meson}
 project('printf', 'cpp', ...)
@@ -279,13 +279,13 @@ Egy másik nehézséget a dinamikus lista jelentette. A lista, amin a bemenetek 
 
 A Qt egy pozitívuma, hogy követi a rendszer témáját. A fejlesztés közben a használt rendszerem témája megváltozott, amit a felület automatikusan követett. A \ref{fig:ui-oblab}. és \ref{fig:ui-szakdoga}. ábrán látható a stílus a rendszer témájának megváltozása előtt és után.
 
-\begin{figure}[h]
+\begin{figure}[]
     \includegraphics[width=\textwidth]{figures/ui_showcase.png}
     \caption{A felhasználói felület.}
     \label{fig:ui-oblab}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[]
     \includegraphics[width=\textwidth]{figures/ui_update.png}
     \caption{A felhasználói felület.}
     \label{fig:ui-szakdoga}
@@ -298,22 +298,53 @@ A program nagyságrendekkel gyorsabban generál képeket, mint a Photoshop szkri
 
 Szoftverfejlesztésben egy gyakori probléma, hogy hosszabb műveletekre van szükség, vagy hogy egy erőforrásra kell várni. Eközben viszont az alkalmazás többi részének még működnie kell a felhasználói élmény érdekében. A megoldás egyzerű: külön szálon kell futtatni a hosszabb folyamatokat, hogy azok ne akadályozzák meg a program fő szálát, azaz felhasználói felület működését. A külön szálból vissza kell jelezni a fő szálra, amikor az eredmény már rendelkezésre áll. Az ilyen jelzésekre a Qt által kínált jelzéseket érdemes felhasználni.
 
-Ezt a technikát minden időigényesebb folyamatnál alkalmaztam, ezek folyamatok a képek generálása és mentése.
+Ezt a technikát minden időigényesebb folyamatnál alkalmaztam, ezek folyamatok a képek generálása és mentése. A megvalósítását a \ref{lst:async}. kódrészlet mutatja be. Visszatérési értékként egy \texttt{QFuture} objektummal kell visszatérni, a többszálúságot pedig a \texttt{QtConcurrent::run} fügvénnyel lehet elérni. A függvény paraméteréül akár lambda függvény is adható. 
 
-% TODO kódrészlet?
+A generálás befejeztét a \texttt{generationCompleted} jel hívásával kell jelezni. Erre a jelre iratkozik fel a felhasználói felület, ezt a \ref{lst:connect}. kódrészlet mutatja be. 
+A gomb kattintásra meghívja az \texttt{asyncGenerate} függvényt (13. sor), majd kikapcsolja magát, hogy ne nyomjuk meg véletlenül kétszer is.
+Jelzésekre csak a komponens megszületése után lehet feliratkozni, így először a \texttt{Component.onCompleted} jelzésre kell feliratkozni, ami a 3. sorban valósul meg egy lambda függvénnyel. Ezt követően iratkozik fel a gomb a generálás befejeztére egy másik lambda függvénnyel a 4. sorban. A jelzés hatására frissül az előnézet képe, majd a gomb visszakapcsolja magát (5-7. sorok).
+
+\begin{listing}[!h]
+    \caption{Kép generálása külön szálon.}
+    \label{lst:async}
+    \begin{minted}[linenos,breaklines]{cpp}
+QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources) 
+{
+    return QtConcurrent::run([=, this]() {
+        ErrorSignal::iinfo("Generating image...");
+        try {
+            generate(properties, sources);
+            ...
+        } catch (const std::exception& e) {
+            ...
+        }
+        emit generationCompleted();
+    });
+}
+    \end{minted}
+\end{listing}
+
+\begin{listing}[!h]
+    \caption{Jelzésre feliratkozás QML-ből.}
+    \label{lst:connect}
+    \begin{minted}[linenos,breaklines]{qml}
+Button {
+    ...
+    Component.onCompleted: {
+        generator.generationCompleted.connect(() => {
+            generator.imageSource = "";
+            generator.imageSource = generator.providedImagePath;
+            generateButton.enabled = true;
+            generator.dirty = false;
+        });
+    }
+    onClicked: {
+        generateButton.enabled = false;
+        generator.asyncGenerate(...);
+    }
+}
+    \end{minted}
+\end{listing}
 
 % - generálás? idk
 % - refactor?
-
-% \subsection{Exportálás}
-
-
-% \subsection{Refaktorálás}
-
-% A félév vége felé haladva elkezdtem refaktorálni a forráskódot. Elkezdtem használni a shared és unique pointereket, megelőzve ezzel a legvalószínűbb memóriaszivárgásokat. A kód nincs dokumentálva, de követi a clean code elveit. 
-
-% \begin{figure}[h]
-%     \includegraphics[width=\textwidth]{figures/ui_showcase.png}
-%     \caption{A felhasználói felület}
-%     \label{fig:ui_screenshot}
-% \end{figure}
