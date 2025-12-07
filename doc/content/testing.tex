@@ -1,11 +1,83 @@
-\chapter{Tesztelés és visszajelzések}
+\chapter{Tesztelés}
 
-Automatizált teszteket nem készítettem, a generált képeket manuálisan ellenőriztem, és összehasonlítottam a script által generált eredményekkel. Ezen felül visszaváltottam a kép szélességét pixelből milliméterre, megbizonyosodva arról, hogy a program valóban megfelelő szélességű képeket generál. Ezt később a UI-be is beépítettem: generálás után az alsó sávban láthatjuk a generált kép méreteit pixelben és milliméterben.
+A programot manuálisan teszteltem. A legfontosabb ellenőrizendő dolog a generált eredmény méretei voltak. A program atomatikusan visszakonvertálja a dokumentum méreteit milliméterbe, amikor a kép elkészül, és szövegesen megjeleníti az előnézet alatt. Az így kapott méretet össze lehet hasonlítani a megadott tekercsszélességgel, ami minimális hibahatáron belül mozog, mert egy képen csak egész pixelek lehetnek.
 
-\section{Éles teszt}
+Következő lépésben a program eredményeit összehasonlítottam a Photoshop szkript eredményeivel. A szélességek megegyeztek, az új pakolási algoritmusok miatt pedig gyakran alacsonyabb dokumentumokat, azaz kevesebb felesleget eredményezett.
 
-Egy ismerősömnek köszönhetően élesben is volt lehetőségem egy plotteren tesztelni a programot. Tesztelés közben merült fel egy már említett probléma is, ami a listából kilógó bemeneti képek esetén jelentkezett. Ez csak a forrásfájlok mennyiségére volt hatással, ezt leszámítva a tesztnyomtatás sikeres volt.
+\section{Különböző sorbarendezési heurisztikák}
+
+TODO különböző szortírozási heurisztikák különböző bemenetekre
+
+\section{Konkrét tesztesetek összehasonlítása}
+
+A teljesítménybeli javuláshoz konkrét tesztesetekkel hasonlítottam össze a két programot. Minden teszt ugyan azon az eszközön futott. A Photoshop szkript tesztjei Windows 10 alatt futottak, az idő stopperrel volt mérve. A printf-et Arch Linux alatt teszteltem, az időt az \texttt{std::chrono} könyvtár segítségével mértem. A tesztesetek 914.4 milliméteres tekercsre 300 dpi-ben futottak, segédvonalakkal és maszk nélkül. A tesztek eredményei a \ref{tab:psvs} táblázatban szerepelnek. A \ref{fig:psvs} diagram vizualizálja az eredményeket.
+
+\begin{table}[htbp]
+    \centering
+    \caption{A tesztesetek és a lefutásuk ideje.}
+    \label{tab:psvs}
+    \begin{tabular}{l l l l r r}
+        \toprule
+        Teszt & Felbontás\footnote{A bemeneti kép felbontása.} (px) & Méret (mm) & Mennyiség & PS\footnote{A dokumentum generálásának ideje a Photoshop szkripttel.} (s) & printf\footnote{A dokumentum generálásának ideje printf-fel.} (s) \\
+        \midrule
+        1 & 800x1030 & 210x297 & 21 & 5,27 & 0,58 \\
+        2 & 4717x2984 & 210x297 & 21 & 6,23 & 0,59 \\
+        3 & 800x1030 & 210x297 & 200 & 47,39 & 6,17 \\
+        4 & 128x128 & 914x1600 & 1 & 3,88 & 1,43 \\
+        5 & 2048x1367 & 297x420 & 40 & 11,58 & 2,23 \\
+        6 & 128x128 & 30x30 & 500 & 51,79 & 0,22 \\
+        7 & 2048x1367 & 420x594 & 20 & 9,96 & 2,25 \\
+        8 & 4717x2984 & 594x841 & 20 & 15,34 & 4,99 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/plot_psvs.png}
+    \caption{A tesztesetek futási idejének összehasonlítása.}
+    \label{fig:psvs}
+\end{figure}
+
+\section{Éles tesztek}
+
+A program 2025. szeptemberének környékére már használható állapotban volt, pár apró beállítás mellett már csak a tekercsre pakoló algoritmust hiányzott belőle. Az aktívabb tagokat megkértem, hogy folyamatában teszteljék az új programot, és szóljanak az esetleges hibákról, észrevételeikről és ötleteikről. Nem sokkal később implementáltam az említett pakoló algoritmust is. A félév során számtalan alkalommal volt tesztelve a program, és a visszajelzések alapján javítottam minden felmerülő hibát.
+
+% fig refs
+
+\begin{figure}[!h]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/test_kz.jpg}
+        \par\smallskip
+        {\small Fotó: Kurunczi Zoltán}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/test_cj.jpg}
+        \par\smallskip
+        {\small Fotó: Cardinael Jan}
+    \end{minipage}
+    \caption{Éles tesztek eredményei.}
+\end{figure}
+
+\subsection{Fordítási problémák}
+
+
+% klubszobagépre telepítés, windows, wsl, 8gb ram, etc
+% kernel panic laptopon
+
+
+
+
+TODO screenshotok
 
 \section{Visszajelzések és ötletek}
 
-Kikértem néhány aktívabb tag véleményét és ötleteit. Pozitív visszajelzéseket kaptam, és érkezett pár ötlet is. Ezekből egy valóban hasznos ötlet volt, hogy lehessen tekercsen kívül fix méretű lapokra is csempézni, hogy irodai nyomtatókkal is működhessen, ha kisebb dokumentumokat akarunk pl. A4-es papírra nyomtatni. Ezt valószínűleg nem lesz nehéz implementálni sem.
+% a4
+% jobb segédvonalak strip tilingnál
+
+
+% Kikértem néhány aktívabb tag véleményét és ötleteit. Pozitív visszajelzéseket kaptam, és érkezett pár ötlet is. Ezekből egy valóban hasznos ötlet volt, hogy lehessen tekercsen kívül fix méretű lapokra is csempézni, hogy irodai nyomtatókkal is működhessen, ha kisebb dokumentumokat akarunk pl. A4-es papírra nyomtatni. Ezt valószínűleg nem lesz nehéz implementálni sem.
