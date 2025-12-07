@@ -134,39 +134,34 @@ Rectangle {
                 model: imagePresetModel
             }
 
-            GroupBox {
+            Column {
                 width: parent.width
+                spacing: 10
 
-                Column {
+                SizeInput {
+                    id: sizeInput
+
+                    sizeWidth: entry.width
+                    sizeHeight: entry.height
+                    onWidthChangedDelegate: (value) => {
+                        if (entry.width != value)
+                            entry.setSizeToWidth(value, sizeInput.locked);
+
+                    }
+                    onHeightChangedDelegate: (value) => {
+                        if (entry.height != value)
+                            entry.setSizeToHeight(value, sizeInput.locked);
+
+                    }
                     width: parent.width
-                    spacing: 10
+                }
 
-                    SizeInput {
-                        id: sizeInput
+                MaskInput {
+                    id: maskInput
 
-                        sizeWidth: entry.width
-                        sizeHeight: entry.height
-                        onWidthChangedDelegate: (value) => {
-                            if (entry.width != value)
-                                entry.setSizeToWidth(value, sizeInput.locked);
-
-                        }
-                        onHeightChangedDelegate: (value) => {
-                            if (entry.height != value)
-                                entry.setSizeToHeight(value, sizeInput.locked);
-
-                        }
-                        width: parent.width
-                    }
-
-                    MaskInput {
-                        id: maskInput
-
-                        presetModel: maskPresetModel
-                        imageSource: entry
-                        width: parent.width
-                    }
-
+                    presetModel: maskPresetModel
+                    imageSource: entry
+                    width: parent.width
                 }
 
             }

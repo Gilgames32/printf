@@ -13,8 +13,6 @@ poppler = dependency('poppler-qt6', required: true)
 # Qt6 preprocessing
 qt6 = import('qt6')
 
-ui_files = files()
-
 moc_headers = files(
   'src/ui/source_entry_view.hpp',
   'src/ui/image_source_view.hpp',
@@ -31,7 +29,6 @@ qresources = files('src/qml/resources.qrc')
 
 prep = qt6.preprocess(
   moc_headers : moc_headers,
-  ui_files : ui_files,
   qresources : qresources,
 )
 

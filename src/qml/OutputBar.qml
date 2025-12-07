@@ -6,12 +6,11 @@ import printf 1.0
 Rectangle {
     id: outputBar
 
-    
     Component.onCompleted: {
         errorSignal.onError.connect((error) => {
             errorText.text = error;
             errorText.color = "#ff5555";
-            errorText.font.bold = true;         
+            errorText.font.bold = true;
         });
         errorSignal.onInfo.connect((info) => {
             errorText.text = info;
@@ -19,16 +18,17 @@ Rectangle {
             errorText.font.bold = false;
         });
     }
-    
-
     height: 40
-    color: palette.base
+    color: palette.mid
+    radius: 5
     clip: true
 
     Row {
-        anchors.fill: parent
-        anchors.margins: 8
-        spacing: 8
+        
+        anchors.centerIn: parent
+        width: parent.width - 2 * dmargin
+        
+        anchors.margins: dmargin
 
         Text {
             id: errorText
