@@ -118,7 +118,7 @@ A preprocesszálás előtti egyetlen hátralevő feladat a felhasználói felül
 A megfelelő előkészületek után megkezdődhet a fordítás. A Mesonnal való fordításhoz egy \texttt{meson.build} fájlra van szükség, a szintaktikája felettéb egyszerű, és a fordítást leíró kód sokkal barátságosabb, mintha ugyan ezt CMake-kel készülne. A Meson szerencsére tartalmaz a Qt-ot használó programok fordítására is beépített modult, így a preprocesszáláshoz nem kell külön szoftvert használni. 
 
 
-\begin{listing}
+\begin{listing}[!h]
     \caption{A fordítást leíró \texttt{meson.build} fájl (részlet).}
     \label{lst:meson-build}
     \begin{minted}[linenos,breaklines]{meson}
@@ -175,16 +175,20 @@ Az első kihívást a képek betöltése jelentette, mivel több különböző f
 
 A legegyszerűbb ilyen szempontból a JPEG formátumú képek betöltése volt, hiszen ezen képek nem tartalmaznak áttetszőségi információkat, nem kell kezelni az alfa csatornát. 
 
-A PNG formátumú képek betöltése már kicsit bonyolultabb, mert tartalmazhatnak áttetszőségi információt, amit külün kezelni kell. El kell tűnteni az alfa csatornát, de nem lehet csak egyszerűen elhagyni ezt az értéket, mert félig áttetsző pixeleknél ez azt jelentené, hogy a pixel a háttér és önmaga keveréke helyett csak a saját színében jelenik meg. 
+A PNG formátumú képek betöltése már kicsit bonyolultabb, mert tartalmazhatnak áttetszőségi információt, amit külün kezelni kell. El kell tűnteni az alfa csatornát, de nem lehet csak egyszerűen elhagyni ezt az értéket, mert félig áttetsző pixeleknél ez azt jelentené, hogy a pixel a háttér és önmaga keveréke helyett csak a saját színében jelenik meg, ahogy azt az \ref{fig:alpha-blend}. ábra is szemlélteti. A teljesen üres pixelek színét a legtöbb képszerketsztő program exportáláskor fekete színűre állítja a jobb tömöríthetőség érdekében, hiszen ezek a pixelek amúgy sem látszanának. 
 
-TODO kép
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{figures/aplha_blend.pdf}
+    \caption{Egy áttetsző kép az alfa csatornája elhagyásával (bal), illetve fehér háttérrel alfa-keverve (jobb).}
+    \label{fig:alpha-blend}
+\end{figure}
 
-A kívánt eredményhez pixel alfa csatornája szerint kell kevernünk a pixel és a háttér színét. Ennek folyamatát a \ref{lst:alpha-blend} kódrészlet mutatja be. A folyamat az alfa keverésnek (\cite{alpha-blending-wiki}) egy egyszerű változata. A kép pixeleit beszorozzuk az alfa csatornával, a hátteret pedig az alfa csatorna negatívjával. A szorzások eredményéül kapott két kép pixelenként vett összege az eredmény. 
+A kívánt eredményhez pixel alfa csatornája szerint kell kevernünk a pixel és a háttér színét. Ennek folyamatát a \ref{lst:alpha-blend} kódrészlet mutatja be. A folyamat az alfa-keverésnek (\cite{alpha-blending-wiki}) egy egyszerű változata. A kép pixeleit beszorozzuk az alfa csatornával, a hátteret pedig az alfa csatorna negatívjával. A szorzások eredményéül kapott két kép pixelenként vett összege az eredmény. 
 
-A program a képet először négy csatornára bontja, majd összeilleszti a B, G és R\footnote{Az OpenCV a képet BGRA formátumban tölti be, és mivel ebben a formátumban történik az exportálás} csatornákat, így két azonos méretű de különböző mátrixban van a kép és az alfa csatornája (4-9. sorok). A csatornák értékei betöltés után előjel nélküli 8 bites számként vannak reprezentálva, a szorzás műveletéhez viszont célszerűbb egy 0 és 1 közötti számmal számolni, ezért a pixeleket érdemes átkonvertálni 32 bites lebegőpontos számokká (float), majd leosztani 255-tel. Azért 255, mert ez a legnagyobb szám, amit egy előjel nélküli 8 bites számként tárolni lehet, tehát a leosztás után után ez fog megfelelni 1-nek. A konvertálást és a leosztást\footnote{Valójában 1/255-del való szorzás történik, ami a 255-tel való osztásnak felel meg.} szerencsére egy műveletként végre lehet hajtani (11. és 12. sor). Az alfa csatornából 3 másolat készül (15. sor), majd 1 darab 3 dimenziós mátrixszá fésülődnek össze (16. sor). Ennek a mátrixnak már megegyezik a dimenziója a színeket tároló mátrixéval, tehát össze lehet szorozni őket pixelenként. Éppen ez történik a 23. és 24. sorban. Az utóbbi esetben a csatorna invertáltjára van szükség, ezt egy ugyan ekkora dimenziójú, 1-esekkel feltöltött mátrixból való kivonással kaphatjuk meg. A két mátrix összegét (25. sor) ezután még vissza kell konvertálni 8 bites előjel nélküli számokká, amihez a pixeleket vissza kell szorozni 255-tel.
+A program a képet először négy csatornára bontja, majd összeilleszti a B, G és R\footnote{Az OpenCV könyvtár a képet BGRA formátumban tölti be.} csatornákat, így két azonos méretű de különböző mátrixban van a kép és az alfa csatornája (4-9. sorok). A csatornák értékei betöltés után előjel nélküli 8 bites számként vannak reprezentálva, a szorzás műveletéhez viszont célszerűbb egy 0 és 1 közötti számmal számolni, ezért a pixeleket érdemes átkonvertálni 32 bites lebegőpontos számokká (float), majd leosztani 255-tel. Azért 255, mert ez a legnagyobb szám, amit egy előjel nélküli 8 bites számként tárolni lehet, tehát a leosztás után után ez fog megfelelni 1-nek. A konvertálást és a leosztást\footnote{Valójában 1/255-del való szorzás történik, ami a 255-tel való osztásnak felel meg.} szerencsére egy műveletként végre lehet hajtani (11. és 12. sor). Az alfa csatornából 3 másolat készül (15. sor), majd 1 darab 3 dimenziós mátrixszá fésülődnek össze (16. sor). Ennek a mátrixnak már megegyezik a dimenziója a színeket tároló mátrixéval, tehát össze lehet szorozni őket pixelenként. Éppen ez történik a 23. és 24. sorban. Az utóbbi esetben a csatorna invertáltjára van szükség, ezt egy ugyan ekkora dimenziójú, 1-esekkel feltöltött mátrixból való kivonással kaphatjuk meg. A két mátrix összegét (25. sor) ezután még vissza kell konvertálni 8 bites előjel nélküli számokká, amihez a pixeleket vissza kell szorozni 255-tel.
 
-\begin{listing}
-    \caption{Az alfa keverés implementációja egy teljesen fehér háttér esetén.}
+\begin{listing}[!h]
+    \caption{Az alfa-keverés implementációja egy teljesen fehér háttér esetén.}
     \label{lst:alpha-blend}
     \begin{minted}[linenos,breaklines]{cpp}
 cv::Mat bgr, alpha;
@@ -223,13 +227,33 @@ Mint az már korábban említve volt, a PDF fájlok egyaránt tartalmazhatnak ra
 
 Erre a feladatra is egy külső könyvtárt használtam. A választás a Poppler PDF renderelő könyvtárra esett, annak sebességéből, egyszerűségéből, valamint C++ és Qt támogatottságából fakadóan.
 
-Az egyszerűség kedvéért a program a PDF fájloknak csak az első oldalát használja fel. Ezen fájlok esetén is lehet szó áttetszőségről, ezért a többi képhez hasonlóan a raszerizált tartalom is alfa keverve lesz. 
+Az egyszerűség kedvéért a program a PDF fájloknak csak az első oldalát használja fel. Ezen fájlok esetén is lehet szó áttetszőségről, ezért a többi képhez hasonlóan a raszerizált tartalom is alfa-keverve lesz. 
 
 \subsection{Előbeállítások kezelése}
 
 Az előbeállításokat valamilyen kulcs-érték formában volt érdemes tárolni, hogy adott értékeket el lehessen hagyni, és hogy felhasználóként egyszerű legyen olvasni. A választás a JSON formátumra esett. Ez a formátum felettébb elterjedt, emberek számára is könnyen olvasható, szöveg alapú formátum, amihez egy nagyon népszerű C++ könyvtár is tartozik: a Niels Lohmann által készített egy fejléces (single header) JSON könyvár (nlohmann-json). 
 
 A könyvtár a leggyorsabb és legelterjedtebb JSON kezelő könyvtár C++-hoz, a használata rendkívül egyszerű. A beolvasás után a kulcsok értékeit az index operátorral (\text{[] operátor}) lehet elérni, amiket akár egymás után is lehet fűzni.
+
+A kaszkádos előbállításokat a JSON-ön belüli szótárakkal oldottam meg. Az \ref{lst:json}. kódrészlet jól szemlélteti ennek működését, és a JSON fájlok könnyen olvashatóságát. A fájl az 5. sorban a dokumentum beállításaira vonatkozó szótárat definiál, majd annak \texttt{resolution\_ppi} kulcsát felhasználva beállítja az értékét 600-ra\footnote{A matricákat 600 dpi-ben szoktuk nyomtatni.}. Hasonló módon történik a körmaszk automatikus betöltése a 8. sorban.
+
+\begin{listing}[!h]
+    \caption{Példa JSON fájl egy körmatrica előbállításhoz.}
+    \label{lst:json}
+    \begin{minted}[linenos,breaklines]{json}
+{
+    "name": "Körmatrica 70+2mm",
+    "width": 72,
+    "height": 72,
+    "document": {
+        "resolution_ppi": 600
+    },
+    "mask": {
+        "path": "assets/mask.png"
+    }
+}
+    \end{minted}
+\end{listing}
 
 \subsection{Exportálás}
 
@@ -246,25 +270,40 @@ Mivel az EXIF egy képformátumokon átívelő metaadat-formátum, ezért elősz
 Egy PNG formátum egy veszteségmentes, de tömörített formátum. A megfelelő kódoláshoz létre kell hozni egy SPNG kontextust, valamint egy fájlt, amibe a kép íródik. A kontextus végzi az adat tömörítését, majd fájlba írását. Ezek után hozzá lehet adni a megfelelő értékeket a fejléchez: a méreteket és a pixelsűrűségeket.
 Ez a megoldás már sikeresnek bizonyult.
 
+\subsection{Qt sajátosságok}
 
-% - ui bug
+A felhasználói felület fejlesztése pár apróbb kiegészítésre volt szükségem, amik nem szerepeltek a tervekben. Az egyik ilyen volt az előnézet alatti szövegdoboz, ami az eseleges hibák megjelenítéséért felelt. 
+Ezt egy singleton osztállyal oldottam meg, hogy a kód bármely részéről egyszerűen lehessen rá kiiratni információt, illetve hibákat.
+
+Egy másik nehézséget a dinamikus lista jelentette. A lista, amin a bemenetek láthatóak lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Egy indirekcióval oldottam meg, hogy az állapotok ne vesszenek el: a lista elemei az értékeket pointereken keresztül érik el, így csak a felületi elemeket szabadítja fel a lista. Gond volt az is, hogy az elemek és a hozzá tartozó szűrők nézetének összeköttetése eleinte UI szinten valósult meg, és ez az összeköttetés csak addig van jelen, amíg az elem látható. Ezt az elemek és a szűrők nézet szintent történő összeköttetése oldotta meg.
+
+A Qt egy pozitívuma, hogy követi a rendszer témáját. A fejlesztés közben a használt rendszerem témája megváltozott, amit a felület automatikusan követett. A \ref{fig:ui-oblab}. és \ref{fig:ui-szakdoga}. ábrán látható a stílus a rendszer témájának megváltozása előtt és után.
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{figures/ui_showcase.png}
+    \caption{A felhasználói felület.}
+    \label{fig:ui-oblab}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{figures/ui_update.png}
+    \caption{A felhasználói felület.}
+    \label{fig:ui-szakdoga}
+\end{figure}
+
+
+\subsection{Több szálon futás}
+
+A program nagyságrendekkel gyorsabban generál képeket, mint a Photoshop szkript, nagyobb dokumentumok esetén is csupán pár másodpercet vesz igénybe. Pár másodperc viszont a felhasználói felület szemszögéből rengeteg időnek számít, és a felület azt hiszi, hogy az alkalmazás lefagyott. 
+
+Szoftverfejlesztésben egy gyakori probléma, hogy hosszabb műveletekre van szükség, vagy hogy egy erőforrásra kell várni. Eközben viszont az alkalmazás többi részének még működnie kell a felhasználói élmény érdekében. A megoldás egyzerű: külön szálon kell futtatni a hosszabb folyamatokat, hogy azok ne akadályozzák meg a program fő szálát, azaz felhasználói felület működését. A külön szálból vissza kell jelezni a fő szálra, amikor az eredmény már rendelkezésre áll. Az ilyen jelzésekre a Qt által kínált jelzéseket érdemes felhasználni.
+
+Ezt a technikát minden időigényesebb folyamatnál alkalmaztam, ezek folyamatok a képek generálása és mentése.
+
+% TODO kódrészlet?
+
 % - generálás? idk
-% - több szálon futás
-% - json példa
 % - refactor?
-% - ui result
-% - preview?
-
-% \subsection{Modell és generálás}
-
-
-% Túlságosan nem mennék részletekbe a UI implementációját illetően, csupán pár érdekesebb részét emelném ki. A lista, amin a bemenetek láthatóak lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Ezt az implementáció során figyelembe is vettem, és egy indirekcióval oldottam meg, arra viszont nem figyeltem, hogy a filterek modelljével való összeköttetés UI szinten valósult meg, és ez az összeköttetés csak addig van jelen, amíg az elem látható. Erre sajnos csak az éles tesztnél találtam rá, mert itt teszteltem először háromnál több képpel a programot. A hiba azóta javítva lett.
-
-% Egy másik érdekesség talán az előbeállítások betöltésének folyamata. A program JSON fájlokból olvas be, ezek létezését először az adott mappában felderíti, majd rögzíti a név-elérési út párokat. Betöltéskor a JSON-ben jelenlévő értékek felülírják az eddigi beállításainkat, a hiányzó kulcsokhoz tartozó értékekre pedig nem lesznek hatással. A beállítások a már említett módon elkülönülnek (papír, dokumentum, maszk), de tovább tudnak propagálni más részekre. Így lehetséges például az, hogy a nagyplakát papírbeállítás hatással van a tekercs szélességére, vagy a matrica beállítás a képpontsűrűségre. 
-
-% \subsection{Több szálon futás}
-
-% Ugyan ügyeltem, hogy minél gyorsabb legyen a kép generálása, ez a folyamat így is tud időigényes lenni. Itt ugyan csak pár másodpercről beszélünk, de ez elég arra, hogy a Qt felület azt higgye, hogy az alkalmazásunk lefagyott. Ez egy elég gyakori eset a szoftverfejlesztésben, már jól ismert megoldással: szervezzük át külön szálra, hogy ne a fő szálon történjen a generálás. Az implementáció itt sem volt zökkenőmentes, hiszen valahogy jeleznünk is kell a UI felé, hogy frissült az eredmény, de vannak erre ún. signalok a Qt-ban. Hasonló problémába ütköztem a kép elmentésénél, ami még tovább tart, de ezt is ugyan úgy javítani tudtam. 
 
 % \subsection{Exportálás}
 
