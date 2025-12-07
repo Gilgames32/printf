@@ -6,6 +6,15 @@ import printf 1.0
 Item {
     property var sourceEntryView: null
 
+    ImagePicker {
+        id: imagePicker
+
+        onAcceptDelegate: (files) => {
+            generator.dirty = true;
+            sourceEntryView.addFiles(files);
+        }
+    }
+
     ColumnLayout {
         id: filePanel
 
@@ -13,15 +22,6 @@ Item {
         spacing: 10
         anchors.margins: 10
         anchors.rightMargin: 0
-
-        ImagePicker {
-            id: imagePicker
-
-            onAcceptDelegate: (files) => {
-                generator.dirty = true;
-                sourceEntryView.addFiles(files);
-            }
-        }
 
         Button {
             id: openButton
@@ -60,8 +60,6 @@ Item {
                 Rectangle {
                     color: palette.mid
                     anchors.fill: parent
-                    border.color: palette.midlight
-                    border.width: 1
                     radius: 5
                     visible: sourceEntryView.count == 0
                 }

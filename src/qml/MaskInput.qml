@@ -7,64 +7,61 @@ Column {
     property var presetModel: null
     property var imageSource: null
 
+    spacing: 5
+
     CheckBox {
         id: maskCheckBox
 
         checked: imageSource.mask.enabled
         onCheckedChanged: {
-            generator.dirty = true
+            generator.dirty = true;
             imageSource.mask.enabled = maskCheckBox.checked;
         }
         text: "Mask"
     }
 
-    GroupBox {
+    RowLayout {
+        id: maskLayout
+
         visible: maskCheckBox.checked
         width: parent.width
+        spacing: 10
 
-        RowLayout {
-            id: maskLayout
+        Image {
+            id: maskImage
 
-            width: parent.width
-            spacing: 10
+            source: imageSource.mask.absoluteFilePath ? "file://" + imageSource.mask.absoluteFilePath : ""
+            fillMode: Image.PreserveAspectFit
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            Layout.preferredHeight: 50
+        }
 
-            Image {
-                id: maskImage
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 3
 
-                source: imageSource.mask.absoluteFilePath ? "file://" + imageSource.mask.absoluteFilePath : ""
-                fillMode: Image.PreserveAspectFit
+            ComboBox {
                 Layout.fillWidth: true
-                Layout.preferredWidth: 1
-                Layout.preferredHeight: 50
+                width: parent.width
+                textRole: "name"
+                onActivated: (index) => {
+                    let path = presetModel.getPath(index);
+                    if (path == "")
+                        return ;
+
+                    generator.dirty = true;
+                    imageSource.mask.setPreset(presetModel.getPath(index));
+                }
+                model: presetModel
             }
 
-            ColumnLayout {
+            Text {
+                color: palette.text
+                text: imageSource.mask.filePath
+                font.pixelSize: 12
                 Layout.fillWidth: true
-                Layout.preferredWidth: 3
-
-                ComboBox {
-                    Layout.fillWidth: true
-                    width: parent.width
-                    textRole: "name"
-                    onActivated: (index) => {
-                        let path = presetModel.getPath(index);
-                        if (path == "")
-                            return;
-                        
-                        generator.dirty = true
-                        imageSource.mask.setPreset(presetModel.getPath(index));
-                    }
-                    model: presetModel
-                }
-
-                Text {
-                    color: palette.text
-                    text: imageSource.mask.filePath
-                    font.pixelSize: 12
-                    Layout.fillWidth: true
-                    clip: true
-                }
-
+                clip: true
             }
 
         }

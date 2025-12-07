@@ -5,6 +5,7 @@ import printf 1.0
 
 ApplicationWindow {
     readonly property var dmargin: 10
+    // TODO: same thing with radius
 
     visible: true
     width: 1280
@@ -39,40 +40,28 @@ ApplicationWindow {
 
     RowLayout {
         anchors.fill: parent
+        spacing: 0
 
         FileList {
             sourceEntryView: sourceEntryView
-            Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: 1
         }
 
-        ColumnLayout {
-            Layout.fillHeight: true
+        Preview {
+            id: preview
+
             Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: 2
-
-            Preview {
-                id: preview
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                previewSource: generator.imageSource
-            }
-
-            OutputBar {
-                id: outputBar
-
-                Layout.fillWidth: true
-                width: parent.width
-            }
-
+            previewSource: generator.imageSource
         }
 
         Properties {
             docProperties: docProperties
-            Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: 1
         }
 
