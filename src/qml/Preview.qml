@@ -14,6 +14,17 @@ Item {
         flickable.resizeContent((image.width * zoom), (image.height * zoom), mousePos);
     }
 
+    MouseArea {
+        id: mouseArea
+
+        anchors.fill: parent
+        onWheel: (wheel) => {
+            mousePos = Qt.point(wheel.x, wheel.y);
+            zoom *= wheel.angleDelta.y > 0 ? 1.25 : 1 / 1.25;
+            flickable.returnToBounds();
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 10
@@ -103,17 +114,6 @@ Item {
             width: parent.width
         }
 
-    }
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-        onWheel: (wheel) => {
-            mousePos = Qt.point(wheel.x, wheel.y);
-            zoom *= wheel.angleDelta.y > 0 ? 1.25 : 1 / 1.25;
-            flickable.returnToBounds();
-        }
     }
 
 }
