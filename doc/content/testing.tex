@@ -63,18 +63,28 @@ A program 2025. szeptemberének környékére már használható állapotban vol
     \caption{Éles tesztek eredményei.}
 \end{figure}
 
-\subsection{Fordítási problémák}
+\subsection{Üzembe helyezési problémák}
 
+A programnak nem csak a saját eszközeimen, de a nyomdai gépen is futnia kellett. A nyomdai gépen Windows 10 fut, és mert a többi nyomdai szoftver nem fut Linux alatt, így a telepítést WSL-lel\footnote{Windows Subsystem for Linux} oldottam meg. A számítógép erőforrásai limitáltak, mindössze 8 GB memória van a számítógépben, a WSL-nek ebből nagyjából 4 GB jutott. A forráskód letöltése után megpróbáltam fordítani a programot a nyomdai gépen, ez viszont egy erőforrásigényes folyamat, és több órányi várakozás után sem sikerült. Szerencsére ez megoldható volt a bináris futtatható fájl átmásolásával a saját gépemről a nyomdai gépre.
 
-% klubszobagépre telepítés, windows, wsl, 8gb ram, etc
-% kernel panic laptopon
-
-
-
+Támadtak problémák az elnevezés kapcsán is. A \texttt{printf} egy Unix shell parancs is egyben. Ez a terminálból való futtatáskor néhány kellemetlen pillanathoz vezetett, de ez a \texttt{./printf} parancs használatával megoldható.
 
 TODO screenshotok
 
 \section{Visszajelzések és ötletek}
+
+Az éles tesztek során megannyi hasznos visszajelzés érkezett, nem csak hibákról, de új ötletekről is. Az egyik ilyen ötlet volt, hogy tekercsen kívül A4-es lapokra is lehessen futtatni a programot. Ehhez csak egy megfelelő előbállításra van szükség, ami megfelelően beállítja a tekercs szélességét és maximális magasságát az A4-es szabvágy méreteire.
+
+A segédvonalak kapcsán több visszajelzést is kaptam. Eleinte a segédvonalak nem lógtak be a kép szélén túl, ez később problémát jelentett a fehér szélű képek vágásánál. Az egyik levágott oldal után nehéz volt megmondani, hogy a rá merőleges oldalt hol kell pontosan elvágni. Emiatt extra segédvonalbeállításokat adtam hozzá a programhoz, és alapértelmezetten belógattam a segédvonalakat minden oldalon. A \ref{fig:bleed} ábrán látható a belógatás előtti és utáni eredmény.
+
+Egy másik kérés is érkezett a segédvonalak kapcsán, hogy több különböző méretű kép pakolásánál legyenek extra segédvonalak teljes tekercs szélességben. Ennek implementálására még nem volt idő.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/bleed.png}
+    \caption{Segédvonalak befuttatás előtt és után.}
+    \label{fig:bleed}
+\end{figure}
 
 % a4
 % jobb segédvonalak strip tilingnál
