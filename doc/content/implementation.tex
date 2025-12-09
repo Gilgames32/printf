@@ -11,31 +11,31 @@ A C++ egy fordítandó nyelv, és a fordító már a fordítás közben is igyek
 
 \subsection{A felhasznált könyvtárak}
 
-A nyelv korából és népszerűségéből adódóan megannyi kiváló könyvtár áll rendelkezésre. A két legfontosabb segédkönyvtár a felhasználó felülethez és a képek szerkesztéséhez kellett.
+A nyelv korából és népszerűségéből adódóan megannyi kiváló könyvtár áll rendelkezésre. A két legfontosabb segédkönyvtár a felhasználói felülethez és a képek szerkesztéséhez kellett.
 
 A képek manipulálásához az OpenCV könyvtárra esett a választás. Az OpenCV egy nyílt forráskódú, platformfüggetlen gépi látással foglalkozó könyvtár. Egyszerű képszerkesztésnél sokkal többre képes, de a teljesítménye és támogatottsága miatt erre esett a választás. A könyvtár robosztussága sem jelent problémát, fordításkor csak a releváns komponensek kerülnek bele a program kódjába.
 
-A felhasználói felülethez szintén egy nyílt forráskódú és platformfüggetlen könyvtárat kerestem, és a Qt mellett döntöttem. A Qt platformfüggetlensége ellenére egy natív megjelenést nyújt, és követi a rendszer témáját. Támogatja a magas pixelsűrűségű képernyőkön való megjelenést, és jól skálázódik minden rendszeren. Eddigi tapasztalataim alapján a teljesítménnyel is meg voltam elégedve, azezt használó programok szinte azonnal elindultak. A felhasználói élmény mellett a fejlesztői élmény is szempont volt. Szerencsére a Qt korából és elterjedségéből adódóan könnyen integrálható C++-os projektekbe, és több lehetőséget is kínál a felületek elkészítésére. 
+A felhasználói felülethez szintén egy nyílt forráskódú és platformfüggetlen könyvtárat kerestem, és a Qt mellett döntöttem. A Qt platformfüggetlensége ellenére egy natív megjelenést nyújt, és követi a rendszer témáját. Támogatja a magas pixelsűrűségű képernyőkön való megjelenést, és jól skálázódik minden rendszeren. Eddigi tapasztalataim alapján a teljesítménnyel is meg voltam elégedve, a Qt-ot használó, általam is használt programok szinte azonnal elindultak, sosem akadoztak. A felhasználói élmény mellett a fejlesztői élmény is szempont volt. Szerencsére a Qt korából és elterjedségéből adódóan könnyen integrálható C++-os projektekbe, és több lehetőséget is kínál a felületek elkészítésére. 
 
-Különböző Qt felületek készítésére specializálódó grafikus tervezőszoftver létezik, de megvan a lehetőség egy deklaratív leírónyelvben is felületeket készíteni, ezt a nyelvet Qt Meta-object Language-nek (QML) hívják. A QML szintaktikája hasonlít a JSON szintaktikájára, de rövid JavaScript szerű függvényeket is támogat az egyszerűbb felületi logikák megvalósításához, valamint a kommunikációhoz a program többi részével. A nyelv mellé egy beépített könyvtár is tartozik (QtQuick), mely megannyi hasznos előre elkészített kisebb komponenst tratalmaz, így nem kell mindent a semmiből felépíteni. Ilyen komponensek például a minden más UI könyvtár részét képező komponensek (gomb, szövegdoboz, legörülő lista) mellett specifikusabb komponensek is, mint a \texttt{Flickable}, ami egy tökéletes kiindulópont a pásztázható előnézethez.
+Különböző Qt felületek készítésére specializálódó grafikus tervezőszoftver léteznek, de megvan a lehetőség egy deklaratív leírónyelvben is felületeket készíteni. Ezt a nyelvet Qt Meta-object Language-nek (QML) hívják. A QML szintaktikája picit hasonlít JSON szintaktikájára, de rövid JavaScript szerű függvényeket is támogat az egyszerűbb felületi logikák megvalósításához, valamint a kommunikációhoz a program többi részével. A nyelv mellé egy beépített könyvtár is tartozik (QtQuick), mely megannyi hasznos előre elkészített kisebb komponenst tratalmaz, így nem kell mindent a semmiből felépíteni. Ilyen komponensek például a minden más UI könyvtár részét képező komponensek (gomb, szövegdoboz, legörülő lista) mellett specifikusabb komponensek is, mint a \texttt{Flickable}, ami egy tökéletes kiindulópont a pásztázható előnézethez.
 Mivel a felület nem túl komplex, ezért nem lett volna kifizetődő a grafikus tervezőprogramok használata, így a QML használtata mellett döntöttem.
 
 \subsubsection{Egyéb felhasznált könyvtárak}
 
-A Qt és az OpenCV könyvtárak mellett egyéb kisebb segédkönyvtárakra is szükség volt a program elkészítéséhez, ezek későbbi egy fejezetben lesznek bemutatva. Ezek a könyvtárak az nlohmann-json, a libspng, az Exiv2 és a Poppler Qt6.
+A Qt és az OpenCV könyvtárak mellett egyéb kisebb segédkönyvtárakra is szükség volt a program elkészítéséhez, ezek egy későbbi fejezetben lesznek bemutatva. Ezek a könyvtárak az nlohmann-json, a libspng, az Exiv2 és a Poppler Qt6.
 
 \section{A program fordítása}
 
 A C++ forráskódok fordítása közel sem triviális feladat nagyobb projektek esetén, vagy ha külső könyvtárak is szerepelnek a projektben. A nyelv népszerűségéből adódóan erre is több megoldás létezik. A két lehetséges opció a CMake és a Meson voltak. A választás a Mesonra esett, mert a CMake-hez képest modernebb, a szintaktikája egyszerűbb és jobban dokumentált. Nagy előnye a Meson-nak, hogy beépített támogatás van a CMake-kel való együttműködésre, és a Qt-tal készült felületek előfeldolgozására is létezik beépített importálható modul.
 
-A felhasznált könyvtárak elég gyakran előforduló könyvtárak, és esélyes, hogy már a rendszer részét képezik. Továbbá a Qt és az OpenCV könyvtárak feletébb robosztusak, ezért az ilyen nagyobb könyvtárakat a fordító dinamikusan linkeli.
+A felhasznált könyvtárak elég népszerűek, és esélyes, hogy már a rendszer részét képezik. Továbbá a Qt és az OpenCV könyvtárak feletébb robosztusak, ezért az ilyen nagyobb könyvtárakat a fordító dinamikusan linkeli.
 
 \subsection{A felhasználói felület előkészítése fordításra}
 
-A program többi részéhez hasonlóan a QML-ben írt felületet is le kell fordítani, hogy az elkészült bináris fájl részét képezhesse, és ne futás időben kelljen betölteni a felületet. Ezt még a program többi részének fordítása előtt kell megtenni. A felhasználó felületet leíró QML fájlokat és a felülettel kommunikáló osztályokat, azaz a nézeteket, előre fel kell dolgoznunk, ez az ún. preprocesszálás.
-A preprocesszálást a Qt Meta-object Compiler-e végzi (MOC).
+A program többi részéhez hasonlóan a QML-ben írt felületet is fel kell dolgozni, hogy az elkészült bináris fájl részét képezhesse, és ne futás időben kelljen betölteni a felületet. Ezt még a program többi részének fordítása előtt kell megtenni. A felhasználói felületet leíró QML fájlokat és a felülettel kommunikáló osztályokat, azaz a nézeteket, előre fel kell dolgoznunk, ez az ún. preprocesszálás.
+A preprocesszálást a Qt Meta-object Compiler végzi (MOC).
 
-Ahhoz, hogy a nézet osztályokat preprocesszálni lehessen, a megfelelő Qt osztályokból való öröklésen túl különféle makrókkal is el kell látni az osztályokat. Szemléltetésképpen erre a \ref{lst:qt-macro}. kódrészlet szolgál. A kódrészletben a \texttt{DocumentPropertiesView} osztály szerepel, mely a dokumentumszintű beállításokhoz tartozó nézet. Az osztály feladata a felülettel való kommunikáció, és a modellhez szükséges adatstruktúra elkészítése. A 3. sorban az osztály leszármazik a \texttt{QObject} osztályból, mint azt az összes Qt objektum teszi. Ezután egyből a \texttt{Q\_OBJECT} makró következik. Ez a makró teszi lehetővé a MOC-nek az előfeldolgozást, és ez felel az események kezeléséért, futásidejű típusinformációkért és egyéb Qt nyújtotta beépített funkciókért. 
+Ahhoz, hogy a nézet osztályokat preprocesszálni lehessen, a megfelelő Qt osztályokból való öröklésen túl különféle makrókkal is el kell látni az osztályokat. Szemléltetésképpen erre a \ref{lst:qt-macro}. kódrészlet szolgál. A kódrészletben a \texttt{DocumentPropertiesView} osztály szerepel, ami a dokumentumszintű beállításokhoz tartozó nézet. Az osztály feladata a felülettel való kommunikáció, és a modellhez szükséges adatstruktúra elkészítése. A 3. sorban az osztály leszármazik a \texttt{QObject} osztályból, ahogy azt az összes Qt objektum teszi. Ezután egyből a \texttt{Q\_OBJECT} makró következik. Ez a makró teszi lehetővé a MOC-rel való előfeldolgozást, ez felel az események kezeléséért, futásidejű típusinformációkért és egyéb Qt nyújtotta beépített funkciókért. 
 
 \begin{listing}[!h]
     \caption{Példa egy saját \texttt{QObject} osztály deklarálására.}
@@ -72,17 +72,17 @@ Az 5. sorban szereplő \texttt{Q\_PROPERTY} makró teszi lehetővé tulajdonság
 Meg kell adni a mező típusát, nevét, láthatóságát, a hozzá tartozó osztálybeli mezőt, valamint az érték megváltozásakor meghívott eseményjelet (signal).
 A tulajdonságok önmagukban nem tárolnak adatot, az osztály egyik belső változójára hivatkoznak. A \texttt{resolution} tulajdonsághoz a 9. sorban deklarált \texttt{m\_resolution} mező tartozik, és a 21. sorban deklarált \texttt{resolutionChanged} esemény fog jelezni, amikor az érték megváltozik.
 
-Az eseményjelek kezelése kritikus az eseményvezérelt rendszereknél, a felületen csak akkor fog megváltozni az érték, ha az adott tulajdonsághoz tartozó értékváltozásről egy jel (signal) érkezik. Ennek köszönhető, hogy nem kell egy végtelen ciklusban folyamatosan lekérni az értéket, ami rossz hatással lenne a teljesítményre. 
+Az eseményjelek kezelése kritikus az eseményvezérelt rendszereknél. A felületen csak akkor fog megváltozni az érték, ha az adott tulajdonsághoz tartozó értékváltozásról egy jel (signal) érkezik. Ennek köszönhető, hogy nem kell egy végtelen ciklusban folyamatosan lekérni az értéket, ami rossz hatással lenne a teljesítményre. 
 Mivel a C++ kódnak nincsen fogalma a Qt makrók működéséről, így a nézetek kódjában csak a mezők értékét tudjuk változtatni, a tulajdonságok elérhetetlenek. Ha a nézetben a mező értéke a belső működés miatt megváltozik, akkor a fejlesztő felelőssége meghívni a hozzá tartozó eseményjelet, hogy az érték a felületen is frissüljön.
 
 Hogy a felülethez tartozó QML kódból is lehessen az osztály függvényeit hívni, a függvényeket a \texttt{Q\_INVOKABLE} makróval kell ellátni. Ezeket a függvényeket egyaránt használhatjuk a nézetből és QML-ből is.
 
 Sajnos még ez sem elég ahhoz, hogy az így elkészített nézet QML-ből elérhető legyen.
-A programkód elején be kell jegyezni a saját típusokat és objektumosztályokat, amiket a felhasználói felület kódja is felhasznál, hogy a kód felismerje a típusának nevét, és hogy futásidejű típusinformációk is rendelkezésre álljanak, utóbbira a QML-ben írt szkriptek miatt van szükség. 
+A programkód elején be kell jegyezni a saját típusokat és objektumosztályokat, amiket a felhasználói felület kódja is használ, hogy a kód felismerje a típusának nevét, és hogy futásidejű típusinformációk is rendelkezésre álljanak, utóbbira a QML-ben írt szkriptek miatt van szükség. 
 
-Ennek a menetét a \ref{lst:qt-meta}. kódrészlet mutatja be. Hogy a \texttt{DocumentPropertiesView} osztály QML-ből is elérhető legyen, a 6. sorban a kód beregisztálja a típust. Meg kell adni a modul nevét (printf) és verziószámát (1.0), valamint a QML-ben használt nevét, ami itt megyezik a C++-os típusával.
+Ennek a menetét a \ref{lst:qt-meta}. kódrészlet mutatja be. Hogy a \texttt{DocumentPropertiesView} osztály QML-ből is elérhető legyen, a 6. sorban a kód beregisztálja a típust. Meg kell adni a modul nevét (printf) és verziószámát (1.0), valamint a QML-ben használt nevét, ami itt megyezik a C++-os típusának nevével.
 
-Mivel a \ref{lst:qt-macro}. kódrészlet 18. sorában egy \texttt{DocumentPreset} osztállyal tér vissza a fügvény, amit QML-ből is meg lehet hívni, így ezt a típust is be kell jegyezni, mint metatípus, hogy a felhasználói felület kódja is kezelni tudja. Ez a \ref{lst:qt-meta}. kódrészlet 9. sorában történik meg.
+Mivel az \ref{lst:qt-macro}. kódrészlet 18. sorában egy \texttt{DocumentPreset} osztállyal tér vissza a fügvény, amit QML-ből is meg lehet hívni, így ezt a típust is be kell jegyezni, mint metatípus, hogy a felhasználói felület kódja is kezelni tudja. Ez a \ref{lst:qt-meta}. kódrészlet 9. sorában történik meg.
 
 
 \begin{listing}[!h]
@@ -113,7 +113,7 @@ A preprocesszálás előtti egyetlen hátralevő feladat a felhasználói felül
 
 \subsection{A fordítás menete}
 
-A megfelelő előkészületek után megkezdődhet a fordítás. A Mesonnal való fordításhoz egy \texttt{meson.build} fájlra van szükség, a szintaktikája felettéb egyszerű, és a fordítást leíró kód sokkal barátságosabb, mintha ugyan ezt CMake-kel készülne. A Meson szerencsére tartalmaz a Qt-ot használó programok fordítására is beépített modult, így a preprocesszáláshoz nem kell külön szoftvert használni. 
+A megfelelő előkészületek után megkezdődhet a fordítás. A Mesonnal való fordításhoz egy \texttt{meson.build} fájlra van szükség. A Meson szintaktikája felettéb egyszerű, és a fordítást leíró kód sokkal barátságosabb, mintha ugyan ezt CMake-kel készülne. A Meson szerencsére tartalmaz a Qt-ot használó programok fordítására is beépített modult, így a preprocesszáláshoz nem kell külön szoftvert használni. 
 
 
 \begin{listing}[!h]
@@ -156,7 +156,7 @@ executable('printf', [srcs, prep],
     \end{minted}
 \end{listing}
 
-A \ref{lst:meson-build}. kódrészlet a \texttt{meson.build} fájl egy rövidített változatát tartalmazza, és jól szemlélteti a Meson egyszerűségét. Elsőnek definiálni kell egy projektet és a projekt nyelvét. Ezek után célszerű minél hamarabb ellenőrizni a szükséges könyvtárak (dependencies) meglétét, ahogy az a példa 3. sorában is szerepel. A 15. sorban történik a felület preprocesszálása, ehhez importálni kell a megfelelő Qt modult (6. sor), feltűntetni a preprocesszálandó fejléc (header) fájlokat (8. sor) és a Qt erőforrásfájlokat (13. sor), amik \texttt{resources.qrc} fájlban vannak felsorolva. A preprocesszálást követően elkészíthető a futtatható fájl (30. sor), amihez fel kell sorolni a felhasznált fejléc (header) fájlokat tartalmazó mappákat (20. sor) és a forráskód fájljainak elérési útját (25. sor), valamint a preprocesszált fájlokat is. Az eredmény egyetlen futtatható bináris fájl.
+A \ref{lst:meson-build}. kódrészlet a \texttt{meson.build} fájl egy rövidített változatát tartalmazza, és jól szemlélteti a Meson egyszerűségét. Elsőnek definiálni kell egy projektet és a projekt nyelvét. Ezek után célszerű minél hamarabb ellenőrizni a szükséges könyvtárak (dependencies) meglétét, ahogy az a kódrészlet 3. sorában is szerepel. A 15. sorban történik meg a felület preprocesszálása, ehhez importálni kell a megfelelő Qt modult (6. sor), feltűntetni a preprocesszálandó fejléc (header) fájlokat (8. sor) és a Qt erőforrásfájlokat (13. sor). A preprocesszálást követően elkészíthető a futtatható fájl (30. sor), amihez fel kell sorolni a felhasznált fejléc (header) fájlokat tartalmazó mappákat (20. sor) és a forráskód fájljainak elérési útját (25. sor), valamint a preprocesszált fájlokat is. Az eredmény egyetlen futtatható bináris fájl.
 
 \section{Fejlesztést segítő eszközök}
 
@@ -169,11 +169,11 @@ A programot a tervek alapján fejlesztettem le, néhány apróbb eltéréssel é
 
 \subsection{Képek betöltése}
 
-Az első kihívást a képek betöltése jelentette, mivel több különböző formátumot is helyesen kell tudni kezelni. Mivel a specifikáció szerint nem megengedett a képek átlapolódása, ezért nincsen szükség az áttetszőségi információkra egy kép esetén, azaz az afla csatorna elhagyható, ezzel is további memóriát spórolva. Ez három (R, G és B), egyenként nyolc bites csatornát eredményez. Ha szükséges, betöltéskor a bemeneteket át kell konvertálni, hogy ennek a formátumnak megfeleljenek. 
+Az első kihívást a képek betöltése jelentette, mivel több különböző formátumot is helyesen kell tudni kezelni. Mivel a specifikáció szerint nem megengedett a képek átlapolódása, ezért nincsen szükség az a képek áttetszőségi információira, azaz az afla csatornák elhagyhatók, ezzel is további memóriát spórolva. Ez három (R, G és B), egyenként 8 bites csatornát eredményez. Ha szükséges, betöltéskor a bemeneteket át kell konvertálni, hogy ennek a formátumnak megfeleljenek. 
 
 A legegyszerűbb ilyen szempontból a JPEG formátumú képek betöltése volt, hiszen ezen képek nem tartalmaznak áttetszőségi információkat, nem kell kezelni az alfa csatornát. 
 
-A PNG formátumú képek betöltése már kicsit bonyolultabb, mert tartalmazhatnak áttetszőségi információt, amit külün kezelni kell. El kell tűnteni az alfa csatornát, de nem lehet csak egyszerűen elhagyni ezt az értéket, mert félig áttetsző pixeleknél ez azt jelentené, hogy a pixel a háttér és önmaga keveréke helyett csak a saját színében jelenik meg, ahogy azt az \ref{fig:alpha-blend}. ábra is szemlélteti. A teljesen üres pixelek színét a legtöbb képszerketsztő program exportáláskor fekete színűre állítja a jobb tömöríthetőség érdekében, hiszen ezek a pixelek amúgy sem látszanának. 
+A PNG formátumú képek betöltése már kicsit bonyolultabb, mert tartalmazhatnak áttetszőségi információt, amit külön kezelni kell. El kell tűnteni az alfa csatornát, de nem lehet csak egyszerűen elhagyni ezt az értéket, mert a félig áttetsző pixeleknél ez azt jelentené, hogy a pixel a háttér és önmaga keveréke helyett csak a saját színében jelenik meg, ahogy azt az \ref{fig:alpha-blend}. ábra is szemlélteti. A teljesen üres pixelek színét a legtöbb képszerketsztő program exportáláskor fekete színűre állítja a jobb tömöríthetőség érdekében, hiszen ezek a pixelek amúgy sem látszanának. 
 
 \begin{figure}[!h]
     \includegraphics[width=\textwidth]{figures/aplha_blend.pdf}
@@ -181,9 +181,9 @@ A PNG formátumú képek betöltése már kicsit bonyolultabb, mert tartalmazhat
     \label{fig:alpha-blend}
 \end{figure}
 
-A kívánt eredményhez pixel alfa csatornája szerint kell kevernünk a pixel és a háttér színét. Ennek folyamatát a \ref{lst:alpha-blend} kódrészlet mutatja be. A folyamat az alfa-keverésnek (\cite{alpha-blending-wiki}) egy egyszerű változata. A kép pixeleit beszorozzuk az alfa csatornával, a hátteret pedig az alfa csatorna negatívjával. A szorzások eredményéül kapott két kép pixelenként vett összege az eredmény. 
+A kívánt eredményhez az adott pixel alfa értéke szerint kell kevernünk a saját színét a háttér színével. Ennek folyamatát a \ref{lst:alpha-blend} kódrészlet mutatja be. A folyamat az alfa-keverésnek (\cite{alpha-blending-wiki}) egy egyszerű változata. A kép pixeleit beszorozzuk az alfa csatornával, a hátteret pedig az alfa csatorna negatívjával. A szorzások eredményéül kapott két kép pixelenként vett összege az eredmény. 
 
-A program a képet először négy csatornára bontja, majd összeilleszti a B, G és R\footnote{Az OpenCV könyvtár a képet BGRA formátumban tölti be.} csatornákat, így két azonos méretű de különböző mátrixban van a kép és az alfa csatornája (4-9. sorok). A csatornák értékei betöltés után előjel nélküli 8 bites számként vannak reprezentálva, a szorzás műveletéhez viszont célszerűbb egy 0 és 1 közötti számmal számolni, ezért a pixeleket érdemes átkonvertálni 32 bites lebegőpontos számokká (float), majd leosztani 255-tel. Azért 255, mert ez a legnagyobb szám, amit egy előjel nélküli 8 bites számként tárolni lehet, tehát a leosztás után után ez fog megfelelni 1-nek. A konvertálást és a leosztást\footnote{Valójában 1/255-del való szorzás történik, ami a 255-tel való osztásnak felel meg.} szerencsére egy műveletként végre lehet hajtani (11. és 12. sor). Az alfa csatornából 3 másolat készül (15. sor), majd 1 darab 3 dimenziós mátrixszá fésülődnek össze (16. sor). Ennek a mátrixnak már megegyezik a dimenziója a színeket tároló mátrixéval, tehát össze lehet szorozni őket pixelenként. Éppen ez történik a 23. és 24. sorban. Az utóbbi esetben a csatorna invertáltjára van szükség, ezt egy ugyan ekkora dimenziójú, 1-esekkel feltöltött mátrixból való kivonással kaphatjuk meg. A két mátrix összegét (25. sor) ezután még vissza kell konvertálni 8 bites előjel nélküli számokká, amihez a pixeleket vissza kell szorozni 255-tel.
+A program a képet először négy csatornára bontja, majd összeilleszti a B, G és R\footnote{Az OpenCV könyvtár a képet BGRA formátumban tölti be.} csatornákat, így két azonos méretű de különböző mátrixban van a kép és az alfa csatornája (4-9. sorok). A csatornák értékei betöltés után előjel nélküli 8 bites számként vannak reprezentálva, a szorzás műveletéhez viszont célszerűbb egy 0 és 1 közötti számmal számolni, ezért a pixeleket érdemes átkonvertálni 32 bites lebegőpontos számokká (float), majd leosztani 255-tel. Azért 255, mert ez a legnagyobb szám, amit egy előjel nélküli 8 bites számként tárolni lehet, tehát a leosztás után után ez fog megfelelni 1-nek. A konvertálást és a leosztást szerencsére egy műveletként végre lehet hajtani (11. és 12. sor). Az alfa csatornából 3 másolat készül (15. sor), majd 1 darab 3 dimenziós mátrixszá fésülődnek össze (16. sor). Ennek a mátrixnak már megegyezik a dimenziója a színeket tároló mátrixéval, tehát össze lehet szorozni őket pixelenként. Éppen ez történik a 23. és a 24. sorban. Az utóbbi esetben a csatorna invertáltjára van szükség, ezt egy ugyan ekkora dimenziójú és méretű, 1-esekkel feltöltött mátrixból való kivonással kaphatjuk meg. A két mátrix összegét (25. sor) ezután még vissza kell konvertálni 8 bites előjel nélküli számokká, amihez a pixeleket vissza kell szorozni 255-tel.
 
 \begin{listing}[!h]
     \caption{Az alfa-keverés implementációja egy teljesen fehér háttér esetén.}
@@ -221,17 +221,17 @@ blended.convertTo(m_image, CV_8UC3, 255.0);
 
 \subsection{PDF fájlok betöltése}
 
-Mint az már korábban említve volt, a PDF fájlok egyaránt tartalmazhatnak raszeteres és vektoros elemeket. Hogy a program kezelni tudja őket, úgy ezeket a fájlokat betöltéskor a megfelelő pixelsűrűség mellett raszerizálni kell. 
+Mint az már korábban említve volt, a PDF fájlok egyaránt tartalmazhatnak raszeteres és vektoros elemeket. Hogy a program kezelni tudja őket, úgy ezeket a fájlokat betöltéskor a megfelelő pixelsűrűség mellett raszterizálni kell. 
 
 Erre a feladatra is egy külső könyvtárt használtam. A választás a Poppler PDF renderelő könyvtárra esett, annak sebességéből, egyszerűségéből, valamint C++ és Qt támogatottságából fakadóan.
 
-Az egyszerűség kedvéért a program a PDF fájloknak csak az első oldalát használja fel. Ezen fájlok esetén is lehet szó áttetszőségről, ezért a többi képhez hasonlóan a raszerizált tartalom is alfa-keverve lesz. 
+Az egyszerűség kedvéért a program a PDF fájloknak csak az első oldalát használja fel. Ezen fájlok esetén is lehet szó áttetszőségről, ezért a többi képhez hasonlóan a raszterizált tartalom alfa-keverve lesz. 
 
 \subsection{Előbeállítások kezelése}
 
-Az előbeállításokat valamilyen kulcs-érték formában volt érdemes tárolni, hogy adott értékeket el lehessen hagyni, és hogy felhasználóként egyszerű legyen olvasni. A választás a JSON formátumra esett. Ez a formátum felettébb elterjedt, emberek számára is könnyen olvasható, szöveg alapú formátum, amihez egy nagyon népszerű C++ könyvtár is tartozik: a Niels Lohmann által készített egy fejléces (single header) JSON könyvár (nlohmann-json). 
+Az előbeállításokat valamilyen kulcs-érték formában volt érdemes tárolni, hogy tetszőleges értékeket el lehessen hagyni, és hogy felhasználóként egyszerűen lehessen olvasni a tartalmát. A választás a JSON formátumra esett. Ez a formátum felettébb elterjedt, emberek számára is könnyen olvasható, szöveg alapú formátum, amihez egy nagyon népszerű C++ könyvtár is tartozik: a Niels Lohmann által készített egyfejléces (single header) JSON könyvár (nlohmann-json). 
 
-A könyvtár a leggyorsabb és legelterjedtebb JSON kezelő könyvtár C++-hoz, a használata rendkívül egyszerű. A beolvasás után a kulcsok értékeit az index operátorral (\text{[] operátor}) lehet elérni, amiket akár egymás után is lehet fűzni.
+Ez a könyvtár a leggyorsabb és legelterjedtebb JSON kezelő könyvtár C++-hoz, a használata rendkívül egyszerű. A beolvasás után a kulcsok értékeit az index operátorral (\texttt{[]} operátor) lehet elérni, amiket akár egymás után is lehet fűzni.
 
 A kaszkádos előbállításokat a JSON-ön belüli szótárakkal oldottam meg. Az \ref{lst:json}. kódrészlet jól szemlélteti ennek működését, és a JSON fájlok könnyen olvashatóságát. A fájl az 5. sorban a dokumentum beállításaira vonatkozó szótárat definiál, majd annak \texttt{resolution\_ppi} kulcsát felhasználva beállítja az értékét 600-ra\footnote{A matricákat 600 dpi-ben szoktuk nyomtatni.}. Hasonló módon történik a körmaszk automatikus betöltése a 8. sorban.
 
@@ -257,7 +257,7 @@ A kaszkádos előbállításokat a JSON-ön belüli szótárakkal oldottam meg. 
 
 A képek exportálására mind az OpenCV, mind a Qt tartalmaz beépített függvényeket. Ezek a függvények viszont viszonylag primitívek, nincsen lehetőség a megfelelő metaadatokat a fájlba írni. 
 
-A kép megfelelő metaadatokkal való ellátása nem volt egy kimondottan kritikus funckió, de mivel a plotterhez kapott hivatalos program ez alapján számolta ki a kép méretét, és mert a Photoshop szkripttel készült képek tartalmazták ezeket az adatokat, így ezt nem szerettem volna kihagyni a programból.
+A kép megfelelő metaadatokkal való ellátása nem volt egy kritikus funckió, de mivel a plotterhez kapott hivatalos program ez alapján számolta ki a kép méretét, és mert a Photoshop szkripttel készült képek tartalmazták ezeket az adatokat, így ezt nem szerettem volna kihagyni a programból.
 
 A metaadatok hozzáadására több megoldás is létezik. Vannak ún. metaadat-formátumok, melyek sok gyakori képformátumhoz nyújtanak egységes metaadat-sémát. Egy ilyen formátum például az Exchangeable Image File Format (EXIF) is, melyet rengeteg fényképezőgép és telefon használ. Néhány képformátumnak van viszont erre specifikus fejléce, ahol pár alapvető információt lehet a képről tárolni, többek között a pixelsűrűséget is, amire a legnagyobb szükség volt.
 
@@ -270,10 +270,10 @@ Ez a megoldás már sikeresnek bizonyult.
 
 \subsection{Qt sajátosságok}
 
-A felhasználói felület fejlesztése pár apróbb kiegészítésre volt szükségem, amik nem szerepeltek a tervekben. Az egyik ilyen volt az előnézet alatti szövegdoboz, ami az eseleges hibák megjelenítéséért felelt. 
+A felhasználói felület fejlesztése pár apróbb kiegészítésre volt szükségem, amik nem szerepeltek a legelső tervekben. Az egyik ilyen volt az előnézet alatti szövegdoboz, ami az eseleges hibák megjelenítéséért felelt. 
 Ezt egy singleton osztállyal oldottam meg, hogy a kód bármely részéről egyszerűen lehessen rá kiiratni információt, illetve hibákat.
 
-Egy másik nehézséget a dinamikus lista jelentette. A lista, amin a bemenetek láthatóak lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Egy indirekcióval oldottam meg, hogy az állapotok ne vesszenek el: a lista elemei az értékeket pointereken keresztül érik el, így csak a felületi elemeket szabadítja fel a lista. Gond volt az is, hogy az elemek és a hozzá tartozó szűrők nézetének összeköttetése eleinte UI szinten valósult meg, és ez az összeköttetés csak addig van jelen, amíg az elem látható. Ezt az elemek és a szűrők nézet szintent történő összeköttetése oldotta meg.
+Egy másik kihívás a dinamikus lista elemeinek kezelése volt. A lista, amin a bemenetek láthatóak, lusta, azaz a nem látható elemeket és a hozzá tartozó állapotot és objektumokat a rendszer felszabadítja. Egy indirekcióval oldottam meg, hogy az állapotok ne vesszenek el: a lista elemei az értékeket pointereken keresztül érik el, így csak a felületi elemeket szabadítja fel a lista. Gond volt az is, hogy az elemek és a hozzá tartozó szűrők nézetének összeköttetése eleinte UI szinten valósult meg, mert ez az összeköttetés csak addig van jelen, amíg az elem látható. Ezt az elemek és a szűrők nézet szintent történő összeköttetése oldotta meg.
 
 A Qt egy pozitívuma, hogy követi a rendszer témáját. A fejlesztés közben a használt rendszerem témája megváltozott, amit a felület automatikusan követett. A \ref{fig:ui-oblab}. és \ref{fig:ui-szakdoga}. ábrán látható a stílus a rendszer témájának megváltozása előtt és után.
 
@@ -294,7 +294,7 @@ A Qt egy pozitívuma, hogy követi a rendszer témáját. A fejlesztés közben 
 
 A program nagyságrendekkel gyorsabban generál képeket, mint a Photoshop szkript, nagyobb dokumentumok esetén is csupán pár másodpercet vesz igénybe. Pár másodperc viszont a felhasználói felület szemszögéből rengeteg időnek számít, és a felület azt hiszi, hogy az alkalmazás lefagyott. 
 
-Szoftverfejlesztésben egy gyakori probléma, hogy hosszabb műveletekre van szükség, vagy hogy egy erőforrásra kell várni. Eközben viszont az alkalmazás többi részének még működnie kell a felhasználói élmény érdekében. A megoldás egyzerű: külön szálon kell futtatni a hosszabb folyamatokat, hogy azok ne akadályozzák meg a program fő szálát, azaz felhasználói felület működését. A külön szálból vissza kell jelezni a fő szálra, amikor az eredmény már rendelkezésre áll. Az ilyen jelzésekre a Qt által kínált jelzéseket érdemes felhasználni.
+Szoftverfejlesztésben egy gyakori probléma, hogy hosszabb műveletekre van szükség, vagy hogy egy erőforrásra kell várni, eközben viszont az alkalmazás többi részének még működnie kell a felhasználói élmény érdekében. A megoldás egyzerű: külön szálon kell futtatni a hosszabb folyamatokat, hogy azok ne akadályozzák meg a program fő szálát, azaz felhasználói felület működését. A külön szálból vissza kell jelezni a fő szálra, amikor az eredmény már rendelkezésre áll. Az ilyen jelzésekre a Qt által kínált jelzéseket érdemes felhasználni.
 
 Ezt a technikát minden időigényesebb folyamatnál alkalmaztam, ezek folyamatok a képek generálása és mentése. A megvalósítását a \ref{lst:async}. kódrészlet mutatja be. Visszatérési értékként egy \texttt{QFuture} objektummal kell visszatérni, a többszálúságot pedig a \texttt{QtConcurrent::run} fügvénnyel lehet elérni. A függvény paraméteréül akár lambda függvény is adható. 
 
