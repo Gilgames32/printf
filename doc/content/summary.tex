@@ -1,26 +1,14 @@
-% A megtervezett műszaki alkotás értékelése, kritikai elemzése, továbbfejlesztési lehetőségek
-
-\chapter{Értékelés}
-
 \chapter{Összegzés}
 
-A programra pozitív visszajelzések érkeztek minden irányból. Ugyan még nem 100\%-ban teljes, de már használható, és a közeljövőben szeretném beterjeszteni a használatát a rendeléseinkhez.
+A programra pozitív visszajelzések érkeztek minden irányból, és az éles tesztek alapján is minden megfelelőnek bizonyult. A nyomda aktívabb tagjai elégedettek voltak vele, így a közeljövőben át fogunk térni a használatára.
 
-\section{Kitekintés}
+\section{A program jövője}
 
-Az érkezett ötleteken kívül saját terveim is vannak a jövőre nézve.
+Az érkezett ötleteken kívül saját terveim is vannak a jövőre nézve. A legambiciózusabb ezek közül, hogy lehessen a programon keresztül nyomtatni, ne kelljen feltétlenül képként exportálni. Erre a CUPS nyílt forráskódú nyomtatórendszerrel lenne mód.
 
-A legambiciózusabb ezek közül, hogy tudjunk a programon keresztül nyomtatni, ne kelljen feltétlenül exportálni. Erre a \href{https://en.wikipedia.org/wiki/CUPS}{CUPS} könyvtár segítségével lenne mód.
+Szeretném azt is megcsinálni, hogy program alapértelmezett értékeit is egy JSON fájlból lehessen betölteni, így ha megváltozik például a leggyakrabban használt papírtekercs, és át szeretnénk állítani ennek alapértékét, akkor ne kelljen újrafordítani a programot. 
 
-Egy másik érdekesebb feladat lenne megoldani, hogy PDF fájlokat is használhassunk mint bemenet. Ennek a nehézsége, hogy nem tárolhatjuk el egy pixelmátrixban, mivel az ilyen dokumentumok többségében vektorgrafikusak. Szerencsére ez nagyon jól működne a jelenlegi cache és filter kezeléssel. További komplikációkat okozhat viszont a PDF jellegéből adódó sajátosságok, pl. több oldal kezelése.
-
-Ezek mellett pár apróbb funkcionális és használatot elősegítő funkciót is szeretnék hozzáadni, pl. jobban nagyítható előnézet, extra konfigurációk a segédvonalaknak és egyéb alapértelmezett értékeknek. Továbbá szeretnénk mihamarabb implementálni a strip tiling algoritmust is.
+A telepítés menete sajnos nem triviális, és még csak egyetlen operációs rendszeren van megoldva, ezt a jövőben szintúgy orvosolni szeretném.
 
 Amennyiben lehetőségem van rá, szeretnék felkeresni más nyomdákat, kikérni a véleményüket, konzultálni velük, hogy milyen funkciókat hiányolnak vagy milyen funkciókat használnak, amit tudnék implementálni.
-
-\section{A forráskódról}
-
-A projekt nyílt forráskódú és a GNU General Public License v3.0 alatt érhető el a \href{https://github.com/Gilgames32/printf}{https://github.com/Gilgames32/printf} címen. Szívesen fogadok minden hozzájárulást a projekthez. 
-
-Ugyan nem szeretném, de az egyetemi keretek és az önálló laboratórium miatt el kell különítenem kettőnk munkáját. A projektet 2025. február közepe óta egyedül csinálom, a build rendszeren és egy-két közösen hozott modellbeli döntésen kívül a projektben mindent én csináltam, ez a Git commitjainkból is jól látszik.
 

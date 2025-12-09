@@ -3,18 +3,18 @@
 - [x] Címoldal
 - [x] Tartalomjegyzék
 - [x] A diplomatervező nyilatkozata az önálló munkáról és az elektronikus adatok kezeléséről
-- [ ] Tartalmi összefoglaló magyarul és angolul
-- [ ] Bevezetés: 
+- [x] Tartalmi összefoglaló magyarul és angolul
+- [x] Bevezetés: 
     - [x] a feladat értelmezése, 
     - [x] a tervezés célja, 
     - [x] a feladat indokoltsága, 
-    - [ ] a diplomaterv felépítésének rövid összefoglalása
+    - [x] a diplomaterv felépítésének rövid összefoglalása
 - [x] A feladatkiírás pontosítása és részletes elemzése 
 - [x] Előzmények (irodalomkutatás, hasonló alkotások), az ezekből levonható következtetések
 - [x] A tervezés részletes leírása, a döntési lehetőségek értékelése és a választott megoldások indoklása
-- [ ] A megtervezett műszaki alkotás értékelése, kritikai elemzése, továbbfejlesztési lehetőségek
-- [ ] Esetleges köszönetnyilvánítások
-- [ ] Részletes és pontos irodalomjegyzék
+- [x] A megtervezett műszaki alkotás értékelése, kritikai elemzése, továbbfejlesztési lehetőségek
+- [x] Esetleges köszönetnyilvánítások
+- [x] Részletes és pontos irodalomjegyzék
 - [ ] Függelék(ek)
 
 
