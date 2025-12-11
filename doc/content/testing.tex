@@ -1,16 +1,16 @@
 \chapter{Tesztelés}
 
-A programot manuálisan teszteltem. A legfontosabb ellenőrizendő dolog a generált eredmény méretei voltak. A program atomatikusan visszaváltja a dokumentum méreteit milliméterbe amikor a kép elkészült, és szövegesen megjeleníti az előnézet alatt. Az így kapott méretet össze lehet hasonlítani a megadott tekercsszélességgel, ami minimális hibahatáron belül mozog, mert egy képen csak egész pixelek lehetnek, így a kerekítés elengedhetetlen.
+A programot manuálisan teszteltem. A legfontosabb ellenőrizendő dolog a generált eredmény mérete volt. A program atomatikusan visszaváltja a dokumentum méreteit milliméterbe, amikor a kép elkészült, és szövegesen megjeleníti az előnézet alatt. Az így kapott méretet össze lehet hasonlítani a megadott tekercsszélességgel, ami minimális hibahatáron belül mozog, mert egy képen csak egész pixelek lehetnek, így a kerekítés elengedhetetlen.
 
-Következő lépésben a program eredményeit összehasonlítottam a Photoshop szkript eredményeivel. A szélességek megegyeztek, az új pakolási algoritmusok miatt pedig gyakran alacsonyabb dokumentumokat, azaz kevesebb felesleget eredményezett.
+A következő lépésben a program eredményeit összehasonlítottam a Photoshop-szkript eredményeivel. A szélességek megegyeztek, az új pakolási algoritmusok miatt pedig gyakran alacsonyabb dokumentumokat, azaz kevesebb felesleget eredményezett.
 
 \section{Különböző sorbarendezési heurisztikák}
 
-Ahogy az a \ref{subsec:strip-tiling}. fejezetben is említve volt, a tekercsre pakolás esetén nem mindegy, hogy milyen szempont alapján vannak az elemek sorbarendezve. Az algoritmus kellően gyors ahhoz, hogy több heurisztika szerinti futtatása se tartson sokáig. A program eleinte 6 különböző szempont alapján tudta sorba rendezni az elemeket: szélesség, magasság, átló, terület, képarány, illetve kerület szerint. Az elrendezések közül a program a legalacsonyabbat választja.
+Ahogy az a \ref{subsec:strip-tiling}. fejezetben is szerepelt, a tekercsre pakolás esetén nem mindegy, hogy milyen szempont alapján vannak az elemek sorbarendezve. Az algoritmus kellően gyors ahhoz, hogy több heurisztika szerinti futtatása se tartson sokáig. A program eleinte 6 különböző szempont alapján tudta sorbarendezni az elemeket: szélesség, magasság, átló, terület, képarány, illetve kerület szerint. Az elrendezések közül a program a legalacsonyabbat választja.
 
-A \ref{tab:heuristics}. táblázat 10 tesztesetet ír le. 14 előre meghatározott, adott felbontású elemet a táblázat adott oszlopának megfelelő mennyiségében kell elehlyezni egy 1181\footnote{300 dpi mellett ez 100 milliméternek felel meg.} pixel széles tekercsre. A \ref{fig:heuristics}. ábra szemléltei a különböző sorbarendezési heurisztikák által generált eredmények magasságát. Az átláthatóság érdekében az értékek tesztesetenként 0 és 1 közé lettek normalizálva, ahol a 0 a legalacsonyabb, azaz a legjobb generált eredményt jelöli.
+A \ref{tab:heuristics}. táblázat 10 tesztesetet ír le. 14 előre meghatározott, adott felbontású elemet a táblázat adott oszlopának megfelelő mennyiségében kell elhlyezni egy 1181\footnote[10]{300 dpi mellett ez 100 milliméternek felel meg.} pixel széles tekercsre. A \ref{fig:heuristics}. ábra szemlélteti a különböző sorbarendezési heurisztikák által generált eredmények magasságát. Az átláthatóság érdekében az értékek tesztesetenként 0 és 1 közé lettek normalizálva, ahol a 0 a legalacsonyabb, azaz a legjobb generált eredményt jelöli.
 
-A kapott diagramon látható, hogy a magasság szerinti sorbarendezés ad legtöbbször jó megoldást. Ez nem minden esetben igaz, például a második tesztesetnél az átló szerinti sorbarendezés egy jobb megoldást eredményez.
+A kapott diagramon látható, hogy a magasság szerinti sorbarendezés ad legtöbbször jó megoldást. Ez nem minden esetben igaz, például a második tesztesetnél az átló szerinti sorbarendezés jobb megoldást eredményez.
 
 Az átló és a kerület szerinti sorbarendezés által generált eredmények magassága megegyezik, mert a két szempont szerinti sorrend mindig azonos lesz. Ezt a redundanciát a tesztelés után eltávolítottam a programból, és csak a kerület szerinti sorbarendezést tartottam meg. A képarány szerinti sorbarendezés szintén el lett tűntetve, mert ez szinte mindig a legrosszabb magasságot eredményezte.
 
@@ -50,7 +50,7 @@ Az átló és a kerület szerinti sorbarendezés által generált eredmények ma
 \section{Konkrét tesztesetek összehasonlítása}
 
 A teljesítménybeli javuláshoz konkrét tesztesetekkel hasonlítottam össze a szkriptet és a kész programot. Mivel a szkript nem képes több különböző méretet kezelni, ezér csak egyetlen mérettel teszteltem egy teszteseten belül. 
-Minden teszt ugyan azon az eszközön futott. A Photoshop szkript tesztjei Windows 10 alatt futottak, az idő stopperrel volt mérve. A printf-et Arch Linux alatt teszteltem, az időt az \texttt{std::chrono} könyvtár segítségével mértem. A tesztesetek 914,4 milliméteres tekercsre 300 dpi-ben futottak, segédvonalakkal és maszk nélkül. A tesztek eredményei a \ref{tab:psvs} táblázatban szerepelnek. A \ref{fig:psvs} diagram vizualizálja az eredményeket. A futási idők arányainak mediánja alapján megállapítható, hogy nagyjából 6,4-szeres sebességnövekedést sikerült elérni.
+Minden teszt ugyanazon az eszközön futott. A Photoshop-szkript tesztjei Windows 10 alatt futottak, az idő stopperrel volt mérve. A printf-et Arch Linux alatt teszteltem, az időt az \texttt{std::chrono} könyvtár segítségével mértem. A tesztesetek 914,4 milliméteres tekercsre 300 dpi-ben futottak, segédvonalakkal és maszk nélkül. A tesztek eredményei a \ref{tab:psvs}. táblázatban szerepelnek. A \ref{fig:psvs}. ábra vizualizálja az eredményeket. A futási idők arányainak mediánja alapján megállapítható, hogy nagyjából 6,4-szeres sebességnövekedést sikerült elérni.
 
 \begin{table}[htbp]
     \centering
@@ -58,7 +58,7 @@ Minden teszt ugyan azon az eszközön futott. A Photoshop szkript tesztjei Windo
     \label{tab:psvs}
     \begin{tabular}{l l l l r r}
         \toprule
-        Teszt & Felbontás\footnote{A bemeneti kép felbontása.} (px) & Méret (mm) & Mennyiség & PS\footnote{A dokumentum generálásának ideje a Photoshop szkripttel.} (s) & printf\footnote{A dokumentum generálásának ideje printf-fel.} (s) \\
+        Teszt & Felbontás (px) & Méret (mm) & Mennyiség & PS (s) & printf (s) \\
         \midrule
         1 & $800  \times 1030$ & $210 \times 297 $ & 21  & 5,27  & 0,58 \\
         2 & $4717 \times 2984$ & $210 \times 297 $ & 21  & 6,23  & 0,59 \\
@@ -81,7 +81,7 @@ Minden teszt ugyan azon az eszközön futott. A Photoshop szkript tesztjei Windo
 
 \section{Éles tesztek}
 
-A program 2025. szeptemberének környékére már használható állapotban volt, pár apró beállítás mellett már csak a különböző méreteket tekercsre pakoló algoritmus hiányzott belőle. Az aktívabb tagokat megkértem, hogy folyamatában teszteljék az új programot, és szóljanak az esetleges hibákról, észrevételeikről és ötleteikről. Nem sokkal később implementáltam az említett pakoló algoritmust is. A félév során számtalan alkalommal volt tesztelve a program, és a visszajelzések alapján javítottam minden felmerülő hibát.
+A program 2025 szeptemberének környékére már használható állapotban volt, pár apró beállítás mellett már csak a különböző méreteket tekercsre pakoló algoritmus hiányzott belőle. Az aktívabb tagokat megkértem, hogy folyamatában teszteljék az új programot, és szóljanak az esetleges hibákról, észrevételeikről és ötleteikről. Nem sokkal később implementáltam az említett pakoló algoritmust is. A félév során számtalan alkalommal volt tesztelve a program, és a visszajelzések alapján javítottam minden felmerülő hibát.
 
 \begin{figure}[!h]
     \centering
@@ -103,15 +103,15 @@ A program 2025. szeptemberének környékére már használható állapotban vol
 
 \subsection{Üzembe helyezési problémák}
 
-A programnak nem csak a saját eszközeimen, de a nyomdai gépen is futnia kellett. A nyomdai gépen Windows 10 fut, és mert a többi nyomdai szoftver nem fut Linux alatt, így a telepítést WSL-lel\footnote{Windows Subsystem for Linux} oldottam meg. A számítógép erőforrásai limitáltak, mindössze 8 GB memória van a számítógépben, a WSL-nek ebből nagyjából 4 GB jutott. A forráskód letöltése után megpróbáltam fordítani a programot a nyomdai gépen, ez viszont egy erőforrásigényes folyamat, és több órányi várakozás után sem sikerült. Szerencsére ez megoldható volt a bináris futtatható fájl átmásolásával a saját gépemről a nyomdai gépre.
+A programnak nem csak a saját eszközeimen, de a nyomdai gépen is futnia kellett. A nyomdai gépen Windows 10 fut, és mivel a többi nyomdai szoftver nem fut Linux alatt, így a telepítést WSL-lel\footnote[11]{Windows Subsystem for Linux} oldottam meg. A számítógép erőforrásai limitáltak, mindössze 8 GB memória van a számítógépben, a WSL-nek ebből nagyjából 4 GB jutott. A forráskód letöltése után megpróbáltam fordítani a programot a nyomdai gépen, ez viszont egy erőforrásigényes folyamat, és több órányi várakozás után sem sikerült. Szerencsére ez megoldható volt a bináris futtatható fájl átmásolásával a saját gépemről a nyomdai gépre.
 
 Támadtak problémák az elnevezés kapcsán is. A \texttt{printf} egy Unix shell parancs is egyben. Ez a terminálból való futtatáskor néhány kellemetlen pillanathoz vezetett, de a \texttt{./printf} parancs használatával feloldható a nevek ütközése.
 
 \section{Visszajelzések és ötletek}
 
-Az éles tesztek során megannyi hasznos visszajelzés érkezett, nem csak hibákról, de új ötletekről is. Az egyik ilyen ötlet volt, hogy tekercsen kívül A4-es lapokra is lehessen futtatni a programot. Ehhez csak egy megfelelő előbállításra van szükség, ami megfelelően beállítja a tekercs szélességét és maximális magasságát az A4-es szabvágy méreteire.
+Az éles tesztek során megannyi hasznos visszajelzés érkezett, nem csak hibákról, de új ötletekről is. Az egyik ilyen ötlet volt, hogy tekercsen kívül A4-es lapokra is lehessen futtatni a programot. Ehhez csak egy megfelelő előbeállításra van szükség, ami megfelelően beállítja a tekercs szélességét és maximális magasságát az A4-es szabvágy méreteire.
 
-A segédvonalak kapcsán több visszajelzést is kaptam. Eleinte a segédvonalak nem lógtak be a kép szélén túl, ez később problémát jelentett a fehér szélű képek vágásánál. Az egyik levágott oldal után nehéz volt megmondani, hogy a rá merőleges oldalt hol kell pontosan elvágni. Emiatt extra segédvonalbeállításokat adtam hozzá a programhoz, és alapértelmezetten belógattam a segédvonalakat minden oldalon. A \ref{fig:bleed} ábrán látható a belógatás előtti és utáni eredmény.
+A segédvonalak kapcsán több visszajelzést is kaptam. Eleinte a segédvonalak nem lógtak be a kép szélén túl, ez később problémát jelentett a fehér szélű képek vágásánál. Az egyik levágott oldal után nehéz volt megmondani, hogy a rá merőleges oldalt hol kell pontosan elvágni. Emiatt extra segédvonalbeállításokat adtam hozzá a programhoz, és alapértelmezetten belógattam a segédvonalakat minden oldalon. A \ref{fig:bleed}. ábrán látható a belógatás előtti és utáni eredmény.
 
 Egy másik kérés is érkezett a segédvonalak kapcsán, hogy több különböző méretű kép pakolásánál legyenek extra segédvonalak a tekercs teljes szélességében. Ennek implementálására még nem volt idő, de a közeljövőben szeretnék erre is sort keríteni.
 

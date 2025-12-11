@@ -1,6 +1,6 @@
 @startuml pdf_source_view
 
-title PDF forrás nézet
+title PDF-forrás nézet
 
 
 class ImageSourceView {
