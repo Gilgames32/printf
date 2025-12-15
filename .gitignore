@@ -55,3 +55,6 @@ output/
 *.fdb_latexmk
 *.fls
 thesis.pdf
+
+# JetBrains
+.idea/
