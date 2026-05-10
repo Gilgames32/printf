@@ -1,6 +1,7 @@
 #include "image_source.hpp"
 
 #include <stdexcept>
+
 #include "rotate.hpp"
 
 ImageSource::ImageSource(cv::Mat source, int amount, double width_mm, double height_mm)
@@ -58,8 +59,8 @@ void ImageSource::set_size_px(int width, int height, bool auto_rotate) {
     cached.set_dirty();
 }
 
-void ImageSource::set_rotated(bool rotated) { 
+void ImageSource::set_rotated(bool rotated) {
     if (rotate_filter.get_rotated() == rotated) return;
-    rotate_filter.set_rotated(rotated); 
-    cached.set_dirty(); 
+    rotate_filter.set_rotated(rotated);
+    cached.set_dirty();
 }

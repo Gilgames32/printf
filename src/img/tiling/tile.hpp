@@ -13,11 +13,12 @@ class Tile {
 
     Tile(ImageSource* img) : image(img), width(image->get_width_px()), height(image->get_height_px()) {}
 
-    Tile(const Tile& other) : image(other.image), width(other.width), height(other.height), rotated(other.rotated), corner(other.corner) {}
+    Tile(const Tile& other)
+        : image(other.image), width(other.width), height(other.height), rotated(other.rotated), corner(other.corner) {}
 
-    void rotate() { 
-      std::swap(width, height);
-      rotated = !rotated;
+    void rotate() {
+        std::swap(width, height);
+        rotated = !rotated;
     }
 
     bool is_rotated() const { return rotated; }
@@ -28,13 +29,13 @@ class Tile {
 
     int get_height() const { return height; }
 
-    int get_diagonal_suqared() const { return width * width + height *height; }
+    int get_diagonal_suqared() const { return width * width + height * height; }
 
-    int get_aspect_ratio() const { return (double) width / (double) height; }
+    int get_aspect_ratio() const { return (double)width / (double)height; }
 
     cv::Mat get_image() {
         image->set_rotated(rotated);
-        return image->get_img(); 
+        return image->get_img();
     }
 
     ImageSource* get_source() const { return image; }

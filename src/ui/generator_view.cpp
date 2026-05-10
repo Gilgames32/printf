@@ -5,12 +5,12 @@
 #include <exiv2/exiv2.hpp>
 #include <iostream>
 
-#include "grid_tiling.hpp"
-#include "strip_tiling.hpp"
-#include "preview_provider.hpp"
-#include "pnghelper.hpp"
-#include "error_signal.hpp"
 #include "convert.hpp"
+#include "error_signal.hpp"
+#include "grid_tiling.hpp"
+#include "pnghelper.hpp"
+#include "preview_provider.hpp"
+#include "strip_tiling.hpp"
 
 GeneratorView::GeneratorView() {}
 
@@ -29,7 +29,7 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<std::
     for (const auto& src : sources) {
         raw_sources.push_back(src.get());
     }
-        
+
     Tiling* tiling;
     if (raw_sources.size() == 1) {
         tiling = new GridTiling();
@@ -37,8 +37,7 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<std::
         tiling = new StripTiling();
     }
 
-
-    cv::Mat result = tiling->generate(properties, raw_sources); 
+    cv::Mat result = tiling->generate(properties, raw_sources);
 
     delete tiling;
 
@@ -48,10 +47,10 @@ void GeneratorView::generate(const DocumentPreset& properties, const QList<std::
 
     QImage image(result.data, result.cols, result.rows, result.step, QImage::Format_BGR888);
     PreviewProvider::instance()->setImage(image.copy());
-
 }
 
-QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources) {
+QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties,
+                                           const QList<std::shared_ptr<ImageSource>>& sources) {
     return QtConcurrent::run([=, this]() {
         ErrorSignal::iinfo("Generating image...");
         try {
@@ -60,14 +59,18 @@ QFuture<void> GeneratorView::asyncGenerate(const DocumentPreset& properties, con
             const auto width = img.width();
             const auto height = img.height();
             const auto ppi = properties.get_ppi();
-                
+
             // TODO: handle properly
-            if (height > properties.get_max_height_px()) 
+            if (height > properties.get_max_height_px())
                 ErrorSignal::ierror("Generated image exceeds maximum height");
-            else if (height < properties.get_min_height_px()) 
+            else if (height < properties.get_min_height_px())
                 ErrorSignal::ierror("Generated image is below minimum height");
-            else 
-                ErrorSignal::iinfo(QString("%1 x %2 px - %3 x %4 mm").arg(width).arg(height).arg(convert::pixel_to_mm(width, ppi)).arg(convert::pixel_to_mm(height, ppi)));
+            else
+                ErrorSignal::iinfo(QString("%1 x %2 px - %3 x %4 mm")
+                                       .arg(width)
+                                       .arg(height)
+                                       .arg(convert::pixel_to_mm(width, ppi))
+                                       .arg(convert::pixel_to_mm(height, ppi)));
         } catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
             PreviewProvider::instance()->setImage(QImage());
@@ -87,7 +90,7 @@ void GeneratorView::save(const QString& path, const DocumentPreset& properties) 
     if (out_path.rfind("file://", 0) == 0) {
         out_path = out_path.substr(7);
     }
-    
+
     // TODO: save as jpeg
     PNGHelper::save_png(out_path, image, properties.get_ppi());
     PNGHelper::add_exif_data(out_path, properties);

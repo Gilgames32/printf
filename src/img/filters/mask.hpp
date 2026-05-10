@@ -9,9 +9,9 @@ class MaskFilter : public IFilter {
     bool invert = false;
 
   public:
-    MaskFilter(const cv::Mat &mask);
+    MaskFilter(const cv::Mat& mask);
 
-    cv::Mat apply(const cv::Mat &image) const override;
+    cv::Mat apply(const cv::Mat& image) const override;
 
     void setInvert(bool invert);
 };

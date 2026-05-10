@@ -1,8 +1,8 @@
 #include "grid_tiling.hpp"
 
+#include "convert.hpp"
 #include "padding.hpp"
 #include "tile.hpp"
-#include "convert.hpp"
 
 int GridTiling::calc_waste(int document_width, int tile_width, int tile_height, int amount) {
     int columns = std::floor(static_cast<double>(document_width) / tile_width);
@@ -27,7 +27,8 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, const std::vector<Ima
     // set uniform sizes and padding
     for (const auto& img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px, true);
-        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
+        img->add_filter(
+            std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
         img->burn();
     }
 
@@ -43,7 +44,6 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, const std::vector<Ima
         throw std::invalid_argument("Invalid image size");
     }
 
-    
     // instantiate tiles based on amounts
     std::vector<Tile> tiles;
     // Assuming that on average, each image is printed three times.
@@ -54,7 +54,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, const std::vector<Ima
             tiles.push_back(Tile(img));
         }
     }
-    
+
     int quantity = static_cast<int>(tiles.size());
     int document_height = 0;
     std::cout << "\n\n";
@@ -88,7 +88,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, const std::vector<Ima
             }
             quantity += extra;
         }
-        
+
         columns = std::min(columns, quantity - i);
 
         for (int j = 0; j < columns; j++) {
@@ -103,7 +103,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, const std::vector<Ima
         document_height += rotate_row ? tile_width : tile_height;
         i += columns;
     }
-    
+
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 

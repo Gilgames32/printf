@@ -2,9 +2,10 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include <string>
-#include <memory>
+
 #include "ifilter_view.hpp"
 
 class MaskFilterView : public IFilterView {

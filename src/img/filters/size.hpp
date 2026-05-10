@@ -16,10 +16,10 @@ class SizeFilter : public IFilter {
 
     void set_size(int width, int height);
 
-    cv::Mat apply(const cv::Mat &image) const override;
+    cv::Mat apply(const cv::Mat& image) const override;
 
-    static cv::Mat resize(const cv::Mat &image, int width, int height, int interDown = sizeInterDown,
+    static cv::Mat resize(const cv::Mat& image, int width, int height, int interDown = sizeInterDown,
                           int interUp = sizeInterUp);
 
-    static cv::Mat resize_to_width(const cv::Mat &image, int width, int interDown = sizeInterDown, int interUp = sizeInterUp);
+    static cv::Mat resize_to_width(const cv::Mat& image, int width, int interDown = sizeInterDown, int interUp = sizeInterUp);
 };

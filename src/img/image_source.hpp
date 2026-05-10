@@ -1,14 +1,14 @@
 #pragma once
 
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include <vector>
-#include <memory>
 
 #include "cached_image.hpp"
-#include "ifilter.hpp"
 #include "icachable.hpp"
-#include "size.hpp"
+#include "ifilter.hpp"
 #include "rotate.hpp"
+#include "size.hpp"
 
 class ImageSource : ICachableImage {
   private:
