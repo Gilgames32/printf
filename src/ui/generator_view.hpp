@@ -11,7 +11,8 @@ class GeneratorView : public QObject {
     GeneratorView();
 
     void generate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources);
-    Q_INVOKABLE QFuture<void> asyncGenerate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources);
+    Q_INVOKABLE QFuture<void> asyncGenerate(const DocumentPreset& properties,
+                                            const QList<std::shared_ptr<ImageSource>>& sources);
 
     void save(const QString& path, const DocumentPreset& properties);
     Q_INVOKABLE QFuture<void> asyncSave(const QString& path, const DocumentPreset& properties);

@@ -1,6 +1,7 @@
 #include "pnghelper.hpp"
 
 #include <stdexcept>
+
 #include "convert.hpp"
 #include "spng.h"
 

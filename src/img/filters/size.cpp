@@ -7,9 +7,9 @@ void SizeFilter::set_size(int width, int height) {
     this->height = height;
 }
 
-cv::Mat SizeFilter::apply(const cv::Mat &image) const { return SizeFilter::resize(image, width, height); }
+cv::Mat SizeFilter::apply(const cv::Mat& image) const { return SizeFilter::resize(image, width, height); }
 
-cv::Mat SizeFilter::resize(const cv::Mat &image, int width, int height, int interDown, int interUp) {
+cv::Mat SizeFilter::resize(const cv::Mat& image, int width, int height, int interDown, int interUp) {
     if (width == image.cols && height == image.rows) {
         return image;
     }
@@ -25,6 +25,6 @@ cv::Mat SizeFilter::resize(const cv::Mat &image, int width, int height, int inte
     return resized;
 }
 
-cv::Mat SizeFilter::resize_to_width(const cv::Mat &image, int width, int interDown, int interUp) {
+cv::Mat SizeFilter::resize_to_width(const cv::Mat& image, int width, int interDown, int interUp) {
     return SizeFilter::resize(image, width, image.rows * width / image.cols, interDown, interUp);
 }

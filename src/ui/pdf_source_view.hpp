@@ -12,5 +12,5 @@ class PDFSourceView : public ImageSourceView {
   public:
     PDFSourceView();
 
-    virtual std::shared_ptr<ImageSource> get_image_source(const DocumentPreset &preset) override;
+    virtual std::shared_ptr<ImageSource> get_image_source(const DocumentPreset& preset) override;
 };

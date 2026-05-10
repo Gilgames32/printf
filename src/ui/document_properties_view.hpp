@@ -2,8 +2,8 @@
 
 #include <QtCore>
 #include <QtGui>
-#include <string>
 #include <document_preset.hpp>
+#include <string>
 
 class DocumentPropertiesView : public QObject {
     Q_OBJECT

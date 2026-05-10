@@ -1,12 +1,8 @@
 #include "grid_tiling.hpp"
 
-#include <numeric>
-
-#include "padding.hpp"
-#include "rotate.hpp"
-#include "size.hpp"
-#include "tile.hpp"
 #include "convert.hpp"
+#include "padding.hpp"
+#include "tile.hpp"
 
 int GridTiling::calc_waste(int document_width, int tile_width, int tile_height, int amount) {
     int columns = std::floor(static_cast<double>(document_width) / tile_width);
@@ -20,7 +16,7 @@ int GridTiling::calc_waste(int document_width, int tile_width, int tile_height, 
     return (document_width - tile_width * columns) * tile_height * rows;
 }
 
-cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) {
+cv::Mat GridTiling::generate(const DocumentPreset& preset, const std::vector<ImageSource*>& images) {
     if (images.empty()) throw std::invalid_argument("No images provided");
 
     auto padding = preset.get_padding_px();
@@ -29,9 +25,10 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
     auto uniform_height_px = convert::mm_to_pixel(images[0]->height_mm, ppi);
 
     // set uniform sizes and padding
-    for (auto img : images) {
+    for (const auto& img : images) {
         img->set_size_px(uniform_width_px, uniform_height_px, true);
-        img->add_filter(std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
+        img->add_filter(
+            std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
         img->burn();
     }
 
@@ -47,15 +44,16 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         throw std::invalid_argument("Invalid image size");
     }
 
-    
     // instantiate tiles based on amounts
-    std::vector<Tile> tiles = {};
-    for (auto img : images) {
+    std::vector<Tile> tiles;
+    // Assuming that on average, each image is printed three times.
+    tiles.reserve(images.size() * 3);
+
+    for (const auto& img : images) {
         for (int i = 0; i < img->get_amount(); i++) {
             tiles.push_back(Tile(img));
         }
     }
-    
 
     int quantity = static_cast<int>(tiles.size());
     int document_height = 0;
@@ -90,7 +88,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
             }
             quantity += extra;
         }
-        
+
         columns = std::min(columns, quantity - i);
 
         for (int j = 0; j < columns; j++) {
@@ -105,7 +103,7 @@ cv::Mat GridTiling::generate(const DocumentPreset& preset, std::vector<std::shar
         document_height += rotate_row ? tile_width : tile_height;
         i += columns;
     }
-    
+
     cv::Mat document = cv::Mat::ones(document_height, document_width, CV_8UC3);
     document.setTo(cv::Scalar(255, 255, 255));
 

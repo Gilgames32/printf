@@ -10,4 +10,4 @@ namespace convert {
 
     inline double ppi_to_ppm(double inch) { return inch / 0.0254; }
 
-}  // namespace Convert
+}  // namespace convert

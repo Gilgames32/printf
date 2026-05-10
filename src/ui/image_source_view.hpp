@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 
-#include "image_source.hpp"
-#include "ifilter_view.hpp"
-#include "mask_filter_view.hpp"
 #include "document_preset.hpp"
+#include "ifilter_view.hpp"
+#include "image_source.hpp"
+#include "mask_filter_view.hpp"
 
 class ImageSourceView : public QObject {
     Q_OBJECT
@@ -53,7 +53,7 @@ class ImageSourceView : public QObject {
 
     void load_from_preset(const std::string& preset_path);
 
-    virtual std::shared_ptr<ImageSource> get_image_source(const DocumentPreset &preset);
+    virtual std::shared_ptr<ImageSource> get_image_source(const DocumentPreset& preset);
 
     MaskFilterView* get_mask_filter_view();
 
