@@ -36,20 +36,20 @@ std::vector<Tile>& StripTiling::ph_sort(std::vector<Tile>& tiles, PriorityHeuris
 }
 
 cv::Mat StripTiling::generate(const DocumentPreset& preset, const std::vector<ImageSource*>& images) {
-    /*
+    // TODO: more checks, check if it fits in any way, etc
     if (images.empty()) throw std::invalid_argument("No images provided");
-    // TODO: checks, check if it fits in any way, etc
-    */
 
     auto ppi = preset.get_ppi();
     auto padding = preset.get_padding_px();
-    auto side_fix = padding - preset.get_line_width();
+    auto side_fix = std::max(padding - preset.get_line_width(), 0);
     auto document_width = preset.get_document_width_px() + 2 * side_fix;
 
     // apply size and add padding
     for (const auto& img : images) {
         auto width_px = convert::mm_to_pixel(img->width_mm, ppi);
         auto height_px = convert::mm_to_pixel(img->height_mm, ppi);
+        // check if any tile is fundamentally too large to fit in the document
+        if (std::min(width_px, height_px) > document_width) throw std::invalid_argument("Image does not fit in document");
         img->set_size_px(width_px, height_px, true);
         img->add_filter(
             std::make_shared<PaddingFilter>(padding, preset.get_guide(), preset.get_bleed_px(), preset.get_line_width()));
