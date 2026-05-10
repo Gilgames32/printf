@@ -39,6 +39,7 @@ output/
 
 # vscode
 .vscode/settings.json
+*.code-workspace
 
 # latex
 *.aux

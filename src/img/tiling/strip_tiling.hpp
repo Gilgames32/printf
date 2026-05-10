@@ -18,8 +18,8 @@ inline const char* to_string(PriorityHeuristic v)
 
 class StripTiling : public Tiling {
   private:
-    void recursive_packing(int x, int y, int row_width, int row_height, std::vector<std::shared_ptr<Tile>>& remaining, std::vector<std::shared_ptr<Tile>>& placed);
+    void recursive_packing(int x, int y, int row_width, int row_height, std::vector<Tile>& remaining, std::vector<Tile>& placed);
   public:
-    std::vector<std::shared_ptr<Tile>>& ph_sort(std::vector<std::shared_ptr<Tile>>& tiles, PriorityHeuristic heuristic = PriorityHeuristic::WIDTH);
-    cv::Mat generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) override;
+    std::vector<Tile>& ph_sort(std::vector<Tile>& tiles, PriorityHeuristic heuristic = PriorityHeuristic::WIDTH);
+    cv::Mat generate(const DocumentPreset& preset, const std::vector<ImageSource*>& images) override;
 };

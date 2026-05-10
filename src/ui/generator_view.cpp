@@ -1,6 +1,7 @@
 #include "generator_view.hpp"
 
 #include <QtConcurrent/QtConcurrent>
+#include <chrono>
 #include <exiv2/exiv2.hpp>
 #include <iostream>
 
@@ -14,19 +15,31 @@
 GeneratorView::GeneratorView() {}
 
 void GeneratorView::generate(const DocumentPreset& properties, const QList<std::shared_ptr<ImageSource>>& sources) {
-    std::vector<std::shared_ptr<ImageSource>> sources_vector(sources.constBegin(), sources.constEnd());
-    
-    if (sources_vector.empty()) {
+    if (sources.empty()) {
         throw std::invalid_argument("No image sources provided");
     }
-    
+
+    // TODO: Instead of passing around std::shared_ptr's in QML,
+    // we should move to only passing around handles, like Cache IDs.
+    // For now, lets just extract the raw pointers from QML to use for
+    // our tiling algorithms.
+    std::vector<ImageSource*> raw_sources;
+    raw_sources.reserve(sources.size());
+
+    for (const auto& src : sources) {
+        raw_sources.push_back(src.get());
+    }
+        
     Tiling* tiling;
-    if (sources_vector.size() == 1) {
+    if (raw_sources.size() == 1) {
         tiling = new GridTiling();
     } else {
         tiling = new StripTiling();
     }
-    cv::Mat result = tiling->generate(properties, sources_vector);
+
+
+    cv::Mat result = tiling->generate(properties, raw_sources); 
+
     delete tiling;
 
     if (result.empty()) {

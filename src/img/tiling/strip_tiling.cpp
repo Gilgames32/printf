@@ -2,49 +2,52 @@
 
 #include "padding.hpp"
 
-std::vector<std::shared_ptr<Tile>>& StripTiling::ph_sort(std::vector<std::shared_ptr<Tile>>& tiles,
-                                                         PriorityHeuristic heuristic) {
+std::vector<Tile>& StripTiling::ph_sort(std::vector<Tile>& tiles, PriorityHeuristic heuristic) {
     // make every tile portrait
     for (auto tile : tiles) {
-        if (tile->get_width() > tile->get_height()) {
-            tile->rotate();
+        if (tile.get_width() > tile.get_height()) {
+            tile.rotate();
         }
     }
 
-    switch (heuristic) {
-        case PriorityHeuristic::WIDTH:
-            std::sort(tiles.begin(), tiles.end(), [](const std::shared_ptr<Tile>& a, const std::shared_ptr<Tile>& b) {
-                return a->get_width() > b->get_width();
-            });
-            break;
-        case PriorityHeuristic::HEIGHT:
-            std::sort(tiles.begin(), tiles.end(), [](const std::shared_ptr<Tile>& a, const std::shared_ptr<Tile>& b) {
-                return a->get_height() > b->get_height();
-            });
-            break;
-        case PriorityHeuristic::DIAGONAL:
-            std::sort(tiles.begin(), tiles.end(), [](const std::shared_ptr<Tile>& a, const std::shared_ptr<Tile>& b) {
-                return a->get_diagonal_suqared() > b->get_diagonal_suqared();
-            });
-            break;
-        case PriorityHeuristic::AREA:
-            std::sort(tiles.begin(), tiles.end(), [](const std::shared_ptr<Tile>& a, const std::shared_ptr<Tile>& b) {
-                return a->get_area() > b->get_area();
-            });
-            break;
-        case PriorityHeuristic::ASPECT_RATIO:
-            std::sort(tiles.begin(), tiles.end(), [](const std::shared_ptr<Tile>& a, const std::shared_ptr<Tile>& b) {
-                return a->get_aspect_ratio() > b->get_aspect_ratio();
-            });
-            break;
+    using SortPredicate = bool(*)(const Tile&, const Tile&);
 
-        default:
-            break;
-    }
+    SortPredicate predicate = [&]() -> SortPredicate {
+        switch (heuristic) {
+            case PriorityHeuristic::WIDTH:
+                return [](const Tile& a, const Tile& b) {
+                    return a.get_width() > b.get_width();
+                };
+            case PriorityHeuristic::HEIGHT:
+                return [](const Tile& a, const Tile& b) {
+                    return a.get_height() > b.get_height();
+                };
+            case PriorityHeuristic::DIAGONAL:
+                return [](const Tile& a, const Tile& b) {
+                    return a.get_diagonal_suqared() > b.get_diagonal_suqared();
+                };
+            case PriorityHeuristic::AREA:
+                return [](const Tile& a, const Tile& b) {
+                    return a.get_area() > b.get_area();
+                };
+            case PriorityHeuristic::ASPECT_RATIO:
+                return [](const Tile& a, const Tile& b) {
+                    return a.get_aspect_ratio() > b.get_aspect_ratio();
+                };
+            // We return false to satisfy the strict weak ordering requirement for the predicate.
+            default:
+                return [](const Tile& a, const Tile& b) {
+                    return false;
+                };
+        }
+    }();
+
+    std::sort(tiles.begin(), tiles.end(), predicate);
+    
     return tiles;
 }
 
-cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::shared_ptr<ImageSource>> images) {
+cv::Mat StripTiling::generate(const DocumentPreset& preset, const std::vector<ImageSource*>& images) {
     /*
     if (images.empty()) throw std::invalid_argument("No images provided");
     // TODO: checks, check if it fits in any way, etc
@@ -56,7 +59,7 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
     auto document_width = preset.get_document_width_px() + 2 * side_fix;
 
     // apply size and add padding
-    for (auto img : images) {
+    for (const auto& img : images) {
         auto width_px = convert::mm_to_pixel(img->width_mm, ppi);
         auto height_px = convert::mm_to_pixel(img->height_mm, ppi);
         img->set_size_px(width_px, height_px, true);
@@ -66,7 +69,7 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
 
     int min_total_height = std::numeric_limits<int>::max();
     PriorityHeuristic best_heuristic;
-    std::vector<std::shared_ptr<Tile>> best_placement = {};
+    std::vector<Tile> best_placement = {};
 
     
     for (auto heuristic : {
@@ -77,17 +80,23 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
         //PriorityHeuristic::ASPECT_RATIO
     }) {
         // sort by priority heuristic
-        std::vector<std::shared_ptr<Tile>> tiles = {};
-        for (auto img : images) {
-            tiles.push_back(std::make_shared<Tile>(img));
+        std::vector<Tile> tiles;
+        tiles.reserve(images.size());
+
+        for (const auto& img : images) {
+            tiles.emplace_back(Tile(img));
         }
+
         ph_sort(tiles, heuristic);
 
         // instantiate tiles based on amounts
-        std::vector<std::shared_ptr<Tile>> remaining = {};
-        for (auto tile : tiles) {
-            for (int i = 0; i < tile->get_source()->get_amount(); i++) {
-                remaining.push_back(std::make_shared<Tile>(*tile));
+        std::vector<Tile> remaining;
+        // Assuming that on average, each image is printed three times
+        remaining.reserve(images.size() * 3);
+
+        for (const auto& tile : tiles) {
+            for (int i = 0; i < tile.get_source()->get_amount(); i++) {
+                remaining.push_back(tile);
             }
         }
 
@@ -96,20 +105,21 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
         int total_height = 0;
         int row_width = 0, row_height = 0;
 
-        std::vector<std::shared_ptr<Tile>> placed = {};
+        std::vector<Tile> placed;
+        placed.reserve(images.size());
 
         while (!remaining.empty()) {
             auto tile = remaining.front();
             remaining.erase(remaining.begin());
-            int tile_width = tile->get_width();
-            int tile_height = tile->get_height();
+            int tile_width = tile.get_width();
+            int tile_height = tile.get_height();
             
             if (tile_height <= document_width) {
-                tile->rotate();
+                tile.rotate();
                 std::swap(tile_width, tile_height);
             }
             
-            tile->corner = cv::Point(x, y);
+            tile.corner = cv::Point(x, y);
             placed.push_back(tile);
             x = tile_width;
             y = total_height;
@@ -134,17 +144,19 @@ cv::Mat StripTiling::generate(const DocumentPreset& preset, std::vector<std::sha
     // place tiles on the document
     auto document_height = min_total_height;
     cv::Mat document(document_height, document_width, CV_8UC3, cv::Scalar(255, 255, 255));
-    for (auto tile : best_placement) {
-        cv::Rect target_rect = cv::Rect(tile->corner.x, tile->corner.y, tile->get_width(), tile->get_height());
 
-        tile->get_image().copyTo(document(target_rect));
+    for (auto& tile : best_placement) {
+        cv::Rect target_rect = cv::Rect(tile.corner.x, tile.corner.y, tile.get_width(), tile.get_height());
+
+        tile.get_image().copyTo(document(target_rect));
     }
+
     document = document(cv::Rect(side_fix, side_fix, document_width - 2 * side_fix, document_height - 2 * side_fix));
 
     return document;
 }
 
-void StripTiling::recursive_packing(int x, int y, int row_width, int row_height, std::vector<std::shared_ptr<Tile>>& remaining, std::vector<std::shared_ptr<Tile>>& placed) {
+void StripTiling::recursive_packing(int x, int y, int row_width, int row_height, std::vector<Tile>& remaining, std::vector<Tile>& placed) {
     int priority = 5;
     int best_idx = -1;
     bool rotate = false;
@@ -152,17 +164,13 @@ void StripTiling::recursive_packing(int x, int y, int row_width, int row_height,
     auto prio = [&](int width, int height, bool is_rotated, int idx) {
         if (priority > 1 && width == row_width && height == row_height) {
             priority = 1;
-        }
-        else if (priority > 2 && width == row_width && height <= row_height) {
+        } else if (priority > 2 && width == row_width && height <= row_height) {
             priority = 2;
-        }
-        else if (priority > 3 && width <= row_width && height == row_height) {
+        } else if (priority > 3 && width <= row_width && height == row_height) {
             priority = 3;
-        }
-        else if (priority > 4 && width <= row_width && height <= row_height) {
+        } else if (priority > 4 && width <= row_width && height <= row_height) {
             priority = 4;
-        }
-        else {
+        } else {
             return;
         }
         best_idx = idx;
@@ -170,9 +178,9 @@ void StripTiling::recursive_packing(int x, int y, int row_width, int row_height,
     };
 
     for (size_t i = 0; i < remaining.size(); i++) {
-        auto tile = remaining[i];
-        int tile_width = tile->get_width();
-        int tile_height = tile->get_height();
+        const auto& tile = remaining[i];
+        int tile_width = tile.get_width();
+        int tile_height = tile.get_height();
 
         prio(tile_width, tile_height, false, i);
         prio(tile_height, tile_width, true, i);
@@ -185,11 +193,13 @@ void StripTiling::recursive_packing(int x, int y, int row_width, int row_height,
     auto tile = remaining[best_idx];
     remaining.erase(remaining.begin() + best_idx);
 
-    if (rotate) tile->rotate();
-    tile->corner = cv::Point(x, y);
+    if (rotate) tile.rotate();
+
+    tile.corner = cv::Point(x, y);
     placed.push_back(tile);
-    auto tile_width = tile->get_width();
-    auto tile_height = tile->get_height();
+
+    auto tile_width = tile.get_width();
+    auto tile_height = tile.get_height();
 
     switch (priority)
     {
@@ -202,7 +212,7 @@ void StripTiling::recursive_packing(int x, int y, int row_width, int row_height,
     case 4:
         int min_side = std::numeric_limits<int>::max();
         for (auto t : remaining) {
-            min_side = std::min({min_side, t->get_width(), t->get_height()});
+            min_side = std::min({min_side, t.get_width(), t.get_height()});
         }
 
         if (row_width - tile_width < min_side) {

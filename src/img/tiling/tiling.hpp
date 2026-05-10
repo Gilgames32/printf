@@ -5,7 +5,7 @@
 
 class Tiling {
   public:
-    virtual cv::Mat generate(const DocumentPreset &preset, std::vector<std::shared_ptr<ImageSource>> images) = 0;
+    virtual cv::Mat generate(const DocumentPreset &preset, const std::vector<ImageSource*>& images) = 0;
     virtual ~Tiling() = default;
 };
 
