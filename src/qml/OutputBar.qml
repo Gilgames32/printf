@@ -9,7 +9,7 @@ Rectangle {
     Component.onCompleted: {
         errorSignal.onError.connect((error) => {
             errorText.text = error;
-            errorText.color = "#ff5555";
+            errorText.color = "#fb4934";
             errorText.font.bold = true;
         });
         errorSignal.onInfo.connect((info) => {
