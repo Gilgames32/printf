@@ -12,14 +12,10 @@ using json = nlohmann::json;
 ImageSourceView::ImageSourceView()
     : m_file_path(""), m_image(cv::Mat()), m_amount(1), m_width(0), m_height(0), mask_filter_view() {}
 
-void ImageSourceView::load(const std::string& path, int amount, double ppi) {
+void ImageSourceView::load(const QString& path, int amount, double ppi) {
     m_amount = amount;
 
-    if (path.rfind("file://", 0) == 0) {
-        m_file_path = path.substr(7);
-    } else {
-        m_file_path = path;
-    }
+    m_file_path = QUrl(path).toLocalFile().toStdString();
 
     load_image(ppi);
 

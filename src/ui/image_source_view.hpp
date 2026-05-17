@@ -35,7 +35,7 @@ class ImageSourceView : public QObject {
   public:
     ImageSourceView();
 
-    void load(const std::string& path, int amount = 1, double ppi = 300);
+    void load(const QString& path, int amount = 1, double ppi = 300);
 
     QString get_file_name() const;
 

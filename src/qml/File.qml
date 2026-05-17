@@ -36,7 +36,7 @@ Rectangle {
                 Image {
                     id: image
 
-                    source: "file://" + entry.filePath
+                    source: Qt.resolvedUrl("file:///" + entry.filePath)
                     fillMode: Image.PreserveAspectFit
                     Layout.fillWidth: true
                     Layout.preferredWidth: 1

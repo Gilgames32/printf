@@ -30,7 +30,7 @@ Column {
         Image {
             id: maskImage
 
-            source: imageSource.mask.absoluteFilePath ? "file://" + imageSource.mask.absoluteFilePath : ""
+            source: imageSource.mask.absoluteFilePath ? Qt.resolvedUrl("file:///" + imageSource.mask.absoluteFilePath) : ""
             fillMode: Image.PreserveAspectFit
             Layout.fillWidth: true
             Layout.preferredWidth: 1

@@ -52,10 +52,10 @@ void SourceEntryView::addFiles(const QStringList& files) {
         ImageSourceView* input_file;
         if (file.endsWith(".pdf", Qt::CaseInsensitive)) {
             input_file = new PDFSourceView();
-            input_file->load(file.toStdString());  // TODO configurable default amount
+            input_file->load(file);  // TODO configurable default amount
         } else {
             input_file = new ImageSourceView();
-            input_file->load(file.toStdString());
+            input_file->load(file);
         }
 
         beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
