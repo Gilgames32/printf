@@ -15,6 +15,7 @@ class ImageSourceView : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString name READ get_file_name NOTIFY nameChanged)
     Q_PROPERTY(QString filePath READ get_file_path NOTIFY filePathChanged)
+    Q_PROPERTY(QUrl fileUrl READ get_file_url NOTIFY filePathChanged)
     Q_PROPERTY(QSize resolution READ get_image_resolution NOTIFY resolutionChanged)
     Q_PROPERTY(double aspectRatio READ get_image_aspect_ratio NOTIFY aspectRatioChanged)
     Q_PROPERTY(int amount MEMBER m_amount NOTIFY amountChanged)
@@ -40,6 +41,8 @@ class ImageSourceView : public QObject {
     QString get_file_name() const;
 
     QString get_file_path() const;
+
+    QUrl get_file_url() const;
 
     QSize get_image_resolution() const;
 

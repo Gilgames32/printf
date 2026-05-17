@@ -2,12 +2,14 @@ project('printf', 'cpp',
   default_options: ['cpp_std=c++23']
 )
 
+is_windows = host_machine.system() == 'windows'
+
 # Dependencies
 nlohmann_json = dependency('nlohmann_json', required: true)
 opencv = dependency('opencv4', required: true, include_type: 'system')
 qt6_dep = dependency('qt6', modules: ['Core', 'Widgets', 'Gui', 'Qml', 'Quick', 'LabsPlatform'])
 exiv2 = dependency('exiv2', required: true)
-spng = dependency('libspng', required: true)
+spng = dependency(is_windows ? 'libspng' : 'spng', required: true)
 poppler = dependency('poppler-qt6', required: true)
 
 # Qt6 preprocessing

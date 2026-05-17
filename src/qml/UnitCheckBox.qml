@@ -30,7 +30,7 @@ RowLayout {
     }
 
     Item {
-        Layout.preferredWidth: 102 // magic
+        Layout.preferredWidth: 89 // magic
     }
 
 }

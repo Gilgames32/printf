@@ -13,6 +13,7 @@ class MaskFilterView : public IFilterView {
     Q_PROPERTY(bool enabled MEMBER m_is_enabled NOTIFY isEnabledChanged)
     Q_PROPERTY(QString name READ get_file_name NOTIFY nameChanged)
     Q_PROPERTY(QString filePath READ get_file_path NOTIFY filePathChanged)
+    Q_PROPERTY(QUrl fileUrl READ get_file_url NOTIFY filePathChanged)
     Q_PROPERTY(QString absoluteFilePath READ get_absolute_file_path NOTIFY filePathChanged)
 
   private:
@@ -26,6 +27,8 @@ class MaskFilterView : public IFilterView {
     QString get_file_name() const;
 
     QString get_file_path() const;
+
+    QUrl get_file_url() const;
 
     QString get_absolute_file_path() const;
 

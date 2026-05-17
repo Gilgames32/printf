@@ -75,6 +75,8 @@ QString ImageSourceView::get_file_name() const {
 
 QString ImageSourceView::get_file_path() const { return QString::fromStdString(m_file_path); }
 
+QUrl ImageSourceView::get_file_url() const { return QUrl::fromLocalFile(QString::fromStdString(m_file_path)); }
+
 QSize ImageSourceView::get_image_resolution() const { return QSize(m_image.cols, m_image.rows); }
 
 double ImageSourceView::get_image_aspect_ratio() const { return float(m_image.cols) / float(m_image.rows); }

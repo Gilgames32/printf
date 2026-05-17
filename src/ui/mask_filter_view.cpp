@@ -17,6 +17,8 @@ QString MaskFilterView::get_file_name() const {
 
 QString MaskFilterView::get_file_path() const { return QString::fromStdString(m_file_path); }
 
+QUrl MaskFilterView::get_file_url() const { return QUrl::fromLocalFile(QString::fromStdString(m_file_path)); }
+
 QString MaskFilterView::get_absolute_file_path() const {
     std::filesystem::path path(m_file_path);
     if (std::filesystem::exists(path) && path.is_relative()) {
