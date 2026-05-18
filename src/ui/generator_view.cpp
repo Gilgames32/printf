@@ -86,10 +86,7 @@ void GeneratorView::save(const QString& path, const DocumentPreset& properties) 
         throw std::runtime_error("Image is null");
     }
 
-    auto out_path = path.toStdString();
-    if (out_path.rfind("file://", 0) == 0) {
-        out_path = out_path.substr(7);
-    }
+    auto out_path = QUrl(path).toLocalFile().toStdString();
 
     // TODO: save as jpeg
     PNGHelper::save_png(out_path, image, properties.get_ppi());
