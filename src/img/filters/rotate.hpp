@@ -13,6 +13,6 @@ class RotateFilter : public IFilter {
     bool get_rotated() const;
     void set_rotated(bool rotated);
 
-    cv::Mat apply(const cv::Mat &image) const override;
-    static cv::Mat rotate(const cv::Mat &image, cv::RotateFlags rotation_dir);
+    cv::Mat apply(const cv::Mat& image) const override;
+    static cv::Mat rotate(const cv::Mat& image, cv::RotateFlags rotation_dir);
 };

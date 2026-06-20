@@ -6,15 +6,16 @@
 #include <string>
 #include <vector>
 
-#include "image_source.hpp"
-#include "ifilter_view.hpp"
-#include "mask_filter_view.hpp"
 #include "document_preset.hpp"
+#include "ifilter_view.hpp"
+#include "image_source.hpp"
+#include "mask_filter_view.hpp"
 
 class ImageSourceView : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString name READ get_file_name NOTIFY nameChanged)
     Q_PROPERTY(QString filePath READ get_file_path NOTIFY filePathChanged)
+    Q_PROPERTY(QUrl fileUrl READ get_file_url NOTIFY filePathChanged)
     Q_PROPERTY(QSize resolution READ get_image_resolution NOTIFY resolutionChanged)
     Q_PROPERTY(double aspectRatio READ get_image_aspect_ratio NOTIFY aspectRatioChanged)
     Q_PROPERTY(int amount MEMBER m_amount NOTIFY amountChanged)
@@ -35,11 +36,13 @@ class ImageSourceView : public QObject {
   public:
     ImageSourceView();
 
-    void load(const std::string& path, int amount = 1, double ppi = 300);
+    void load(const QString& path, int amount = 1, double ppi = 300);
 
     QString get_file_name() const;
 
     QString get_file_path() const;
+
+    QUrl get_file_url() const;
 
     QSize get_image_resolution() const;
 
@@ -53,7 +56,7 @@ class ImageSourceView : public QObject {
 
     void load_from_preset(const std::string& preset_path);
 
-    virtual std::shared_ptr<ImageSource> get_image_source(const DocumentPreset &preset);
+    virtual std::shared_ptr<ImageSource> get_image_source(const DocumentPreset& preset);
 
     MaskFilterView* get_mask_filter_view();
 

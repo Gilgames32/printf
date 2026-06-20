@@ -10,7 +10,16 @@ using json = nlohmann::json;
 
 // TODO: remove constants
 DocumentPropertiesView::DocumentPropertiesView()
-    : m_resolution(300), m_roll_width(914.4), m_margin(0), m_correct_quantity(false), m_gutter(2), m_guides(true), m_line_width(1), m_bleed(10), m_min_height(101.6), m_max_height(18000) {}
+    : m_resolution(300),
+      m_roll_width(914.4),
+      m_margin(0),
+      m_correct_quantity(false),
+      m_gutter(2),
+      m_guides(true),
+      m_line_width(1),
+      m_bleed(10),
+      m_min_height(101.6),
+      m_max_height(18000) {}
 
 void DocumentPropertiesView::load_from_preset(const std::string& preset_path, const std::string& subcategory) {
     std::cout << "Loading preset from: " << preset_path << std::endl;
@@ -28,10 +37,9 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path, co
     f.close();
 
     if (!subcategory.empty()) {
-        if (j.contains(subcategory)){
+        if (j.contains(subcategory)) {
             j = j[subcategory];
-        }
-        else {
+        } else {
             return;
         }
     }
@@ -79,8 +87,11 @@ void DocumentPropertiesView::load_from_preset(const std::string& preset_path, co
     }
 }
 
-void DocumentPropertiesView::setPreset(const QString& presetPath, const QString& subcategory) { load_from_preset(presetPath.toStdString(), subcategory.toStdString()); }
+void DocumentPropertiesView::setPreset(const QString& presetPath, const QString& subcategory) {
+    load_from_preset(presetPath.toStdString(), subcategory.toStdString());
+}
 
 DocumentPreset DocumentPropertiesView::getDocumentProperties() const {
-    return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides, m_line_width, m_bleed, m_min_height, m_max_height);
+    return DocumentPreset(m_resolution, m_roll_width, m_margin, m_gutter, m_correct_quantity, m_guides, m_line_width, m_bleed,
+                          m_min_height, m_max_height);
 }

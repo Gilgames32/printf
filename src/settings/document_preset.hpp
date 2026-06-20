@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <string>
+
 #include "convert.hpp"
 
 class DocumentPreset {
@@ -22,8 +23,8 @@ class DocumentPreset {
     DocumentPreset(
         // FIXME
         double ppi = 300, double roll_width_mm = 914.4, double margin_mm = 0, double gutter_mm = 2,
-        bool correct_quantity = false, bool guide = true, int line_width_px = 10, double bleed_mm = 10, double min_height_mm = 101.6,
-        double max_height_mm = 18000);
+        bool correct_quantity = false, bool guide = true, int line_width_px = 10, double bleed_mm = 10,
+        double min_height_mm = 101.6, double max_height_mm = 18000);
 
     double get_ppi() const { return ppi; }
 

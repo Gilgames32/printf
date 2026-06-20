@@ -1,44 +1,6 @@
-# Build
-build/
-
-# Output
-output/
-
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
 # vscode
 .vscode/settings.json
+*.code-workspace
 
 # latex
 *.aux
@@ -57,3 +19,12 @@ output/
 thesis.pdf
 *.minted
 *.lol
+
+
+# jetbrains
+.idea/
+
+# wrapdb
+subprojects/.wraplock
+subprojects/nlohmann_json*/
+subprojects/packagecache/

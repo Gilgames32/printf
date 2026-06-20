@@ -1,6 +1,7 @@
 #include "pnghelper.hpp"
 
 #include <stdexcept>
+
 #include "convert.hpp"
 #include "spng.h"
 
@@ -77,7 +78,7 @@ void PNGHelper::save_png(const std::string& path, const QImage& image, double dp
 void PNGHelper::add_exif_data(const std::string& path, const DocumentPreset& properties) {
     auto image = Exiv2::ImageFactory::open(path);
 
-    if (!image) {
+    if (!image.get()) {
         throw std::runtime_error("Failed to open image file.");
     }
 

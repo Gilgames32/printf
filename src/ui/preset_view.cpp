@@ -1,6 +1,6 @@
 #include "preset_view.hpp"
 
-PresetView::PresetView(QObject *parent) : QAbstractListModel(parent) {
+PresetView::PresetView(QObject* parent) : QAbstractListModel(parent) {
     m_path = QString();
 
     m_roleNames[NameRole] = "name";
@@ -20,19 +20,19 @@ void PresetView::fetch_entries() {
     m_data.append(std::make_pair("None", ""));
 
     auto presets = jsonprobe::probe_presets(m_path.toStdString(), "name");
-    for (const auto &preset : *presets) {
+    for (const auto& preset : *presets) {
         m_data.append(preset);
     }
 
     endResetModel();
 }
 
-int PresetView::rowCount(const QModelIndex &parent) const {
+int PresetView::rowCount(const QModelIndex& parent) const {
     Q_UNUSED(parent);
     return m_data.count();
 }
 
-QVariant PresetView::data(const QModelIndex &index, int role) const {
+QVariant PresetView::data(const QModelIndex& index, int role) const {
     int row = index.row();
 
     // oob check
@@ -54,7 +54,7 @@ QVariant PresetView::data(const QModelIndex &index, int role) const {
 
 QString PresetView::get_path() const { return m_path; }
 
-void PresetView::set_path(const QString &path) {
+void PresetView::set_path(const QString& path) {
     if (m_path != path) {
         m_path = path;
 

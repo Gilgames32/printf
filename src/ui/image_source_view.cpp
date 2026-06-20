@@ -9,17 +9,13 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
-ImageSourceView::ImageSourceView(): m_file_path(""), m_image(cv::Mat()), m_amount(1), m_width(0), m_height(0), mask_filter_view() {}
+ImageSourceView::ImageSourceView()
+    : m_file_path(""), m_image(cv::Mat()), m_amount(1), m_width(0), m_height(0), mask_filter_view() {}
 
-void ImageSourceView::load(const std::string& path, int amount, double ppi) {
+void ImageSourceView::load(const QString& path, int amount, double ppi) {
     m_amount = amount;
-    
-    if (path.rfind("file://", 0) == 0) {
-        m_file_path = path.substr(7);
-    }
-    else {
-        m_file_path = path;
-    }
+
+    m_file_path = QUrl(path).toLocalFile().toStdString();
 
     load_image(ppi);
 
@@ -31,7 +27,7 @@ void ImageSourceView::load_image(double ppi) {
     if (!std::filesystem::exists(m_file_path)) {
         throw std::invalid_argument("File does not exist: " + m_file_path);
     }
-    
+
     m_image = cv::imread(m_file_path, cv::IMREAD_UNCHANGED);
     if (m_image.empty()) {
         throw std::runtime_error("Failed to load image: " + m_file_path);
@@ -79,6 +75,8 @@ QString ImageSourceView::get_file_name() const {
 
 QString ImageSourceView::get_file_path() const { return QString::fromStdString(m_file_path); }
 
+QUrl ImageSourceView::get_file_url() const { return QUrl::fromLocalFile(QString::fromStdString(m_file_path)); }
+
 QSize ImageSourceView::get_image_resolution() const { return QSize(m_image.cols, m_image.rows); }
 
 double ImageSourceView::get_image_aspect_ratio() const { return float(m_image.cols) / float(m_image.rows); }
@@ -119,7 +117,7 @@ void ImageSourceView::load_from_preset(const std::string& preset_path) {
     }
 }
 
-std::shared_ptr<ImageSource> ImageSourceView::get_image_source(const DocumentPreset &preset) {
+std::shared_ptr<ImageSource> ImageSourceView::get_image_source(const DocumentPreset& preset) {
     auto img = std::make_shared<ImageSource>(m_image, m_amount, m_width, m_height);
     if (mask_filter_view.is_enabled()) img->add_filter(mask_filter_view.get_filter());
     return img;

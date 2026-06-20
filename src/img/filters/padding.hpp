@@ -7,15 +7,15 @@ class PaddingFilter : public IFilter {
   private:
     int padding;
     bool guide;
-    int bleed; // -1 for full lines
+    int bleed;  // -1 for full lines
     int line_thickness;
     cv::Scalar line_color;
     cv::Scalar bg_color = cv::Scalar(255, 255, 255);
 
   public:
     // TODO config
-    PaddingFilter(int padding, bool guide = false, int bleed = 0,
-                  int line_thickness = 1, cv::Scalar line_color = cv::Scalar(0, 0, 0));
+    PaddingFilter(int padding, bool guide = false, int bleed = 0, int line_thickness = 1,
+                  cv::Scalar line_color = cv::Scalar(0, 0, 0));
 
-    cv::Mat apply(const cv::Mat &image) const override;
+    cv::Mat apply(const cv::Mat& image) const override;
 };

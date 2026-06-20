@@ -3,5 +3,5 @@
 
 class IFilter {
   public:
-    virtual cv::Mat apply(const cv::Mat &image) const = 0;
+    virtual cv::Mat apply(const cv::Mat& image) const = 0;
 };

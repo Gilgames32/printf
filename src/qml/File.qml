@@ -36,7 +36,7 @@ Rectangle {
                 Image {
                     id: image
 
-                    source: "file://" + entry.filePath
+                    source: entry.fileUrl
                     fillMode: Image.PreserveAspectFit
                     Layout.fillWidth: true
                     Layout.preferredWidth: 1
@@ -97,6 +97,7 @@ Rectangle {
                         SpinBox {
                             id: spinbox
 
+                            Layout.preferredWidth: dinputsize
                             value: entry.amount
                             from: 1
                             to: 1000

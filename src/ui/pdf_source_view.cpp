@@ -1,5 +1,7 @@
 #include "pdf_source_view.hpp"
+
 #include <poppler-qt6.h>
+
 #include <iostream>
 
 PDFSourceView::PDFSourceView() : ImageSourceView() {}
@@ -11,12 +13,11 @@ std::shared_ptr<ImageSource> PDFSourceView::get_image_source(const DocumentPrese
 }
 
 void PDFSourceView::load_image(double ppi) {
-
     auto doc = Poppler::Document::load(QString::fromStdString(m_file_path));
     if (!doc) {
         throw std::runtime_error("Failed to load pdf: " + m_file_path);
     }
-    
+
     auto page = doc->page(0);
     if (!page) {
         throw std::runtime_error("Failed to the first page of the pdf: " + m_file_path);
