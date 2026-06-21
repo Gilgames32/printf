@@ -98,7 +98,16 @@
   #pause
   - egyetlen méret esetén viszonylag egyszerű
 
-  // TODO: ábra
+  #pause
+  #place(
+    center + bottom,
+    image("img/wastecalc_1.svg", height: 60%),
+  )
+  #pause
+  #place(
+    center + bottom,
+    image("img/wastecalc_2.svg", height: 60%),
+  )
 ]
 
 // multi
@@ -110,17 +119,112 @@
   - ládapakolás #pause #tgray[(np nehéz)]
   #pause
   - _vágóasztallal vágható_ ládapakolás #pause #tgray[(np nehéz)]
-  // TODO: vágóasztallal vághatóság pic
+  #pause
+  - heurisztikus megoldás létezik
 ]
 
 // heur
 #slide[
   = #tgreen[felesleg minimalizálás]
+  #text(linebreak(), size: 0.1em) // oughhh
 
-  - heurisztikus megoldás létezik
-  - sorbarendezés
-  - csíkonként elhelyezzük a legnagyobbat
-  - keletkező csíkokat rekurzívan kitöltjük
+  // #pause
+  // - sorbarendezés #tgray[(adott heurisztika szerint)]
+  // #pause
+  // - csíkonként elhelyezzük a _leginkább odaillőt_
+  // #pause
+  // - keletkező csíkokat rekurzívan kitöltjük
+  // #pause
+  // - ha már nem fér el egy sem, új csík
+  // // TODO: pic
+  
+  
+  #pause
+  #place(
+    rect(
+      width: 29em,
+      height: 14em,
+      stroke: fg1
+    )
+  )
+
+  #pause
+  #place(
+    rect(
+      width: 10em,
+      height: 10em,
+      stroke: none,
+      fill: gray
+    )
+  )
+
+  #pause
+  #place(
+    rect(
+      width: 29em,
+      height: 10em,
+      stroke: (paint: gray, thickness: 3pt),
+    )
+  )
+
+  #pause
+  #place(
+    rect(
+      width: 5em,
+      height: 10em,
+      stroke: none,
+      fill: green
+    ),
+    dx: 10em
+  )
+
+  #pause
+  #place(
+    rect(
+      width: 19em,
+      height: 10em,
+      stroke: (paint: green, thickness: 3pt)
+    ),
+    dx: 10em
+  )
+
+  #pause
+  #place(
+    rect(
+      width: 5em,
+      height: 5em,
+      stroke: none,
+      fill: orange
+    ),
+    dx: 15em
+  )
+
+  #pause
+  #place(
+    rect(
+      width: 14em,
+      height: 5em,
+      stroke: (paint: orange, thickness: 3pt)
+    ),
+    dx: 15em
+  )
+  #place(
+    rect(
+      width: 5em,
+      height: 10em,
+      stroke: (paint: orange, thickness: 3pt)
+    ),
+    dx: 15em
+  )
+
+  #pause
+  #place(
+    text("?"),
+    dx: 24em,
+    dy: 7em,
+  )
+
+  // oh my god bruh
 ]
 
 #slide[
@@ -202,10 +306,10 @@
 ]
 
 #slide[
-  = #tblue[eredmények]
-
-  // TODO: ui pic
-  // TODO: strip tiled example
+  #place(
+    center + horizon,
+    image("img/ui_update.png", height: 100%),
+  )
 ]
 
 #slide[
@@ -270,8 +374,6 @@
   - adott valós méret és pixelsűrűség
   #pause
   $ s_(p x) = s_(m m) dot text("dpi") / 0.0254 $ 
-  
-  // TODO: ábra
 ]
 
 #slide[
