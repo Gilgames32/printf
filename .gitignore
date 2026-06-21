@@ -17,6 +17,7 @@
 *.fdb_latexmk
 *.fls
 thesis.pdf
+main.pdf
 *.minted
 *.lol
 
