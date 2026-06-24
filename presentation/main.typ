@@ -62,6 +62,8 @@
 
   kovács bálint
 
+  #text(strike("2026. 06. 29."), fill: bg1)
+
   \2026. \06. \24.
 
 ]
@@ -374,6 +376,16 @@
   - adott valós méret és pixelsűrűség
   #pause
   $ s_(p x) = s_(m m) dot text("dpi") / 0.0254 $ 
+]
+
+#slide[
+  = #tgreen[extrák]
+
+  - #link("https://github.com/Gilgames32/printf", "github")
+  #linebreak()
+  - #link("https://vik.bme.hu/hir/3642/", "extra 1")
+  - #link("https://szabalyozastar.bme.hu/storage/documents/rektor/1/2025/1_2025_ru_2025_2026_os_tanev_idobeosztasa_alairt_iktatott_20250131143605.pdf", "extra 2")
+  - #link("https://kth.bme.hu/hirek/aktualis/2361/", "extra 3")
 ]
 
 #slide[
